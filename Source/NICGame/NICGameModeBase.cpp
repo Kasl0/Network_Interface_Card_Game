@@ -3,3 +3,7 @@
 
 #include "NICGameModeBase.h"
 
+ANICGameModeBase::ANICGameModeBase()
+{
+	DefaultPawnClass = AGameCharacter::StaticClass();
+}

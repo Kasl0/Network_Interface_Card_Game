@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameCharacter.h"
 #include "GameFramework/GameModeBase.h"
 #include "NICGameModeBase.generated.h"
 
@@ -13,5 +14,7 @@ UCLASS()
 class NICGAME_API ANICGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	ANICGameModeBase();
 };
