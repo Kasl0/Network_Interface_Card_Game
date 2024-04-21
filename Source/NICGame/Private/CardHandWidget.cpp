@@ -6,15 +6,20 @@
 #include "CardBattleCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
-void UCardHandWidget::NativeConstruct()
-{
-	this->BattleDeck = Cast<ACardBattleCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->GetBattleDeck();
-}
-
 void UCardHandWidget::DrawCard()
 {
+	if (!this->BattleDeck) 
+	{
+		ACardBattleCharacter* Ab = Cast<ACardBattleCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		this->BattleDeck = Ab->GetBattleDeck();
+		this->BattleDeck->InitializeDeck(GetWorld()); 
+	}
 	UCardData* NewCardData = this->BattleDeck->DrawCard();
-	this->CardDataArray.Add(NewCardData);
+	if (NewCardData)
+	{
+		this->CardDataArray.Add(NewCardData);
+		this->CreateCardWidget(NewCardData);
+	}
 }
 
 

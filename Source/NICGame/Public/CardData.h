@@ -16,10 +16,10 @@ class NICGAME_API UCardData : public UObject
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FString Name;
+	FText CardName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FString Description;
+	FText CardDescription;
 
 public:
 	void SetData(std::string Name, std::string Description);

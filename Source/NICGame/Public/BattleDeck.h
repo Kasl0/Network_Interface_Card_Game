@@ -20,12 +20,14 @@ class NICGAME_API UBattleDeck : public UObject
 protected:
 	std::default_random_engine RNG;
 	
-	TArray<UCardData> CardDataArray;
+	TArray<UCardData*> CardDataArray;
 
 	std::vector<int> CardOrder;
 
-	void InitializeDeck();
+	bool isInitialized = false;
 
 public:
+	void InitializeDeck(UWorld* World);
+
 	UCardData* DrawCard();
 };

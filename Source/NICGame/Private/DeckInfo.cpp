@@ -8,15 +8,28 @@ void UDeckInfo::CreateMockDeck()
 	if (this->SinglePlayerDeck.Num() == 0)
 	{
 		UCardData* Data1 = NewObject<UCardData>();
-		this->SinglePlayerDeck.Add(NewObject<UCardData>("Test 1", "Test 1");
-		this->SinglePlayerDeck.Emplace("Test 1", "Test 1");
-		this->SinglePlayerDeck.Emplace("Test 2", "Test 2");
-		this->SinglePlayerDeck.Emplace("Test 3", "Test 3");
+		Data1->AddToRoot();
+		UCardData* Data2 = NewObject<UCardData>();
+		Data2->AddToRoot();
+		UCardData* Data3 = NewObject<UCardData>();
+		Data3->AddToRoot();
+		this->SinglePlayerDeck.Add(Data1);
+		this->SinglePlayerDeck.Add(Data2);
+		this->SinglePlayerDeck.Add(Data3);
 	}
 }
 
-TArray<UCardData> UDeckInfo::GetSinglePlayerDeck()
+TArray<UCardData*> UDeckInfo::GetSinglePlayerDeck()
 {
-	this->CreateMockDeck();
-	return this->SinglePlayerDeck; // returns a copy of SinglePlayerDeck
+	if (this->SinglePlayerDeck.Num() == 0)
+	{
+		this->CreateMockDeck();
+	}
+	for (int i = 0; i < this->SinglePlayerDeck.Num(); i++)
+	{
+		// Nie wiem co tu sie dzieje
+		// https://forums.unrealengine.com/t/duplicate-uobject-into-another-one/311521/4
+		this->DeckCopy.Add(DuplicateObject(this->SinglePlayerDeck[i], this->GetOuter()));
+	}
+	return DeckCopy;
 }

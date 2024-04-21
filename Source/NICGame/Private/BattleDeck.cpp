@@ -4,22 +4,33 @@
 
 #include <vector>
 #include <chrono>
+#include <iostream>
+#include "MyGameInstance.h"
 
 #include "DeckInfo.h"
 #include "Kismet/GameplayStatics.h"
 
-void UBattleDeck::InitializeDeck()
+void UBattleDeck::InitializeDeck(UWorld* World)
 {
-	UDeckInfo* DeckInfo = Cast<UDeckInfo>(UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UDeckInfo>());
-	this->CardDataArray = DeckInfo->GetSinglePlayerDeck();
-
-	this->CardOrder = std::vector<int>(this->CardDataArray.Num());
-	for (int i = 0; i < this->CardDataArray.Num(); i++)
+	if (!this->isInitialized)
 	{
-		CardOrder[i] = i;
+		UGameInstance* Ins = UGameplayStatics::GetGameInstance(World);
+		if (Ins)
+		{
+			UDeckInfo* DeckInfo = Cast<UDeckInfo>(Ins->GetSubsystem<UDeckInfo>());
+			this->CardDataArray = DeckInfo->GetSinglePlayerDeck();
+
+			this->CardOrder = std::vector<int>(this->CardDataArray.Num());
+			for (int i = 0; i < this->CardDataArray.Num(); i++)
+			{
+				CardOrder[i] = i;
+			}
+			this->RNG = std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
+			std::ranges::shuffle(std::begin(this->CardOrder), std::end(this->CardOrder), RNG);
+
+			this->isInitialized = true;
+		}
 	}
-	this->RNG = std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
-	std::ranges::shuffle(std::begin(this->CardOrder), std::end(this->CardOrder), RNG);
 }
 
 UCardData* UBattleDeck::DrawCard()
@@ -27,7 +38,7 @@ UCardData* UBattleDeck::DrawCard()
 	UCardData* LastCard = nullptr;
 	if (this->CardOrder.size() > 0)
 	{
-		LastCard = &this->CardDataArray[this->CardOrder.back()];
+		LastCard = this->CardDataArray[this->CardOrder.back()];
 		this->CardOrder.pop_back();
 	}
 	// TODO

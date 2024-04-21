@@ -16,10 +16,13 @@ class NICGAME_API UDeckInfo : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 protected:
-	TArray<UCardData> SinglePlayerDeck;
+	UPROPERTY(BlueprintReadOnly)
+	TArray<UCardData*> SinglePlayerDeck;
+
+	TArray<UCardData*> DeckCopy;
 
 	void CreateMockDeck();
 
 public:
-	TArray<UCardData> GetSinglePlayerDeck();
+	TArray<UCardData*> GetSinglePlayerDeck();
 };

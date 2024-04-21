@@ -16,13 +16,12 @@ class NICGAME_API UCardHandWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-    virtual void NativeConstruct() override;
-
-	UPROPERTY(BlueprintReadOnly)
 	TArray<UCardData*> CardDataArray;
 	
-	UPROPERTY(BlueprintReadWrite)
 	UBattleDeck* BattleDeck;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CreateCardWidget(UCardData* CardData);
 	
 public:
 	void DrawCard();
