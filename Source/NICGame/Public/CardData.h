@@ -14,13 +14,12 @@ class NICGAME_API UCardData : public UObject
 {
 	GENERATED_BODY()
 
-protected:
+public:
+	void SetData(std::string Name, std::string Description);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText CardName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText CardDescription;
-
-public:
-	void SetData(std::string Name, std::string Description);
 };

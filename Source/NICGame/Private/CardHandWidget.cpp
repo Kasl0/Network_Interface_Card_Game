@@ -2,7 +2,7 @@
 
 
 #include "CardHandWidget.h"
-
+#include <iostream>
 #include "CardBattleCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
