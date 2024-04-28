@@ -11,6 +11,9 @@ AGameCharacter::AGameCharacter()
 
 	// Create components
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+
+	// Set default forward/backward movement distance
+	DistanceToMove = 100.0f;
 }
 
 // Called when the game starts or when spawned
@@ -45,12 +48,51 @@ void AGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	if (UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		Input->BindAction(TurnLeftAction, ETriggerEvent::Triggered, this, &AGameCharacter::TurnLeft);
+		if (TurnLeftAction)
+		{
+			Input->BindAction(TurnLeftAction, ETriggerEvent::Triggered, this, &AGameCharacter::TurnLeft);
+		}
+		if (TurnRightAction)
+		{
+			Input->BindAction(TurnRightAction, ETriggerEvent::Triggered, this, &AGameCharacter::TurnRight);
+		}
+		if (MoveForwardAction)
+		{
+			Input->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &AGameCharacter::MoveForward);
+		}
+		if (MoveBackwardAction)
+		{
+			Input->BindAction(MoveBackwardAction, ETriggerEvent::Triggered, this, &AGameCharacter::MoveBackward);
+		}
 	}
 }
 
 void AGameCharacter::TurnLeft(const FInputActionInstance& Instance)
 {
-	bool BoolValue = Instance.GetValue().Get<bool>();
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "TurnLeftAction");
+	FRotator newRotation = GetActorRotation();
+	newRotation += FRotator(0.0f, -90.0f, 0.0f);
+	SetActorRotation(newRotation);
+}
+
+void AGameCharacter::TurnRight(const FInputActionInstance& Instance)
+{
+	FRotator newRotation = GetActorRotation();
+	newRotation += FRotator(0.0f, 90.0f, 0.0f);
+	SetActorRotation(newRotation);
+}
+
+void AGameCharacter::MoveForward(const FInputActionInstance& Instance)
+{
+	FVector newLocation = GetActorLocation();
+	FVector forwardVector = GetActorForwardVector();
+	newLocation += (forwardVector * DistanceToMove);
+	SetActorLocation(newLocation);
+}
+
+void AGameCharacter::MoveBackward(const FInputActionInstance& Instance)
+{
+	FVector newLocation = GetActorLocation();
+	FVector forwardVector = GetActorForwardVector();
+	newLocation -= (forwardVector * DistanceToMove);
+	SetActorLocation(newLocation);
 }

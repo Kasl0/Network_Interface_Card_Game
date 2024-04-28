@@ -20,8 +20,6 @@ public:
 	// Sets default values for this pawn's properties
 	AGameCharacter();
 
-	void TurnLeft(const FInputActionInstance& Instance);
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,11 +28,31 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* Camera;
 
+	// Enhanced Input
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	UInputMappingContext* InputMapping;
 
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	UInputAction* TurnLeftAction;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	UInputAction* TurnRightAction;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	UInputAction* MoveForwardAction;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	UInputAction* MoveBackwardAction;
+
+	// Forward/backward movement distance
+	UPROPERTY(EditAnywhere)
+	float DistanceToMove;
+
+	// Movement
+	void TurnLeft(const FInputActionInstance& Instance);
+	void TurnRight(const FInputActionInstance& Instance);
+	void MoveForward(const FInputActionInstance& Instance);
+	void MoveBackward(const FInputActionInstance& Instance);
 
 public:	
 	// Called every frame
