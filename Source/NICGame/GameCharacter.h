@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -45,8 +43,29 @@ protected:
 	UInputAction* MoveBackwardAction;
 
 	// Forward/backward movement distance
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Moving")
 	float DistanceToMove;
+
+	// Table location vector
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	FVector TableLocation;
+
+	// Whether the player is at the table
+	bool IsAtTable;
+
+	// Table camera down rotation value
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	FRotator TableCameraDownRotation;
+
+	// Table camera tilt direction:
+	// -1: left
+	//	0: none
+	//	1: right
+	int TableCameraTiltDirection;
+
+	// Table camera tilt rotation value
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	FRotator TableCameraTiltRotation;
 
 	// Movement
 	void TurnLeft(const FInputActionInstance& Instance);

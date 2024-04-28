@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "GameCharacter.h"
 
 // Sets default values
@@ -14,6 +11,13 @@ AGameCharacter::AGameCharacter()
 
 	// Set default forward/backward movement distance
 	DistanceToMove = 100.0f;
+
+	// Set default table location vector
+	TableLocation = FVector(0.0f, 0.0f, 0.0f);
+	IsAtTable = false;
+	TableCameraDownRotation = FRotator(40.0f, 0.0f, 0.0f);
+	TableCameraTiltDirection = 0;
+	TableCameraTiltRotation = FRotator(15.0f, 30.0f, 0.0f);
 }
 
 // Called when the game starts or when spawned
@@ -70,29 +74,86 @@ void AGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void AGameCharacter::TurnLeft(const FInputActionInstance& Instance)
 {
 	FRotator newRotation = GetActorRotation();
-	newRotation += FRotator(0.0f, -90.0f, 0.0f);
+	if (IsAtTable and TableCameraTiltDirection > -1)
+	{
+		if (TableCameraTiltDirection == 1)
+		{
+			newRotation -= TableCameraTiltRotation;
+		}
+		else
+		{
+			newRotation -= FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+		}
+		TableCameraTiltDirection--;
+	}
+	else if (!IsAtTable)
+	{
+		newRotation -= FRotator(0.0f, 90.0f, 0.0f);
+	}
 	SetActorRotation(newRotation);
 }
 
 void AGameCharacter::TurnRight(const FInputActionInstance& Instance)
 {
 	FRotator newRotation = GetActorRotation();
-	newRotation += FRotator(0.0f, 90.0f, 0.0f);
+	if (IsAtTable and TableCameraTiltDirection < 1)
+	{
+		if (TableCameraTiltDirection == -1)
+		{
+			newRotation += FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+		}
+		else
+		{
+			newRotation += TableCameraTiltRotation;
+		}
+		TableCameraTiltDirection++;
+	}
+	else if (!IsAtTable)
+	{
+		newRotation += FRotator(0.0f, 90.0f, 0.0f);
+	}
 	SetActorRotation(newRotation);
 }
 
 void AGameCharacter::MoveForward(const FInputActionInstance& Instance)
 {
-	FVector newLocation = GetActorLocation();
-	FVector forwardVector = GetActorForwardVector();
-	newLocation += (forwardVector * DistanceToMove);
-	SetActorLocation(newLocation);
+	if (!IsAtTable)
+	{
+		FVector newLocation = GetActorLocation();
+		FVector forwardVector = GetActorForwardVector();
+		newLocation += (forwardVector * DistanceToMove);
+
+		if (newLocation.Equals(TableLocation) and GetActorRotation().Equals(FRotator(0.0f, 90.0f, 0.0f)))
+		{
+			IsAtTable = true;
+			FRotator newRotation = GetActorRotation();
+			newRotation -= TableCameraDownRotation;
+			SetActorRotation(newRotation);
+		}
+		SetActorLocation(newLocation);
+	}
 }
 
 void AGameCharacter::MoveBackward(const FInputActionInstance& Instance)
 {
-	FVector newLocation = GetActorLocation();
-	FVector forwardVector = GetActorForwardVector();
-	newLocation -= (forwardVector * DistanceToMove);
-	SetActorLocation(newLocation);
+	if (IsAtTable and TableCameraTiltDirection != 0)
+	{
+		FRotator newRotation = GetActorRotation();
+		newRotation -= FRotator(TableCameraTiltRotation.Pitch, TableCameraTiltDirection * TableCameraTiltRotation.Yaw, TableCameraTiltDirection * TableCameraTiltRotation.Roll);
+		SetActorRotation(newRotation);
+		TableCameraTiltDirection = 0;
+	}
+	else if (IsAtTable and TableCameraTiltDirection == 0)
+	{
+		FRotator newRotation = GetActorRotation();
+		newRotation += TableCameraDownRotation;
+		SetActorRotation(newRotation);
+		IsAtTable = false;
+	}
+	if (!IsAtTable) {
+		FVector newLocation = GetActorLocation();
+		FVector forwardVector = GetActorForwardVector();
+		newLocation -= (forwardVector * DistanceToMove);
+		SetActorLocation(newLocation);
+	}
 }
