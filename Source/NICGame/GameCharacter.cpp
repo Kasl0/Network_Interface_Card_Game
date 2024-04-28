@@ -32,5 +32,25 @@ void AGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Add input mapping context
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		// Get local player subsystem
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			// Add input context
+			Subsystem->AddMappingContext(InputMapping, 0);
+		}
+	}
+
+	if (UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		Input->BindAction(TurnLeftAction, ETriggerEvent::Triggered, this, &AGameCharacter::TurnLeft);
+	}
 }
 
+void AGameCharacter::TurnLeft(const FInputActionInstance& Instance)
+{
+	bool BoolValue = Instance.GetValue().Get<bool>();
+	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, "TurnLeftAction");
+}
