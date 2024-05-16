@@ -73,6 +73,13 @@ protected:
 	void MoveForward(const FInputActionInstance& Instance);
 	void MoveBackward(const FInputActionInstance& Instance);
 
+	// Show card overlay
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowCardOverlay();
+	// Hide card overlay
+	UFUNCTION(BlueprintImplementableEvent)
+	void HideCardOverlay();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

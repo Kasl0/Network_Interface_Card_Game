@@ -129,6 +129,8 @@ void AGameCharacter::MoveForward(const FInputActionInstance& Instance)
 			FRotator newRotation = GetActorRotation();
 			newRotation -= TableCameraDownRotation;
 			SetActorRotation(newRotation);
+
+			this->ShowCardOverlay();
 		}
 		SetActorLocation(newLocation);
 	}
@@ -149,6 +151,8 @@ void AGameCharacter::MoveBackward(const FInputActionInstance& Instance)
 		newRotation += TableCameraDownRotation;
 		SetActorRotation(newRotation);
 		IsAtTable = false;
+
+		this->HideCardOverlay();
 	}
 	if (!IsAtTable) {
 		FVector newLocation = GetActorLocation();
