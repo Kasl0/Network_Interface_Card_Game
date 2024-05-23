@@ -10,10 +10,10 @@ AGameCharacter::AGameCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
 	// Set default forward/backward movement distance
-	DistanceToMove = 100.0f;
+	DistanceToMove = 150.0f;
 
 	// Set default table location vector
-	TableLocation = FVector(0.0f, 0.0f, 0.0f);
+	TableLocation = FVector(166.0f, -213.0f, 125.0f);
 	IsAtTable = false;
 	TableCameraDownRotation = FRotator(40.0f, 0.0f, 0.0f);
 	TableCameraTiltDirection = 0;
@@ -123,7 +123,7 @@ void AGameCharacter::MoveForward(const FInputActionInstance& Instance)
 		FVector forwardVector = GetActorForwardVector();
 		newLocation += (forwardVector * DistanceToMove);
 
-		if (newLocation.Equals(TableLocation) and GetActorRotation().Equals(FRotator(0.0f, 90.0f, 0.0f)))
+		if (newLocation.Equals(TableLocation) and (GetActorRotation().Equals(FRotator(0.0f, 180.0f, 0.0f)) or GetActorRotation().Equals(FRotator(0.0f, -180.0f, 0.0f))))
 		{
 			IsAtTable = true;
 			FRotator newRotation = GetActorRotation();
