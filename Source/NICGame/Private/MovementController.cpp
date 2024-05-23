@@ -1,4 +1,5 @@
 #include "MovementController.h"
+#include "NICGame/GameCharacter.h"
 
 // Sets default values for this component's properties
 UMovementController::UMovementController()
@@ -17,6 +18,7 @@ UMovementController::UMovementController()
 
 	// Set default table location vector
 	TableLocation = FVector(166.0f, -213.0f, 125.0f);
+	TableRotation = FRotator(0.0f, 180.0f, 0.0f);
 	IsAtTable = false;
 	TableCameraDownRotation = FRotator(40.0f, 0.0f, 0.0f);
 	TableCameraTiltDirection = 0;
@@ -58,66 +60,59 @@ void UMovementController::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UMovementController::TurnLeft(const FInputActionInstance& Instance)
 {
-	FRotator newRotation = GetOwner()->GetActorRotation();
 	if (IsAtTable and TableCameraTiltDirection > -1)
 	{
 		if (TableCameraTiltDirection == 1)
 		{
-			newRotation -= TableCameraTiltRotation;
+			DesiredRotation -= TableCameraTiltRotation;
 		}
 		else
 		{
-			newRotation -= FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+			DesiredRotation -= FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
 		}
 		TableCameraTiltDirection--;
 	}
 	else if (!IsAtTable)
 	{
-		newRotation -= FRotator(0.0f, 90.0f, 0.0f);
+		DesiredRotation -= FRotator(0.0f, 90.0f, 0.0f);
 	}
-	GetOwner()->SetActorRotation(newRotation);
+	bMoveToDesiredTransform = true;
 }
 
 void UMovementController::TurnRight(const FInputActionInstance& Instance)
 {
-	FRotator newRotation = GetOwner()->GetActorRotation();
 	if (IsAtTable and TableCameraTiltDirection < 1)
 	{
 		if (TableCameraTiltDirection == -1)
 		{
-			newRotation += FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+			DesiredRotation += FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
 		}
 		else
 		{
-			newRotation += TableCameraTiltRotation;
+			DesiredRotation += TableCameraTiltRotation;
 		}
 		TableCameraTiltDirection++;
 	}
 	else if (!IsAtTable)
 	{
-		newRotation += FRotator(0.0f, 90.0f, 0.0f);
+		DesiredRotation += FRotator(0.0f, 90.0f, 0.0f);
 	}
-	GetOwner()->SetActorRotation(newRotation);
+	bMoveToDesiredTransform = true;
 }
 
 void UMovementController::MoveForward(const FInputActionInstance& Instance)
 {
 	if (!IsAtTable)
 	{
-		AActor* Owner = GetOwner();
-		FVector newLocation = Owner->GetActorLocation();
-		FVector forwardVector = Owner->GetActorForwardVector();
-		newLocation += (forwardVector * DistanceToMove);
+		DesiredLocation += (DesiredRotation.Vector() * DistanceToMove);
 
-		if (newLocation.Equals(TableLocation) and Owner->GetActorRotation().Equals(FRotator(0.0f, 180.0f, 0.0f), 0.1f))
+		if (DesiredLocation.Equals(TableLocation, 0.1f) and DesiredRotation.Equals(TableRotation, 0.1f))
 		{
 			IsAtTable = true;
-			FRotator newRotation = Owner->GetActorRotation();
-			newRotation -= TableCameraDownRotation;
-			DesiredRotation = newRotation;
-			this->ShowCardOverlay();
+			DesiredRotation -= TableCameraDownRotation;
+			AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+			GameCharacter->ShowCardOverlay();
 		}
-		DesiredLocation = newLocation;
 		bMoveToDesiredTransform = true;
 	}
 }
@@ -126,23 +121,18 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 {
 	if (IsAtTable and TableCameraTiltDirection != 0)
 	{
-		FRotator newRotation = GetOwner()->GetActorRotation();
-		newRotation -= FRotator(TableCameraTiltRotation.Pitch, TableCameraTiltDirection * TableCameraTiltRotation.Yaw, TableCameraTiltDirection * TableCameraTiltRotation.Roll);
-		GetOwner()->SetActorRotation(newRotation);
+		DesiredRotation -= FRotator(TableCameraTiltRotation.Pitch, TableCameraTiltDirection * TableCameraTiltRotation.Yaw, TableCameraTiltDirection * TableCameraTiltRotation.Roll);
 		TableCameraTiltDirection = 0;
 	}
 	else if (IsAtTable and TableCameraTiltDirection == 0)
 	{
-		FRotator newRotation = GetOwner()->GetActorRotation();
-		newRotation += TableCameraDownRotation;
-		GetOwner()->SetActorRotation(newRotation);
+		DesiredRotation += TableCameraDownRotation;
 		IsAtTable = false;
-		this->HideCardOverlay();
+		AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+		GameCharacter->HideCardOverlay();
 	}
 	if (!IsAtTable) {
-		FVector newLocation = GetOwner()->GetActorLocation();
-		FVector forwardVector = GetOwner()->GetActorForwardVector();
-		newLocation -= (forwardVector * DistanceToMove);
-		GetOwner()->SetActorLocation(newLocation);
+		DesiredLocation -= (DesiredRotation.Vector() * DistanceToMove);
 	}
+	bMoveToDesiredTransform = true;
 }

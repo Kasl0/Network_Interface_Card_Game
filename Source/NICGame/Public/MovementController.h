@@ -20,19 +20,24 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Whether to move to the desired transform
+	UPROPERTY(EditAnywhere, Category = "Moving")
 	bool bMoveToDesiredTransform;
 
 	// Desired transform
+	UPROPERTY(EditAnywhere, Category = "Moving")
 	FVector DesiredLocation;
+	UPROPERTY(EditAnywhere, Category = "Moving")
 	FRotator DesiredRotation;
 
 	// Forward/backward movement distance
 	UPROPERTY(EditAnywhere, Category = "Moving")
 	float DistanceToMove;
 
-	// Table location vector
+	// Table transform
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FVector TableLocation;
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	FRotator TableRotation;
 
 	// Whether the player is at the table
 	bool IsAtTable;
@@ -50,14 +55,6 @@ protected:
 	// Table camera tilt rotation value
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FRotator TableCameraTiltRotation;
-
-	// Show card overlay
-	UFUNCTION(BlueprintImplementableEvent)
-	void ShowCardOverlay();
-
-	// Hide card overlay
-	UFUNCTION(BlueprintImplementableEvent)
-	void HideCardOverlay();
 
 public:	
 	// Called every frame

@@ -53,4 +53,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Show card overlay
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowCardOverlay();
+
+	// Hide card overlay
+	UFUNCTION(BlueprintImplementableEvent)
+	void HideCardOverlay();
+
 };
