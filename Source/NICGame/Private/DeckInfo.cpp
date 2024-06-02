@@ -3,17 +3,19 @@
 
 #include "DeckInfo.h"
 
+#include "Cards/CardData.h"
+
 void UDeckInfo::CreateMockDeck()
 {
 	if (this->SinglePlayerDeck.Num() == 0)
 	{
-		for (int i = 0; i < 5; i++) 
+		/*for (int i = 0; i < 5; i++) 
 		{
 			UCardData* Data = NewObject<UCardData>();
 			Data->SetData(std::to_string(i), std::to_string(i));
 			Data->AddToRoot();
 			this->SinglePlayerDeck.Add(Data);
-		}
+		}*/
 	}
 }
 

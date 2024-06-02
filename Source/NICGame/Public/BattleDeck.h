@@ -5,7 +5,7 @@
 #include <random>
 
 #include "CoreMinimal.h"
-#include "CardData.h"
+#include "Cards/CardData.h"
 #include "UObject/Object.h"
 #include "BattleDeck.generated.h"
 

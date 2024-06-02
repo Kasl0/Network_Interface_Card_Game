@@ -15,8 +15,11 @@ class NICGAME_API UCardData : public UObject
 	GENERATED_BODY()
 
 public:
-	void SetData(std::string Name, std::string Description);
+	virtual void SetData(uint8 Cost, std::string Name, std::string Description);
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	uint8 CardCost;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText CardName;
 
