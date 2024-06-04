@@ -12,7 +12,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class NICGAME_API UCardWidget : public UUserWidget
 {
 	GENERATED_BODY()

@@ -6,6 +6,6 @@
 
 // Add default functionality here for any IDamageable functions that are not pure virtual.
 
-void IDamageable::TakeDamage(int32 DamageValue)
+void IDamageable::TakeDamage(int32 DamageValue, UObject* Source)
 {
 }

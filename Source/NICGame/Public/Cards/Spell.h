@@ -4,16 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "CardData.h"
+#include "Effects/Effect.h"
 #include "Spell.generated.h"
 
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class NICGAME_API USpell : public UCardData
 {
 	GENERATED_BODY()
-
-public:
 	
+	UEffect* SpellEffect;
+	
+public:
+	void init(UEffect* Effect);
 };

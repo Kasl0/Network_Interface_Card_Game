@@ -6,11 +6,9 @@
 #include "Damageable.h"
 #include "Cards/CardData.h"
 
-UDamageEffect::UDamageEffect(){}
-
-UDamageEffect::UDamageEffect(uint32 DamageValue)
+void UDamageEffect::Init(uint32 Value)
 {
-	this->DamageValue = DamageValue;
+	this->DamageValue = Value;
 }
 
 void UDamageEffect::Apply(UObject* EffectTarget)
@@ -18,6 +16,6 @@ void UDamageEffect::Apply(UObject* EffectTarget)
 	IDamageable* Damageable = Cast<IDamageable>(EffectTarget);
 	if (Damageable != nullptr)
 	{
-		Damageable->TakeDamage(this->DamageValue);
+		Damageable->TakeDamage(this->DamageValue, this);
 	}
 }
