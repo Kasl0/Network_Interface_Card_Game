@@ -14,12 +14,10 @@ class NICGAME_API UDamageEffect : public UEffect
 {
 	GENERATED_BODY()
 
-	UDamageEffect();
-
-	UDamageEffect(uint32 DamageValue);
-
 	uint32 DamageValue;
 
 public:
+	void Init(uint32 Value);
+	
 	void Apply(UObject* EffectTarget) override;
 };

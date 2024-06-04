@@ -15,17 +15,13 @@ class NICGAME_API UMinionModifier : public UObject
 {
 	GENERATED_BODY()
 
-	UMinionModifier(const FObjectInitializer& ObjectInitializer);
-
-	UMinionModifier(uint32 Attack=0, int32 Health=0, UEffect* Effect = nullptr, int32 Turns=-1);
-	
 public:
-	uint32 AttackModifier;
+	uint32 AttackModifier = 0;
 
-	int32 HealthModifier;
+	int32 HealthModifier = 0;
 
-	UEffect* Effect;
+	UEffect* Effect = nullptr;
 	
 	// How long the modifier lasts (-1 means no limit)
-	int32 TurnsLeft;
+	int32 TurnsLeft = -1;
 };

@@ -2,3 +2,9 @@
 
 
 #include "Cards/Spell.h"
+
+void USpell::init(UEffect* Effect)
+{
+	this->SpellEffect = Effect;
+	this->SpellEffect->AddToRoot();
+}
