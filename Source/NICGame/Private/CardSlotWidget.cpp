@@ -25,11 +25,10 @@ void UCardSlotWidget::SetCardWidget(UCardWidget* NewCardWidget)
 	CardWidget = NewCardWidget;
 }
 
-void UCardSlotWidget::OnCardSlotClicked()
+void UCardSlotWidget::OnCardSlotClicked(UCardWidget* NewCardWidget)
 {
 	if (CardWidget != NULL)
 	{
-		// place card in battlefield
-		// TODO: implement
+		SetCardWidget(NewCardWidget);
 	}
 }

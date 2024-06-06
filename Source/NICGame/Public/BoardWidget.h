@@ -30,8 +30,21 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
+	uint8 GetColumnCount() const { return ColumnCount; }
+
+	UFUNCTION(BlueprintCallable)
 	UCardWidget* GetUpcomingCardWidgetAt(uint8 Column);
 
 	UFUNCTION(BlueprintCallable)
+	void SetUpcomingCardWidgetAt(uint8 Column, class UCardWidget* CardWidget);
+
+	UFUNCTION(BlueprintCallable)
+	void MoveUpcomingCardsToBattlefield();
+
+
+	UFUNCTION(BlueprintCallable)
 	UCardWidget* GetCardWidgetAt(uint8 Row, uint8 Column);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCardWidgetAt(uint8 Row, uint8 Column, class UCardWidget* CardWidget);
 };

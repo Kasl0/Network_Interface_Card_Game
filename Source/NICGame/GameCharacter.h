@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
+#include "CardWidget.h"
 #include "GameCharacter.generated.h"
 
 UCLASS()
@@ -46,6 +47,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
 	UInputAction* MoveBackwardAction;
 
+	// Selected card
+	UPROPERTY(EditAnywhere, Category = "Card")
+	UCardWidget* SelectedCard;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -61,4 +66,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void HideCardOverlay();
 
+	// Get selected card
+	UFUNCTION(BlueprintCallable)
+	UCardWidget* GetSelectedCard() const { return SelectedCard; }
+
+	// Set selected card
+	UFUNCTION(BlueprintCallable)
+	void SetSelectedCard(UCardWidget* NewSelectedCard) { SelectedCard = NewSelectedCard; }
 };

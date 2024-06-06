@@ -29,8 +29,8 @@ public:
 	UCardWidget* GetCardWidget();
 
 	UFUNCTION(BlueprintCallable)
-	void SetCardWidget(class UCardWidget* NewCardWidget);
+	void SetCardWidget(UCardWidget* NewCardWidget);
 
 	UFUNCTION(BlueprintCallable)
-	void OnCardSlotClicked();
+	void OnCardSlotClicked(UCardWidget* NewCardWidget);
 };
