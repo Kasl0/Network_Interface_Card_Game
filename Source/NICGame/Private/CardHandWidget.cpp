@@ -5,6 +5,11 @@
 #include <iostream>
 #include "Kismet/GameplayStatics.h"
 
+void UCardHandWidget::RemoveCardData(UCardData* CardData)
+{
+	this->CardDataArray.Remove(CardData);
+}
+
 void UCardHandWidget::DrawCard()
 {
 	if (!this->BattleDeck) 

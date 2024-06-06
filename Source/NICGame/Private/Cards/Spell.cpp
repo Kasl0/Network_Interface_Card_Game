@@ -8,3 +8,8 @@ void USpell::init(UEffect* Effect)
 	this->SpellEffect = Effect;
 	this->SpellEffect->AddToRoot();
 }
+
+void USpell::Apply(UObject* SpellTarget)
+{
+	this->SpellEffect->Apply(SpellTarget);
+}

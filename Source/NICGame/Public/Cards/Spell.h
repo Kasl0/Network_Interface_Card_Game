@@ -19,4 +19,7 @@ class NICGAME_API USpell : public UCardData
 	
 public:
 	void init(UEffect* Effect);
+
+	UFUNCTION(BlueprintCallable)
+	void Apply(UObject* SpellTarget);
 };
