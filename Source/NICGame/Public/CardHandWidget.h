@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattleDeck.h"
+#include "CardWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "CardHandWidget.generated.h"
 
@@ -22,7 +23,13 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateCardWidget(UCardData* CardData);
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveCardData(UCardData* CardData);
 	
 public:
 	void DrawCard();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void RemoveCard(UCardWidget* CardWidget);
 };
