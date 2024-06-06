@@ -27,7 +27,7 @@ void UCardSlotWidget::SetCardWidget(UCardWidget* NewCardWidget)
 
 void UCardSlotWidget::OnCardSlotClicked(UCardWidget* NewCardWidget)
 {
-	if (CardWidget != NULL)
+	if (CardWidget == NULL)
 	{
 		SetCardWidget(NewCardWidget);
 	}
