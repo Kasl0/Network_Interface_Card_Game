@@ -1,5 +1,5 @@
-#include "MovementController.h"
-#include "NICGame/GameCharacter.h"
+#include "Player/MovementController.h"
+#include "Player/GameCharacter.h"
 
 // Sets default values for this component's properties
 UMovementController::UMovementController()

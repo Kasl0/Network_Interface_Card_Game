@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Effects/Effect.h"
+#include "Cards/Effects/Effect.h"
 #include "UObject/Object.h"
 #include "MinionModifier.generated.h"
 

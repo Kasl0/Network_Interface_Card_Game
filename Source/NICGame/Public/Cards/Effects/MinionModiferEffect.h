@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Effect.h"
-#include "Cards/MinionModifier.h"
+#include "Cards/Effects/MinionModifier.h"
 #include "MinionModiferEffect.generated.h"
 
 /**

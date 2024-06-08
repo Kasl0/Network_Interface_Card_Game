@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattleDeck.h"
+#include "Deck/BattleDeck.h"
 #include "CardWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "CardHandWidget.generated.h"

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BoardWidget.h"
+#include "Duel/Board/BoardWidget.h"
 #include "Components/HorizontalBox.h"
 #include "Components/UniformGridPanel.h"
-#include "CardSlotWidget.h"
+#include "Duel/Board/CardSlotWidget.h"
 
 void UBoardWidget::NativeConstruct()
 {

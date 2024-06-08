@@ -3,7 +3,7 @@
 
 #include "Cards/Effects/MinionModiferEffect.h"
 
-#include "Cards/Minion.h"
+#include "Cards/CardTypes/Minion.h"
 
 void UMinionModiferEffect::Init(UMinionModifier* MinionModifier)
 {

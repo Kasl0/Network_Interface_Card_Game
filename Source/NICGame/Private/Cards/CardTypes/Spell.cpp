@@ -1,9 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Cards/Spell.h"
+#include "Cards/CardTypes/Spell.h"
 
-void USpell::init(UEffect* Effect)
+void USpell::Init(UEffect* Effect)
 {
 	this->SpellEffect = Effect;
 	this->SpellEffect->AddToRoot();

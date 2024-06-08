@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CardData.h"
-#include "Effects/Effect.h"
+#include "Cards/Effects/Effect.h"
 #include "Spell.generated.h"
 
 /**
@@ -15,10 +15,11 @@ class NICGAME_API USpell : public UCardData
 {
 	GENERATED_BODY()
 	
-	UEffect* SpellEffect;
-	
 public:
-	void init(UEffect* Effect);
+	UPROPERTY(BlueprintReadOnly)
+	UEffect* SpellEffect;
+
+	void Init(UEffect* Effect);
 
 	UFUNCTION(BlueprintCallable)
 	void Apply(UObject* SpellTarget);

@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Damageable.h"
-#include "MinionModifier.h"
-#include "Cards/CardData.h"
+#include "Duel/Damageable.h"
+#include "Cards/Effects/MinionModifier.h"
+#include "Cards/CardTypes/CardData.h"
 #include "Minion.generated.h"
 
 /**

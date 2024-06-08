@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Cards/Minion.h"
+#include "Cards/CardTypes/Minion.h"
 //#include "Damageable.h"
 
 void UMinion::CheckDeath()

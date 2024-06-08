@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Cards/CardWidget.h"
 #include "CardSlotWidget.generated.h"
 
 /**

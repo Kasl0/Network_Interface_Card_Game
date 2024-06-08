@@ -1,4 +1,4 @@
-#include "GameCharacter.h"
+#include "Player/GameCharacter.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter()
