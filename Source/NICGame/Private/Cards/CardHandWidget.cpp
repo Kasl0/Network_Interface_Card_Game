@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CardHandWidget.h"
-#include <iostream>
-#include "Kismet/GameplayStatics.h"
+#include "Cards/CardHandWidget.h"
+
+#include "Deck/BattleDeck.h"
+
 
 void UCardHandWidget::RemoveCardData(UCardData* CardData)
 {

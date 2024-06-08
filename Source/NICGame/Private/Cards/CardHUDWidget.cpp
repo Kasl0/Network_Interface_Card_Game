@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CardHUDWidget.h"
+#include "Cards/CardHUDWidget.h"
 #include "Components/Button.h"
-#include <CardWidget.h>
+#include <Cards/CardWidget.h>
 
-#include "CardHandWidget.h"
+#include "Cards/CardHandWidget.h"
 
 void UCardHUDWidget::NativeConstruct()
 {

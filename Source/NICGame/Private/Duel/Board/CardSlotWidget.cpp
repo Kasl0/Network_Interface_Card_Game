@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CardSlotWidget.h"
+#include "Duel/Board/CardSlotWidget.h"
 
 void UCardSlotWidget::NativeConstruct()
 {

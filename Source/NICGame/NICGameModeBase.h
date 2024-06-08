@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameCharacter.h"
+#include "Player/GameCharacter.h"
 #include "GameFramework/GameModeBase.h"
 #include "NICGameModeBase.generated.h"
 

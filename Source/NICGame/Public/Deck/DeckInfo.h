@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Cards/CardData.h"
+#include "Cards/CardTypes/CardData.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "DeckInfo.generated.h"
 

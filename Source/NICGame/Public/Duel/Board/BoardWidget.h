@@ -4,10 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Cards/CardWidget.h"
 #include "BoardWidget.generated.h"
 
+// TODO
+//  Move Board logic to BoardState, listen for changes and visualise them
+//  https://forums.unrealengine.com/t/how-should-i-implement-observer-pattern/99165
+
 /**
- * 
+ * Handles visualising Board 
  */
 UCLASS()
 class NICGAME_API UBoardWidget : public UUserWidget

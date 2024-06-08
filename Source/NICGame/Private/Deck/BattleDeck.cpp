@@ -1,12 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BattleDeck.h"
+#include "Deck/BattleDeck.h"
 
 #include <vector>
 #include <chrono>
-#include <iostream>
 
-#include "DeckInfo.h"
+#include "Deck/DeckInfo.h"
 #include "Kismet/GameplayStatics.h"
 
 void UBattleDeck::InitializeDeck(UWorld* World)

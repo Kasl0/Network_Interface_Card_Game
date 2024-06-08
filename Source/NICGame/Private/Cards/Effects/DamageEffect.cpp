@@ -3,8 +3,7 @@
 
 #include "Cards/Effects/DamageEffect.h"
 
-#include "Damageable.h"
-#include "Cards/CardData.h"
+#include "Duel/Damageable.h"
 
 void UDamageEffect::Init(uint32 Value)
 {

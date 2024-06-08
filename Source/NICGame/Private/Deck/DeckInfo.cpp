@@ -1,11 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DeckInfo.h"
+#include "Deck/DeckInfo.h"
 
-#include "Cards/CardData.h"
-#include "Cards/Minion.h"
-#include "Cards/Spell.h"
+#include "Cards/CardTypes/CardData.h"
+#include "Cards/CardTypes/Minion.h"
+#include "Cards/CardTypes/Spell.h"
 #include "Cards/Effects/MinionModiferEffect.h"
 
 void UDeckInfo::CreateMockDeck()
@@ -45,7 +45,7 @@ void UDeckInfo::CreateMockDeck()
 		Modifier->AttackModifier = 1;
 		Modifier->HealthModifier = 1;
 		Effect->Init(Modifier);
-		Spell1->init(Effect);
+		Spell1->Init(Effect);
 		Spell1->AddToRoot();
 		this->SinglePlayerDeck.Add(Spell1);
 	}
@@ -61,6 +61,7 @@ TArray<UCardData*> UDeckInfo::GetSinglePlayerDeck()
 	for (int i = 0; i < this->SinglePlayerDeck.Num(); i++)
 	{
 		this->DeckCopy.Add(DuplicateObject(this->SinglePlayerDeck[i], this->GetOuter()));
+		this->DeckCopy[i]->AddToRoot();
 	}
 	return DeckCopy;
 }
