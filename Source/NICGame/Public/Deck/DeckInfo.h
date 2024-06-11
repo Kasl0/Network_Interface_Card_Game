@@ -19,6 +19,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<UCardData*> SinglePlayerDeck;
 
+	UPROPERTY()
 	TArray<UCardData*> DeckCopy;
 
 	void CreateMockDeck();

@@ -6,6 +6,7 @@
 #include "DuelCharacter.h"
 #include "Cards/CardWidget.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Duel/EBoardSide.h"
 #include "DuelState.generated.h"
 
 /**
@@ -15,6 +16,8 @@ UCLASS()
 class NICGAME_API UDuelState : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
+
+	//bool DuelInProgress = false;
 	
 	// Selected card
 	UPROPERTY(EditAnywhere, Category = "Card")
@@ -23,9 +26,6 @@ class NICGAME_API UDuelState : public UGameInstanceSubsystem
 public:
 	// Initializes duel and necessary variables
 	void StartDuel();
-	
-	// Enum used for current turn, board-wide effects etc.
-	enum EBoardSide {Friendly = 0, Enemy = 1};
 	
 	// Get selected card
 	UFUNCTION(BlueprintCallable)
@@ -37,10 +37,17 @@ public:
 
 	// Handles turn change to opposite player
 	UFUNCTION(BlueprintCallable)
-	void SwitchTurn();
-	
-private:
+	void SwitchPlayerTurn();
+
+	UFUNCTION(BlueprintCallable)
+	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> GetCharacters();
+
+	// Add card to board, handle mana etc.
+	UFUNCTION(BlueprintCallable)
+	bool PlayCard(UCardData* CardData);
+protected:
 	EBoardSide CurrentTurn;
 
-	TMap<EBoardSide, UDuelCharacter*> DuelCharacters;
+	UPROPERTY(BlueprintReadOnly)
+	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> DuelCharacters;
 };

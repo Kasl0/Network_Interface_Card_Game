@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
+#include "Duel/DuelState.h"
+#include "Cards/CardHandWidget.h"
 #include "CardHUDWidget.generated.h"
 
 /**
@@ -13,16 +16,25 @@ UCLASS()
 class NICGAME_API UCardHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
+	UFUNCTION()
+	void DrawCard();
+
+	UFUNCTION()
+	void EndTurn();
+
+	UPROPERTY()
+	UDuelState* DuelState;
 	
 protected:
 	virtual void NativeConstruct() override;
 
-	UFUNCTION()
-	virtual void DrawCard();
-
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UButton* DrawCardButton;
+	UButton* DrawCardButton;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	class UCardHandWidget* CardHand;
+	UButton* EndTurnButton;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UCardHandWidget* CardHand;
 };

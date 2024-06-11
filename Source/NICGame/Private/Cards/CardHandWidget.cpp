@@ -2,6 +2,7 @@
 
 
 #include "Cards/CardHandWidget.h"
+#include "Cards/CardTypes/CardData.h"
 
 #include "Deck/BattleDeck.h"
 
@@ -16,7 +17,6 @@ void UCardHandWidget::DrawCard()
 	if (!this->BattleDeck) 
 	{
 		this->BattleDeck = NewObject<UBattleDeck>();
-		this->BattleDeck->AddToRoot();
 		this->BattleDeck->InitializeDeck(GetWorld()); 
 	}
 	UCardData* NewCardData = this->BattleDeck->DrawCard();
