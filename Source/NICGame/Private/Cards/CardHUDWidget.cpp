@@ -6,14 +6,31 @@
 #include <Cards/CardWidget.h>
 
 #include "Cards/CardHandWidget.h"
+#include "Duel/DuelState.h"
 
 void UCardHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	if (DrawCardButton)
+	if (this->DrawCardButton)
 	{
-		DrawCardButton->OnClicked.AddDynamic(this, &UCardHUDWidget::DrawCard);
+		this->DrawCardButton->OnClicked.AddDynamic(this, &UCardHUDWidget::DrawCard);
+	}
+
+	if (this->EndTurnButton)
+	{
+		this->EndTurnButton->OnClicked.AddDynamic(this, &UCardHUDWidget::EndTurn);
+	}
+
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		this->DuelState = GameInstance->GetSubsystem<UDuelState>();
+		if (this->DuelState)
+		{
+			//this->DuelState->AddToRoot();
+			this->DuelState->StartDuel();
+		}
 	}
 }
 
@@ -21,4 +38,12 @@ void UCardHUDWidget::NativeConstruct()
 void UCardHUDWidget::DrawCard()
 {
 	this->CardHand->DrawCard();
+}
+
+void UCardHUDWidget::EndTurn()
+{
+	if (this->DuelState)
+	{
+		this->DuelState->SwitchPlayerTurn();
+	}
 }

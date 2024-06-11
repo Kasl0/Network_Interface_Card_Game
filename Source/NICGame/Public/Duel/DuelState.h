@@ -15,6 +15,8 @@ UCLASS()
 class NICGAME_API UDuelState : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
+
+	//bool DuelInProgress = false;
 	
 	// Selected card
 	UPROPERTY(EditAnywhere, Category = "Card")
@@ -37,7 +39,7 @@ public:
 
 	// Handles turn change to opposite player
 	UFUNCTION(BlueprintCallable)
-	void SwitchTurn();
+	void SwitchPlayerTurn();
 	
 private:
 	EBoardSide CurrentTurn;

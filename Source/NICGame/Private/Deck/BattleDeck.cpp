@@ -37,6 +37,7 @@ UCardData* UBattleDeck::DrawCard()
 	if (this->CardOrder.size() > 0)
 	{
 		LastCard = this->CardDataArray[this->CardOrder.back()];
+		//LastCard->AddToRoot();
 		this->CardOrder.pop_back();
 	}
 	// TODO

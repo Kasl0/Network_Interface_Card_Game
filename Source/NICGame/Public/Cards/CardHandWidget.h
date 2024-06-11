@@ -17,8 +17,10 @@ class NICGAME_API UCardHandWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY()
 	TArray<UCardData*> CardDataArray;
 	
+	UPROPERTY()
 	UBattleDeck* BattleDeck;
 
 	UFUNCTION(BlueprintImplementableEvent)

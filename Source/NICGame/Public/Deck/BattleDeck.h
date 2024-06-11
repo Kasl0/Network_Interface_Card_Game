@@ -20,6 +20,7 @@ class NICGAME_API UBattleDeck : public UObject
 protected:
 	std::default_random_engine RNG;
 	
+	UPROPERTY()
 	TArray<UCardData*> CardDataArray;
 
 	std::vector<int> CardOrder;

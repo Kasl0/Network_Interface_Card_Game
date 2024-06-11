@@ -60,8 +60,9 @@ TArray<UCardData*> UDeckInfo::GetSinglePlayerDeck()
 
 	for (int i = 0; i < this->SinglePlayerDeck.Num(); i++)
 	{
-		this->DeckCopy.Add(DuplicateObject(this->SinglePlayerDeck[i], this->GetOuter()));
-		this->DeckCopy[i]->AddToRoot();
+		UCardData* Card = DuplicateObject(this->SinglePlayerDeck[i], this->GetOuter());
+		//Card->AddToRoot();
+		DeckCopy.Add(Card);
 	}
 	return DeckCopy;
 }
