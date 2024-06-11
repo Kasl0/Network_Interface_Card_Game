@@ -18,11 +18,32 @@ class NICGAME_API UDuelCharacter : public UObject, public IDamageable
 	// Character starting health
 	int32 BaseHealth;
 
+protected:
 	// Character health after damage, modifiers etc.
+	UPROPERTY(BlueprintReadOnly)
 	int32 CurrentHealth;
+
+	// Mana gained at the start of every turn
+	UPROPERTY(BlueprintReadOnly)
+	int32 BaseMana;
+
+	// Mana left during this turn
+	UPROPERTY(BlueprintReadOnly)
+	int32 CurrentMana;
 	
 public:
-	void Init();
+	void StartTurn();
+	
+	void Init(int32 Health = 15, int32 Mana = 3);
 	
 	virtual void TakeDamage(int32 DamageValue, UObject* Source) override;
+
+	int32 GetBaseMana() const;
+
+	int32 GetCurrentMana() const;
+
+	// Spend mana on cards, false if not enough mana
+	bool UseMana(int32 Mana);
+	
+	int32 GetHealth();
 };

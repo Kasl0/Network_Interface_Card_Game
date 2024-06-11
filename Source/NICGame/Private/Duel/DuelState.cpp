@@ -6,24 +6,25 @@
 
 void UDuelState::StartDuel()
 {
-	// for (EBoardSide Side : {Friendly, Enemy})
-	// {
-	// 	if (this->DuelCharacters.Contains(Side))
-	// 	{
-	// 		this->DuelCharacters[Side]->RemoveFromRoot();
-	// 		this->DuelCharacters.Remove(Side);
-	// 	}
-	// 	UDuelCharacter* Character = NewObject<UDuelCharacter>();
-	// 	Character->Init();
-	// 	Character->AddToRoot();
-	// 	this->DuelCharacters.Add(Side, Character);
-	// }
-	this->CurrentTurn = Friendly;
+	for (EBoardSide Side : {TEnumAsByte(Friendly), TEnumAsByte(Enemy)})
+	{
+		if (this->DuelCharacters.Contains(Side))
+		{
+			this->DuelCharacters[Side]->RemoveFromRoot();
+			this->DuelCharacters.Remove(Side);
+		}
+		UDuelCharacter* Character = NewObject<UDuelCharacter>();
+		Character->Init();
+		Character->AddToRoot();
+		this->DuelCharacters.Add(Side, Character);
+	}
+	this->CurrentTurn = TEnumAsByte(Friendly);
+	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
 }
 
 UCardWidget* UDuelState::GetSelectedCard() const
 {
-	return this->CurrentTurn == Friendly ? SelectedCard : nullptr;
+	return this->CurrentTurn == TEnumAsByte(Friendly) ? SelectedCard : nullptr;
 }
 
 void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
@@ -33,6 +34,20 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::SwitchPlayerTurn()
 {
-	// Any additional logic surrounding turn change
-	this->CurrentTurn = this->CurrentTurn == Friendly ? Enemy : Friendly;
+	// Tutaj atakowanie miniona na przeciwko, lub postaci przeciwnika jak nie ma miniona
+	this->CurrentTurn = this->CurrentTurn == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
+	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
+}
+
+TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
+{
+	return this->DuelCharacters;
+}
+
+bool UDuelState::PlayCard(UCardData* CardData)
+{
+	// TODO
+	//  Później proponuję przenieść tutaj logikę zagrywania kart z blueprintów
+	//  Póki co tylko zarządza maną
+	return this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(CardData->CardCost);
 }

@@ -6,6 +6,7 @@
 #include "DuelCharacter.h"
 #include "Cards/CardWidget.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Duel/EBoardSide.h"
 #include "DuelState.generated.h"
 
 /**
@@ -26,9 +27,6 @@ public:
 	// Initializes duel and necessary variables
 	void StartDuel();
 	
-	// Enum used for current turn, board-wide effects etc.
-	enum EBoardSide {Friendly = 0, Enemy = 1};
-	
 	// Get selected card
 	UFUNCTION(BlueprintCallable)
 	UCardWidget* GetSelectedCard() const;
@@ -40,9 +38,16 @@ public:
 	// Handles turn change to opposite player
 	UFUNCTION(BlueprintCallable)
 	void SwitchPlayerTurn();
-	
-private:
+
+	UFUNCTION(BlueprintCallable)
+	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> GetCharacters();
+
+	// Add card to board, handle mana etc.
+	UFUNCTION(BlueprintCallable)
+	bool PlayCard(UCardData* CardData);
+protected:
 	EBoardSide CurrentTurn;
 
-	TMap<EBoardSide, UDuelCharacter*> DuelCharacters;
+	UPROPERTY(BlueprintReadOnly)
+	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> DuelCharacters;
 };

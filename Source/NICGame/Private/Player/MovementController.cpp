@@ -20,7 +20,7 @@ UMovementController::UMovementController()
 	TableLocation = FVector(166.0f, -213.0f, 125.0f);
 	TableRotation = FRotator(0.0f, 180.0f, 0.0f);
 	IsAtTable = false;
-	TableCameraDownRotation = FRotator(50.0f, 0.0f, 0.0f);
+	TableCameraDownRotation = FRotator(40.0f, 0.0f, 0.0f);
 	TableCameraTiltDirection = 0;
 	TableCameraTiltRotation = FRotator(15.0f, 30.0f, 0.0f);
 }
