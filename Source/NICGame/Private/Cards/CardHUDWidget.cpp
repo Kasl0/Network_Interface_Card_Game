@@ -1,10 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Cards/CardHUDWidget.h"
 #include "Components/Button.h"
 #include <Cards/CardWidget.h>
-
+#include "Duel/EBoardSide.h"
 #include "Cards/CardHandWidget.h"
 #include "Duel/DuelState.h"
 
@@ -29,7 +26,7 @@ void UCardHUDWidget::NativeConstruct()
 		if (this->DuelState)
 		{
 			//this->DuelState->AddToRoot();
-			this->DuelState->StartDuel();
+			this->DuelState->StartDuel(TEnumAsByte(Enemy));
 		}
 	}
 }

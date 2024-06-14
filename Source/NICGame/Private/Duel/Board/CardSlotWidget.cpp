@@ -1,34 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Duel/Board/CardSlotWidget.h"
-
-void UCardSlotWidget::NativeConstruct()
-{
-    Super::NativeConstruct();
-
-	CardWidget = NULL;
-}
 
 bool UCardSlotWidget::IsOccupied()
 {
-	return CardWidget != NULL;
+	return this->Overlay->GetChildAt(1) != NULL;
 }
 
 UCardWidget* UCardSlotWidget::GetCardWidget()
 {
-	return CardWidget;
-}
-
-void UCardSlotWidget::SetCardWidget(UCardWidget* NewCardWidget)
-{
-	CardWidget = NewCardWidget;
-}
-
-void UCardSlotWidget::OnCardSlotClicked(UCardWidget* NewCardWidget)
-{
-	if (CardWidget == NULL)
-	{
-		SetCardWidget(NewCardWidget);
-	}
+	return Cast<UCardWidget>(this->Overlay->GetChildAt(1));
 }

@@ -1,12 +1,11 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "DuelCharacter.h"
 #include "Cards/CardWidget.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Duel/EBoardSide.h"
+#include "Duel/Board/BoardState.h"
 #include "DuelState.generated.h"
 
 /**
@@ -16,6 +15,8 @@ UCLASS()
 class NICGAME_API UDuelState : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
+protected:
+	UDuelState();
 
 	//bool DuelInProgress = false;
 	
@@ -25,7 +26,7 @@ class NICGAME_API UDuelState : public UGameInstanceSubsystem
 
 public:
 	// Initializes duel and necessary variables
-	void StartDuel();
+	void StartDuel(EBoardSide StartingSide);
 	
 	// Get selected card
 	UFUNCTION(BlueprintCallable)
@@ -44,10 +45,18 @@ public:
 
 	// Add card to board, handle mana etc.
 	UFUNCTION(BlueprintCallable)
-	bool PlayCard(UCardData* CardData);
+	bool PlayCard(UCardData* CardData, uint8 Colum);
+
+	// Get board state
+	UFUNCTION(BlueprintCallable)
+	UBoardState* GetBoardState() const { return this->BoardState; }
+
 protected:
 	EBoardSide CurrentTurn;
 
 	UPROPERTY(BlueprintReadOnly)
 	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> DuelCharacters;
+
+	UPROPERTY()
+	UBoardState* BoardState;
 };

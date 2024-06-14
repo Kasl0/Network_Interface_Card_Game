@@ -1,10 +1,12 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿#include "Duel/DuelState.h"
+#include "Duel/EnemyDuelCharacter.h"
 
+UDuelState::UDuelState()
+{
+	this->BoardState = NewObject<UBoardState>();
+}
 
-#include "Duel/DuelState.h"
-
-
-void UDuelState::StartDuel()
+void UDuelState::StartDuel(EBoardSide StartingSide)
 {
 	for (EBoardSide Side : {TEnumAsByte(Friendly), TEnumAsByte(Enemy)})
 	{
@@ -13,12 +15,22 @@ void UDuelState::StartDuel()
 			this->DuelCharacters[Side]->RemoveFromRoot();
 			this->DuelCharacters.Remove(Side);
 		}
-		UDuelCharacter* Character = NewObject<UDuelCharacter>();
-		Character->Init();
-		Character->AddToRoot();
-		this->DuelCharacters.Add(Side, Character);
+
+		if (Side == TEnumAsByte(Enemy)) {
+			UEnemyDuelCharacter* Character = NewObject<UEnemyDuelCharacter>();
+			Character->Init();
+			Character->InitializeDuelState(this);
+			Character->AddToRoot();
+			this->DuelCharacters.Add(Side, Character);
+		}
+		else {
+			UDuelCharacter* Character = NewObject<UDuelCharacter>();
+			Character->Init();
+			Character->AddToRoot();
+			this->DuelCharacters.Add(Side, Character);
+		}
 	}
-	this->CurrentTurn = TEnumAsByte(Friendly);
+	this->CurrentTurn = StartingSide;
 	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
 }
 
@@ -34,9 +46,9 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::SwitchPlayerTurn()
 {
-	// Tutaj atakowanie miniona na przeciwko, lub postaci przeciwnika jak nie ma miniona
 	this->CurrentTurn = this->CurrentTurn == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
 	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
+	// Tutaj atakowanie miniona na przeciwko, lub postaci przeciwnika jak nie ma miniona
 }
 
 TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
@@ -44,10 +56,8 @@ TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
 	return this->DuelCharacters;
 }
 
-bool UDuelState::PlayCard(UCardData* CardData)
+bool UDuelState::PlayCard(UCardData* CardData, uint8 Column)
 {
-	// TODO
-	//  Później proponuję przenieść tutaj logikę zagrywania kart z blueprintów
-	//  Póki co tylko zarządza maną
+	this->BoardState->PlaceCard(CardData, this->CurrentTurn, Column);
 	return this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(CardData->CardCost);
 }

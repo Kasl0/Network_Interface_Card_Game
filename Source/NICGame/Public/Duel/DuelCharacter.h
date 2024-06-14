@@ -32,7 +32,7 @@ protected:
 	int32 CurrentMana;
 	
 public:
-	void StartTurn();
+	virtual void StartTurn();
 	
 	void Init(int32 Health = 15, int32 Mana = 3);
 	
