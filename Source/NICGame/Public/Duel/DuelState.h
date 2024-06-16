@@ -59,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UEnemyDeckInfo* GetEnemyDeckInfo();
 
+	UFUNCTION()
+	void EndDuel(EBoardSide WiningSide, uint8 excessiveDamage);
+
 protected:
 	EBoardSide CurrentTurn;
 

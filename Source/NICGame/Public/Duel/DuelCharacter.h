@@ -36,6 +36,8 @@ public:
 	
 	virtual void TakeDamage(int32 DamageValue, UObject* Source) override;
 
+	bool CheckDeath();
+
 	int32 GetBaseMana() const;
 
 	int32 GetCurrentMana() const;

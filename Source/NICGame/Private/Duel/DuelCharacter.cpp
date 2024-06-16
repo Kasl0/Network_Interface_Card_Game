@@ -1,4 +1,5 @@
 ﻿#include "Duel/DuelCharacter.h"
+#include "Duel/DuelState.h"
 
 void UDuelCharacter::StartTurn()
 {
@@ -15,8 +16,24 @@ void UDuelCharacter::Init(int32 Health, int32 Mana)
 void UDuelCharacter::TakeDamage(int32 DamageValue, UObject* Source)
 {
 	this->CurrentHealth -= DamageValue;
-	// TODO
-	//  Check and handle death
+}
+
+bool UDuelCharacter::CheckDeath()
+{
+	if (this->CurrentHealth <= 0)
+	{
+		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+		UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
+		for (auto& Character : DuelState->GetCharacters())
+		{
+			if (Character.Value == this)
+			{
+				DuelState->EndDuel(Character.Key == Friendly ? Enemy : Friendly, this->CurrentHealth * -1);
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 int32 UDuelCharacter::GetBaseMana() const

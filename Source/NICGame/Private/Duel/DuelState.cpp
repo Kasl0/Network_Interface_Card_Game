@@ -3,6 +3,7 @@
 #include "Duel/EnemyDuelCharacter.h"
 #include "Duel/Board/BoardState.h"
 #include "Duel/DuelCharacter.h"
+#include "Engine/Engine.h" // temporary for debug text
 
 UDuelState::UDuelState()
 {
@@ -13,7 +14,7 @@ UDuelState::UDuelState()
 
 void UDuelState::StartDuel(EBoardSide StartingSide)
 {
-	for (EBoardSide Side : {TEnumAsByte(Friendly), TEnumAsByte(Enemy)})
+	for (EBoardSide Side : {Friendly, Enemy})
 	{
 		if (this->DuelCharacters.Contains(Side))
 		{
@@ -21,17 +22,19 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 			this->DuelCharacters.Remove(Side);
 		}
 
-		if (Side == TEnumAsByte(Enemy)) {
-			UEnemyDuelCharacter* Character = NewObject<UEnemyDuelCharacter>();
-			Character->Init();
-			Character->AddToRoot();
+		if (Side == Enemy) {
+			UEnemyDuelCharacter* Character0 = NewObject<UEnemyDuelCharacter>();
+			Character0->Init();
+			Character0->AddToRoot();
+			UEnemyDuelCharacter* Character = DuplicateObject(Character0, this->GetOuter());
 			Character->InitializeDuelState(this);
 			this->DuelCharacters.Add(Side, Character);
 		}
 		else {
-			UDuelCharacter* Character = NewObject<UDuelCharacter>();
-			Character->Init();
-			Character->AddToRoot();
+			UDuelCharacter* Character0 = NewObject<UDuelCharacter>();
+			Character0->Init();
+			Character0->AddToRoot();
+			UDuelCharacter* Character = DuplicateObject(Character0, this->GetOuter());
 			this->DuelCharacters.Add(Side, Character);
 		}
 	}
@@ -41,7 +44,7 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 
 UCardWidget* UDuelState::GetSelectedCard() const
 {
-	return this->CurrentTurn == TEnumAsByte(Friendly) ? SelectedCard : nullptr;
+	return this->CurrentTurn == Friendly ? SelectedCard : nullptr;
 }
 
 void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
@@ -52,8 +55,13 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 void UDuelState::SwitchPlayerTurn()
 {
 	this->BoardState->MinionAttack(this->CurrentTurn);
-	this->CurrentTurn = this->CurrentTurn == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
+	this->CurrentTurn = this->CurrentTurn == Friendly ? Enemy : Friendly;
+	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
+	{
+		return;
+	}
 	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
+	
 }
 
 TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
@@ -82,4 +90,23 @@ UEnemyDeckInfo* UDuelState::GetEnemyDeckInfo()
 {
 	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 	return Cast<UEnemyDeckInfo>(GameInstance->GetSubsystem<UEnemyDeckInfo>());
+}
+
+void UDuelState::EndDuel(EBoardSide WiningSide, uint8 excessiveDamage)
+{
+	// temporary debug text
+	FString Text1 = "GAME OVER! Winner: ";
+	Text1.Append(WiningSide == TEnumAsByte(Friendly) ? "Player" : "Enemy");
+	Text1.Append(" with excessiveDamage = ");
+	Text1.Append(FString::FromInt(excessiveDamage));
+	FString Text2 = "New game automatically started";
+
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text2);
+	}
+
+	// very temporary, for the demo
+	this->BoardState->Init(this, 4);
+	this->StartDuel(TEnumAsByte(Enemy));
 }
