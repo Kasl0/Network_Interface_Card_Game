@@ -3,8 +3,10 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Duel/EBoardSide.h"
-#include "Cards/CardTypes/CardData.h"
 #include "BoardState.generated.h"
+
+class UDuelState;
+class UCardData;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBoardStateDelegate);
 
@@ -17,16 +19,18 @@ class NICGAME_API UBoardState : public UObject
 	GENERATED_BODY()
 
 public:
-	
-	/*
-	* Constructor
-	*/
-	UBoardState();
 
 	/*
 	* Event that is broadcasted when the board changes
 	*/
 	FBoardStateDelegate OnBoardChanged;
+
+	/*
+	* Initialize the board with the specified number of columns
+	* @param State The duel state that the board is associated with
+	* @param ColumnCnt The number of columns to initialize the board with
+	*/
+	void Init(UDuelState* State, uint8 ColumnCnt);
 
 	/*
 	* Get the card at the specified position in the upcoming row
@@ -66,12 +70,21 @@ public:
 	void MoveUpcomingCardsToBattlefield();
 
 	/*
+	* Attack the minions on the opposite side
+	* @param AttackerSide The side that is attacking
+	*/
+	void MinionAttack(EBoardSide AttackerSide);
+
+	/*
 	* Get the number of columns on the board
 	* @return The number of columns on the board
 	*/
-	uint8 GetColumnCount() const { return this->ColumnCount; }
+	uint8 GetColumnCount();
 
 private:
+	UPROPERTY()
+	class UDuelState* DuelState;
+
 	UPROPERTY()
 	uint8 ColumnCount;
 

@@ -21,36 +21,11 @@ void UEnemyDuelCharacter::PlayCards()
 	// Move upcoming cards to the board
 	BoardState->MoveUpcomingCardsToBattlefield();
 
-	// Get available columns
-	TArray<uint8> AvailableColumns;
-	for (uint8 Column = 0; Column < BoardState->GetColumnCount(); Column++)
-	{
-		if (BoardState->GetUpcomingCardAt(Column) == NULL)
-		{
-			AvailableColumns.Add(Column);
-		}
-	}
-	if (AvailableColumns.Num() == 0)
+	uint8 Column = this->GetPreferredEmptyColumn();
+	if (Column == -1)
 	{
 		return;
 	}
-
-	// Get prefferable columns (columns without enemy minions)
-	TArray<uint8> PrefferableColumns;
-	for (uint8 i = 0; i < AvailableColumns.Num(); i++)
-	{
-		if (BoardState->GetCardAt(TEnumAsByte(Enemy), AvailableColumns[i]) == NULL)
-		{
-			PrefferableColumns.Add(AvailableColumns[i]);
-		}
-	}
-	if (PrefferableColumns.Num() == 0)
-	{
-		PrefferableColumns = AvailableColumns;
-	}
-
-	// Select a random column
-	uint8 Column = PrefferableColumns[FMath::RandRange(0, PrefferableColumns.Num() - 1)];
 
 	// One hard-coded enemy for now
 	UMinion* Minion1 = NewObject<UMinion>();
@@ -64,6 +39,56 @@ void UEnemyDuelCharacter::PlayCards()
 	
 	// Place the card
 	this->DuelState->GetBoardState()->PlaceUpcomingCard(Minion1, Column);
+}
+
+uint8 UEnemyDuelCharacter::GetPreferredEmptyColumn()
+{
+	UBoardState* BoardState = this->DuelState->GetBoardState();
+
+	// Get available upcoming columns
+	TArray<uint8> AvailableColumns;
+	for (uint8 Column = 0; Column < BoardState->GetColumnCount(); Column++)
+	{
+		if (BoardState->GetUpcomingCardAt(Column) == NULL)
+		{
+			AvailableColumns.Add(Column);
+		}
+	}
+	if (AvailableColumns.Num() == 0)
+	{
+		return -1;
+	}
+
+	// Get empty columns (columns without minions)
+	TArray<uint8> EmptyColumns;
+	for (uint8 i = 0; i < AvailableColumns.Num(); i++)
+	{
+		if (BoardState->GetCardAt(TEnumAsByte(Enemy), AvailableColumns[i]) == NULL)
+		{
+			EmptyColumns.Add(AvailableColumns[i]);
+		}
+	}
+	if (EmptyColumns.Num() == 0)
+	{
+		return AvailableColumns[FMath::RandRange(0, AvailableColumns.Num() - 1)];
+	}
+
+	// Get prefferable columns (columns without enemy minions & opposing friendly minion)
+	TArray<uint8> PrefferableColumns;
+	for (uint8 i = 0; i < EmptyColumns.Num(); i++)
+	{
+		if (BoardState->GetCardAt(TEnumAsByte(Friendly), EmptyColumns[i]) != NULL)
+		{
+			PrefferableColumns.Add(EmptyColumns[i]);
+		}
+	}
+	if (PrefferableColumns.Num() == 0)
+	{
+		return EmptyColumns[FMath::RandRange(0, EmptyColumns.Num() - 1)];
+	}
+
+	// Select a random column
+	return PrefferableColumns[FMath::RandRange(0, PrefferableColumns.Num() - 1)];
 }
 
 void UEnemyDuelCharacter::EndTurn()

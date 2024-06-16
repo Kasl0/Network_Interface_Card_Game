@@ -1,9 +1,13 @@
 ﻿#include "Duel/DuelState.h"
+#include "Cards/CardWidget.h"
 #include "Duel/EnemyDuelCharacter.h"
+#include "Duel/Board/BoardState.h"
+#include "Duel/DuelCharacter.h"
 
 UDuelState::UDuelState()
 {
 	this->BoardState = NewObject<UBoardState>();
+	this->BoardState->Init(this, 4);
 }
 
 void UDuelState::StartDuel(EBoardSide StartingSide)
@@ -46,9 +50,9 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::SwitchPlayerTurn()
 {
+	this->BoardState->MinionAttack(this->CurrentTurn);
 	this->CurrentTurn = this->CurrentTurn == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
 	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
-	// Tutaj atakowanie miniona na przeciwko, lub postaci przeciwnika jak nie ma miniona
 }
 
 TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
@@ -58,6 +62,17 @@ TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
 
 bool UDuelState::PlayCard(UCardData* CardData, uint8 Column)
 {
-	this->BoardState->PlaceCard(CardData, this->CurrentTurn, Column);
-	return this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(CardData->CardCost);
+	if (this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(CardData->CardCost))
+	{
+		return this->BoardState->PlaceCard(CardData, this->CurrentTurn, Column);
+	}
+	else
+	{
+		return false;
+	}
+}
+
+UBoardState* UDuelState::GetBoardState()
+{
+	return this->BoardState;
 }

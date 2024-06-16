@@ -1,11 +1,17 @@
 ﻿#include "Duel/Board/BoardState.h"
+#include "Duel/DuelState.h"
+#include "Cards/CardTypes/CardData.h"
+#include "Cards/CardTypes/Minion.h"
+#include "Cards/CardTypes/Spell.h"
+#include "Duel/DuelCharacter.h"
 
-UBoardState::UBoardState()
+void UBoardState::Init(UDuelState* State, uint8 ColumnCnt)
 {
-	this->ColumnCount = 4;
+	this->DuelState = State;
+	this->ColumnCount = ColumnCnt;
 	this->UpcomingRow.SetNum(this->ColumnCount);
-	this->Board.SetNum(this->ColumnCount *2);
-	
+	this->Board.SetNum(this->ColumnCount * 2);
+
 	for (int i = 0; i < this->ColumnCount; i++)
 	{
 		this->UpcomingRow[i] = NULL;
@@ -57,14 +63,29 @@ bool UBoardState::PlaceCard(UCardData* Card, EBoardSide Side, uint8 Column)
 	{
 		return false;
 	}
+
 	if (this->Board[Side * this->ColumnCount + Column] != NULL)
 	{
+		// if spell
+		USpell* Spell = Cast<USpell>(Card);
+		if (Spell != NULL)
+		{
+			Spell->Apply(this->Board[Side * this->ColumnCount + Column]);
+			return true;
+		}
 		return false;
 	}
-
-	this->Board[Side * this->ColumnCount + Column] = Card;
-	this->BroadcastBoardChanged();
-	return true;
+	else {
+		// if minion
+		UMinion* Minion = Cast<UMinion>(Card);
+		if (Minion != NULL)
+		{
+			this->Board[Side * this->ColumnCount + Column] = Card;
+			this->BroadcastBoardChanged();
+			return true;
+		}
+		return false;
+	}
 }
 
 void UBoardState::MoveUpcomingCardsToBattlefield()
@@ -83,6 +104,43 @@ void UBoardState::MoveUpcomingCardsToBattlefield()
 	{
 		this->BroadcastBoardChanged();
 	}
+}
+
+void UBoardState::MinionAttack(EBoardSide AttackerSide)
+{
+	EBoardSide DefenderSide = AttackerSide == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
+	for (int i = 0; i < this->ColumnCount; i++)
+	{
+		UCardData* Attacker = this->GetCardAt(AttackerSide, i);
+		if (Attacker == NULL)
+		{
+			continue;
+		}
+		UMinion* AttackerMinion = Cast<UMinion>(Attacker);
+		if (AttackerMinion == NULL)
+		{
+			continue;
+		}
+
+		UCardData* Defender = this->GetCardAt(DefenderSide, i);
+		UMinion* DefenderMinion = Cast<UMinion>(Defender);
+		if (Defender != NULL && DefenderMinion != NULL)
+		{
+			// Attack the minion in front
+			DefenderMinion->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
+		}
+		else
+		{
+			// Attack the enemy player
+			this->DuelState->GetCharacters()[DefenderSide]->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
+		}
+	}
+	this->BroadcastBoardChanged();
+}
+
+uint8 UBoardState::GetColumnCount()
+{
+	return this->ColumnCount;
 }
 
 void UBoardState::BroadcastBoardChanged()

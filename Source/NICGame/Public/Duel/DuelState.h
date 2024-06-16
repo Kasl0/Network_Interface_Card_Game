@@ -1,12 +1,15 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-#include "DuelCharacter.h"
-#include "Cards/CardWidget.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Duel/EBoardSide.h"
-#include "Duel/Board/BoardState.h"
 #include "DuelState.generated.h"
+
+// Forward declarations
+class UCardWidget;
+class UBoardState;
+class UDuelCharacter;
+class UCardData;
 
 /**
  * 
@@ -49,7 +52,7 @@ public:
 
 	// Get board state
 	UFUNCTION(BlueprintCallable)
-	UBoardState* GetBoardState() const { return this->BoardState; }
+	class UBoardState* GetBoardState();
 
 protected:
 	EBoardSide CurrentTurn;

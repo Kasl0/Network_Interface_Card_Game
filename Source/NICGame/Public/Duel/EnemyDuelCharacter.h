@@ -31,5 +31,8 @@ private:
 	void PlayCards();
 
 	UFUNCTION()
+	uint8 GetPreferredEmptyColumn();
+
+	UFUNCTION()
 	void EndTurn();
 };
