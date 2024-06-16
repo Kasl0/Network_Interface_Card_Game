@@ -1,10 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Cards/CardHUDWidget.h"
 #include "Components/Button.h"
 #include <Cards/CardWidget.h>
-
+#include "Duel/EBoardSide.h"
 #include "Cards/CardHandWidget.h"
 #include "Duel/DuelState.h"
 
@@ -12,24 +9,22 @@ void UCardHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	if (this->DrawCardButton)
-	{
-		this->DrawCardButton->OnClicked.AddDynamic(this, &UCardHUDWidget::DrawCard);
-	}
-
-	if (this->EndTurnButton)
-	{
-		this->EndTurnButton->OnClicked.AddDynamic(this, &UCardHUDWidget::EndTurn);
-	}
-
 	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
 		this->DuelState = GameInstance->GetSubsystem<UDuelState>();
-		if (this->DuelState)
+		if (this->DuelState && !this->DuelState->IsDuelInProgress())
 		{
-			//this->DuelState->AddToRoot();
-			this->DuelState->StartDuel();
+			if (this->DrawCardButton)
+			{
+				this->DrawCardButton->OnClicked.AddDynamic(this, &UCardHUDWidget::DrawCard);
+			}
+
+			if (this->EndTurnButton)
+			{
+				this->EndTurnButton->OnClicked.AddDynamic(this, &UCardHUDWidget::EndTurn);
+			}
+			this->DuelState->StartDuel(TEnumAsByte(Enemy));
 		}
 	}
 }

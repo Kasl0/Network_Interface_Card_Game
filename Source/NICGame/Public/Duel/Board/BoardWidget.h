@@ -1,15 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Cards/CardWidget.h"
+#include "UObject/NoExportTypes.h"
+#include "Duel/Board/BoardState.h"
+#include "Components/HorizontalBox.h"
+#include "Components/UniformGridPanel.h"
 #include "BoardWidget.generated.h"
-
-// TODO
-//  Move Board logic to BoardState, listen for changes and visualise them
-//  https://forums.unrealengine.com/t/how-should-i-implement-observer-pattern/99165
 
 /**
  * Handles visualising Board 
@@ -23,33 +21,41 @@ protected:
 	virtual void NativeConstruct() override;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	uint8 ColumnCount;
+
+	UPROPERTY()
+	UBoardState* BoardState;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UHorizontalBox* UpcomingRow;
+	UHorizontalBox* UpcomingRow;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UUniformGridPanel* Battlefield;
+	UUniformGridPanel* Battlefield;
 
 public:
 	UFUNCTION(BlueprintCallable)
-	uint8 GetColumnCount() const { return ColumnCount; }
+	void OnBoardChanged();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CreateUpcomingCardWidgetAt(uint8 Column, UCardData* CardData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void RemoveUpcomingCardWidgetAt(uint8 Column);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CreateCardWidgetAt(uint8 Row, uint8 Column, UCardData* CardData);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void RemoveCardWidgetAt(uint8 Row, uint8 Column);
 
 	UFUNCTION(BlueprintCallable)
 	UCardWidget* GetUpcomingCardWidgetAt(uint8 Column);
 
 	UFUNCTION(BlueprintCallable)
-	void SetUpcomingCardWidgetAt(uint8 Column, class UCardWidget* CardWidget);
-
-	UFUNCTION(BlueprintCallable)
-	void MoveUpcomingCardsToBattlefield();
-
-
-	UFUNCTION(BlueprintCallable)
 	UCardWidget* GetCardWidgetAt(uint8 Row, uint8 Column);
 
 	UFUNCTION(BlueprintCallable)
-	void SetCardWidgetAt(uint8 Row, uint8 Column, class UCardWidget* CardWidget);
+	uint8 GetColumnCount() const { return this->ColumnCount; }
 };

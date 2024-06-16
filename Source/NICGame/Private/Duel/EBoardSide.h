@@ -3,6 +3,6 @@
 UENUM()
 enum EBoardSide : uint8
 {
-	Friendly = 0,
-	Enemy = 1
+	Enemy = 0,
+	Friendly = 1
 };

@@ -1,13 +1,16 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "Cards/CardTypes/Minion.h"
+﻿#include "Cards/CardTypes/Minion.h"
+#include "Duel/DuelState.h"
+#include "Duel/Board/BoardState.h"
 //#include "Damageable.h"
 
 void UMinion::CheckDeath()
 {
-	// TODO
-	//  Check for death, handle death if health is 0
+	if (this->CurrentHealth <= 0)
+	{
+		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+		UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
+		DuelState->GetBoardState()->DestroyCard(this);
+	}
 }
 
 void UMinion::Init(uint8 Cost, std::string Name, std::string Description, int32 Attack, int32 Health)

@@ -1,6 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "Damageable.h"
@@ -32,11 +30,13 @@ protected:
 	int32 CurrentMana;
 	
 public:
-	void StartTurn();
+	virtual void StartTurn();
 	
 	void Init(int32 Health = 15, int32 Mana = 3);
 	
 	virtual void TakeDamage(int32 DamageValue, UObject* Source) override;
+
+	bool CheckDeath();
 
 	int32 GetBaseMana() const;
 
