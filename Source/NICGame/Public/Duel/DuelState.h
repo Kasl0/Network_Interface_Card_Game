@@ -29,6 +29,10 @@ protected:
 	UCardWidget* SelectedCard = nullptr;
 
 public:
+
+	// Check if duel is in progress
+	bool IsDuelInProgress();
+
 	// Initializes duel and necessary variables
 	void StartDuel(EBoardSide StartingSide);
 	

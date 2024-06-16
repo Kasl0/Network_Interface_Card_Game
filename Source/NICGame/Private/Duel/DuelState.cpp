@@ -12,6 +12,11 @@ UDuelState::UDuelState()
 	this->BoardState->AddToRoot();
 }
 
+bool UDuelState::IsDuelInProgress()
+{
+	return this->DuelCharacters.Num() > 0;
+}
+
 void UDuelState::StartDuel(EBoardSide StartingSide)
 {
 	for (EBoardSide Side : {Friendly, Enemy})

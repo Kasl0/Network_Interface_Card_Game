@@ -9,23 +9,21 @@ void UCardHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	if (this->DrawCardButton)
-	{
-		this->DrawCardButton->OnClicked.AddDynamic(this, &UCardHUDWidget::DrawCard);
-	}
-
-	if (this->EndTurnButton)
-	{
-		this->EndTurnButton->OnClicked.AddDynamic(this, &UCardHUDWidget::EndTurn);
-	}
-
 	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
 		this->DuelState = GameInstance->GetSubsystem<UDuelState>();
-		if (this->DuelState)
+		if (this->DuelState && !this->DuelState->IsDuelInProgress())
 		{
-			//this->DuelState->AddToRoot();
+			if (this->DrawCardButton)
+			{
+				this->DrawCardButton->OnClicked.AddDynamic(this, &UCardHUDWidget::DrawCard);
+			}
+
+			if (this->EndTurnButton)
+			{
+				this->EndTurnButton->OnClicked.AddDynamic(this, &UCardHUDWidget::EndTurn);
+			}
 			this->DuelState->StartDuel(TEnumAsByte(Enemy));
 		}
 	}
