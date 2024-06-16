@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Duel/EBoardSide.h"
+#include "Deck/EnemyDeckInfo.h"
 #include "DuelState.generated.h"
 
 // Forward declarations
@@ -52,7 +53,11 @@ public:
 
 	// Get board state
 	UFUNCTION(BlueprintCallable)
-	class UBoardState* GetBoardState();
+	UBoardState* GetBoardState();
+
+	// Get enemy deck info
+	UFUNCTION(BlueprintCallable)
+	UEnemyDeckInfo* GetEnemyDeckInfo();
 
 protected:
 	EBoardSide CurrentTurn;

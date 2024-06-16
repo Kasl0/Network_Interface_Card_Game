@@ -138,6 +138,19 @@ void UBoardState::MinionAttack(EBoardSide AttackerSide)
 	this->BroadcastBoardChanged();
 }
 
+void UBoardState::DestroyCard(UCardData* Card)
+{
+	for (int i = 0; i < this->ColumnCount * 2; i++)
+	{
+		if (this->Board[i] == Card)
+		{
+			this->Board[i] = NULL;
+			this->BroadcastBoardChanged();
+			return;
+		}
+	}
+}
+
 uint8 UBoardState::GetColumnCount()
 {
 	return this->ColumnCount;

@@ -1,11 +1,15 @@
 ﻿#include "Cards/CardTypes/Minion.h"
+#include "Duel/DuelState.h"
+#include "Duel/Board/BoardState.h"
 //#include "Damageable.h"
 
 void UMinion::CheckDeath()
 {
 	if (this->CurrentHealth <= 0)
 	{
-		//this->Destroy();
+		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+		UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
+		DuelState->GetBoardState()->DestroyCard(this);
 	}
 }
 

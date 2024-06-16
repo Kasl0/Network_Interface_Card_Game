@@ -8,6 +8,7 @@ UDuelState::UDuelState()
 {
 	this->BoardState = NewObject<UBoardState>();
 	this->BoardState->Init(this, 4);
+	this->BoardState->AddToRoot();
 }
 
 void UDuelState::StartDuel(EBoardSide StartingSide)
@@ -23,8 +24,8 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 		if (Side == TEnumAsByte(Enemy)) {
 			UEnemyDuelCharacter* Character = NewObject<UEnemyDuelCharacter>();
 			Character->Init();
-			Character->InitializeDuelState(this);
 			Character->AddToRoot();
+			Character->InitializeDuelState(this);
 			this->DuelCharacters.Add(Side, Character);
 		}
 		else {
@@ -75,4 +76,10 @@ bool UDuelState::PlayCard(UCardData* CardData, uint8 Column)
 UBoardState* UDuelState::GetBoardState()
 {
 	return this->BoardState;
+}
+
+UEnemyDeckInfo* UDuelState::GetEnemyDeckInfo()
+{
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	return Cast<UEnemyDeckInfo>(GameInstance->GetSubsystem<UEnemyDeckInfo>());
 }

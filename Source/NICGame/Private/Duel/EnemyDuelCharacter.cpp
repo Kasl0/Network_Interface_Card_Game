@@ -27,18 +27,11 @@ void UEnemyDuelCharacter::PlayCards()
 		return;
 	}
 
-	// One hard-coded enemy for now
-	UMinion* Minion1 = NewObject<UMinion>();
-	uint8 Cost = 1;
-	std::string Name = "Enemy Minion";
-	std::string Description = "Very strong enemy, OMG!";
-	int32 Attack = FMath::RandRange(1, 3);
-	int32 Health = FMath::RandRange(1, 3);
-	Minion1->Init(Cost, Name, Description, Attack, Health);
-	Minion1->AddToRoot();
-	
+	// Get a card from the deck
+	UCardData* Card = this->DuelState->GetEnemyDeckInfo()->GetCard();
+
 	// Place the card
-	this->DuelState->GetBoardState()->PlaceUpcomingCard(Minion1, Column);
+	this->DuelState->GetBoardState()->PlaceUpcomingCard(Card, Column);
 }
 
 uint8 UEnemyDuelCharacter::GetPreferredEmptyColumn()

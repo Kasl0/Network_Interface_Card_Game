@@ -76,6 +76,12 @@ public:
 	void MinionAttack(EBoardSide AttackerSide);
 
 	/*
+	* Destroy the card
+	* @param Card The card to destroy
+	*/
+	void DestroyCard(UCardData* Card);
+
+	/*
 	* Get the number of columns on the board
 	* @return The number of columns on the board
 	*/
