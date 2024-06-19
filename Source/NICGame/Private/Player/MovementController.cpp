@@ -20,7 +20,8 @@ UMovementController::UMovementController()
 	TableLocation = FVector(166.0f, -213.0f, 125.0f);
 	TableRotation = FRotator(0.0f, 180.0f, 0.0f);
 	IsAtTable = false;
-	TableCameraDownRotation = FRotator(40.0f, 0.0f, 0.0f);
+	TableCameraTranslation = FVector(-10.0f, 0.0f, 12.0f);
+	TableCameraDownRotation = FRotator(54.0f, 0.0f, 0.0f);
 	TableCameraTiltDirection = 0;
 	TableCameraTiltRotation = FRotator(15.0f, 30.0f, 0.0f);
 }
@@ -109,6 +110,7 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 		if (DesiredLocation.Equals(TableLocation, 0.1f) and DesiredRotation.Equals(TableRotation, 0.1f))
 		{
 			IsAtTable = true;
+			DesiredLocation += TableCameraTranslation;
 			DesiredRotation -= TableCameraDownRotation;
 			AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 			GameCharacter->ShowCardOverlay();
@@ -126,8 +128,9 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 	}
 	else if (IsAtTable and TableCameraTiltDirection == 0)
 	{
-		DesiredRotation += TableCameraDownRotation;
 		IsAtTable = false;
+		DesiredLocation -= TableCameraTranslation;
+		DesiredRotation += TableCameraDownRotation;
 		AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 		GameCharacter->HideCardOverlay();
 	}

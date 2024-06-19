@@ -42,6 +42,10 @@ protected:
 	// Whether the player is at the table
 	bool IsAtTable;
 
+	// Camera movement when sitting down
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	FVector TableCameraTranslation;
+
 	// Table camera down rotation value
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FRotator TableCameraDownRotation;
