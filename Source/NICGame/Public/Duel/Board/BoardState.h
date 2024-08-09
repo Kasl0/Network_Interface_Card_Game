@@ -9,6 +9,7 @@ class UDuelState;
 class UCardData;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBoardStateDelegate);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FMinionAttackDelegate, int32, MinionIndex, int32, MinionSide);
 
 /**
  * Handles Board logic
@@ -18,19 +19,33 @@ class NICGAME_API UBoardState : public UObject
 {
 	GENERATED_BODY()
 
+	/*
+	* Function to call after Minion Attack is complete
+	* Continues turn switch logic
+	*/
+	TFunction<void()> AfterMinionAttack;
+
+	/*
+	* Helper variables to use during minion attack
+	*/
+	EBoardSide CurrentAttackerSide;
+	int CurrentlyAttackingMinion;
+
 public:
 
 	/*
 	* Event that is broadcasted when the board changes
 	*/
 	FBoardStateDelegate OnBoardChanged;
+	FMinionAttackDelegate OnMinionAttack;
 
 	/*
 	* Initialize the board with the specified number of columns
 	* @param State The duel state that the board is associated with
 	* @param ColumnCnt The number of columns to initialize the board with
+	* @param World Object returned by GetWorld
 	*/
-	void Init(UDuelState* State, uint8 ColumnCnt);
+	void Init(UDuelState* State, uint8 ColumnCnt, UWorld* World);
 
 	/*
 	* Get the card at the specified position in the upcoming row
@@ -73,7 +88,13 @@ public:
 	* Attack the minions on the opposite side
 	* @param AttackerSide The side that is attacking
 	*/
-	void MinionAttack(EBoardSide AttackerSide);
+	void MinionAttack(EBoardSide AttackerSide, TFunction<void()> OnMinionAttackComplete);
+
+	/*
+	* Attack with minion in a specific column (in a separate column to set intervals between attacks).
+	* Recursively calls next column after a delay
+	*/
+	void MinionAttackInColumn();
 
 	/*
 	* Destroy the card
@@ -93,6 +114,8 @@ private:
 
 	UPROPERTY()
 	uint8 ColumnCount;
+
+	UWorld* CurrentWorld;
 
 	UPROPERTY()
 	TArray<UCardData*> UpcomingRow;

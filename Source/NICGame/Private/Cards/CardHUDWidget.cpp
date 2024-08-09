@@ -39,6 +39,6 @@ void UCardHUDWidget::EndTurn()
 {
 	if (this->DuelState)
 	{
-		this->DuelState->SwitchPlayerTurn();
+		this->DuelState->EndPlayerTurn();
 	}
 }

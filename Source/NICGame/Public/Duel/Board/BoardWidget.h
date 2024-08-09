@@ -35,6 +35,9 @@ protected:
 	UUniformGridPanel* Battlefield;
 
 public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnMinionAttack(int32 MinionIndex, int32 MinionSide);
+
 	UFUNCTION(BlueprintCallable)
 	void OnBoardChanged();
 
