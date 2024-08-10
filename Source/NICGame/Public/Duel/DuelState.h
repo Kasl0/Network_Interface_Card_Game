@@ -46,6 +46,10 @@ public:
 
 	// Handles turn change to opposite player
 	UFUNCTION(BlueprintCallable)
+	void EndPlayerTurn();
+
+	// Handles turn change to opposite player
+	UFUNCTION(BlueprintCallable)
 	void SwitchPlayerTurn();
 
 	UFUNCTION(BlueprintCallable)

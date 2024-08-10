@@ -16,6 +16,7 @@ void UBoardWidget::NativeConstruct()
 	this->BoardState = DuelState->GetBoardState();
 
 	this->BoardState->OnBoardChanged.AddDynamic(this, &UBoardWidget::OnBoardChanged);
+	this->BoardState->OnMinionAttack.BindDynamic(this, &UBoardWidget::OnMinionAttack);
 }
 
 void UBoardWidget::OnBoardChanged()

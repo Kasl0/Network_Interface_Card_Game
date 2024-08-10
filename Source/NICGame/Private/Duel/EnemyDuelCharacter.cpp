@@ -86,5 +86,5 @@ uint8 UEnemyDuelCharacter::GetPreferredEmptyColumn()
 
 void UEnemyDuelCharacter::EndTurn()
 {
-	this->DuelState->SwitchPlayerTurn();
+	this->DuelState->EndPlayerTurn();
 }

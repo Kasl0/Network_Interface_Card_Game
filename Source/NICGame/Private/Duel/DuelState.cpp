@@ -8,7 +8,7 @@
 UDuelState::UDuelState()
 {
 	this->BoardState = NewObject<UBoardState>();
-	this->BoardState->Init(this, 4);
+	this->BoardState->Init(this, 4, GetWorld());
 	this->BoardState->AddToRoot();
 }
 
@@ -57,9 +57,14 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 	this->SelectedCard = NewSelectedCard;
 }
 
+void UDuelState::EndPlayerTurn()
+{
+	this->BoardState->MinionAttack(this->CurrentTurn, [this]() { this->SwitchPlayerTurn(); });
+}
+
 void UDuelState::SwitchPlayerTurn()
 {
-	this->BoardState->MinionAttack(this->CurrentTurn);
+	//this->BoardState->MinionAttack(this->CurrentTurn);
 	this->CurrentTurn = this->CurrentTurn == Friendly ? Enemy : Friendly;
 	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
 	{
@@ -112,6 +117,6 @@ void UDuelState::EndDuel(EBoardSide WiningSide, uint8 excessiveDamage)
 	}
 
 	// very temporary, for the demo
-	this->BoardState->Init(this, 4);
+	this->BoardState->Init(this, 4, GetWorld());
 	this->StartDuel(TEnumAsByte(Enemy));
 }
