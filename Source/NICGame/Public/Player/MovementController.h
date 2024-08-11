@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "InputAction.h"
+#include "Player/TableCameraTiltDirection.h"
 #include "MovementController.generated.h"
 
 
@@ -50,15 +51,17 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FRotator TableCameraDownRotation;
 
-	// Table camera tilt direction:
-	// -1: left
-	//	0: none
-	//	1: right
-	int TableCameraTiltDirection;
+	// Table camera tilt direction
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	TEnumAsByte<TableCameraTiltDirection> TableCameraTiltDirection;
 
 	// Table camera tilt rotation value
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FRotator TableCameraTiltRotation;
+
+	// Table camera forward tilt translation value
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	FVector TableCameraForwardTiltTranslation;
 
 public:	
 	// Called every frame
