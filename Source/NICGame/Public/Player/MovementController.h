@@ -43,6 +43,9 @@ protected:
 	// Whether the player is at the table
 	bool IsAtTable;
 
+	// Whether to ignore the input
+	bool IsIgnoringInput;
+
 	// Camera movement when sitting down
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FVector TableCameraTranslation;
@@ -72,4 +75,7 @@ public:
 	void TurnRight(const FInputActionInstance& Instance);
 	void MoveForward(const FInputActionInstance& Instance);
 	void MoveBackward(const FInputActionInstance& Instance);
+	
+	// Move to the desired transform
+	void SetView(enum TableCameraTiltDirection Location, bool IgnoreInput);
 };

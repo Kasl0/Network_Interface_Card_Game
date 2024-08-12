@@ -25,7 +25,7 @@ UMovementController::UMovementController()
 	TableCameraDownRotation = FRotator(54.0f, 0.0f, 0.0f);
 	TableCameraTiltDirection = TableCameraTiltDirection::None;
 	TableCameraTiltRotation = FRotator(15.0f, 30.0f, 0.0f);
-	TableCameraForwardTiltTranslation = FVector(-45.0f, 0.0f, 25.0f);
+	TableCameraForwardTiltTranslation = FVector(-30.0f, 0.0f, 5.0f);
 }
 
 
@@ -63,6 +63,10 @@ void UMovementController::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UMovementController::TurnLeft(const FInputActionInstance& Instance)
 {
+	if (IsIgnoringInput)
+	{
+		return;
+	}
 	if (IsAtTable)
 	{
 		if (TableCameraTiltDirection == TableCameraTiltDirection::Right)
@@ -85,6 +89,10 @@ void UMovementController::TurnLeft(const FInputActionInstance& Instance)
 
 void UMovementController::TurnRight(const FInputActionInstance& Instance)
 {
+	if (IsIgnoringInput)
+	{
+		return;
+	}
 	if (IsAtTable)
 	{
 		if (TableCameraTiltDirection == TableCameraTiltDirection::Left)
@@ -107,6 +115,10 @@ void UMovementController::TurnRight(const FInputActionInstance& Instance)
 
 void UMovementController::MoveForward(const FInputActionInstance& Instance)
 {
+	if (IsIgnoringInput)
+	{
+		return;
+	}
 	if (IsAtTable)
 	{
 		if (TableCameraTiltDirection == TableCameraTiltDirection::None)
@@ -136,6 +148,10 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 
 void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 {
+	if (IsIgnoringInput)
+	{
+		return;
+	}
 	if (IsAtTable)
 	{
 		if (TableCameraTiltDirection == TableCameraTiltDirection::Left)
@@ -167,5 +183,32 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 	{
 		DesiredLocation -= (DesiredRotation.Vector() * DistanceToMove);
 	}
+	bMoveToDesiredTransform = true;
+}
+
+void UMovementController::SetView(enum TableCameraTiltDirection Location, bool IgnoreInput)
+{
+	switch (Location)
+	{
+		case TableCameraTiltDirection::None:
+			DesiredRotation = TableRotation - TableCameraDownRotation;
+			DesiredLocation = TableLocation + TableCameraTranslation;
+			break;
+		case TableCameraTiltDirection::Forward:
+			DesiredRotation = TableRotation - FRotator(90.0f, 0.0f, 0.0f);
+			DesiredLocation = TableLocation + TableCameraTranslation + TableCameraForwardTiltTranslation;
+			break;
+		case TableCameraTiltDirection::Left:
+			DesiredRotation = TableRotation - TableCameraDownRotation - FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+			DesiredLocation = TableLocation + TableCameraTranslation;
+			break;
+		case TableCameraTiltDirection::Right:
+			DesiredRotation = TableRotation + TableCameraTiltRotation;
+			DesiredLocation = TableLocation + TableCameraTranslation;
+			break;
+	}
+	IsIgnoringInput = IgnoreInput;
+	IsAtTable = true;
+	TableCameraTiltDirection = Location;
 	bMoveToDesiredTransform = true;
 }

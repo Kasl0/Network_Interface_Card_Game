@@ -4,6 +4,8 @@
 #include "Duel/Board/BoardState.h"
 #include "Duel/DuelCharacter.h"
 #include "Engine/Engine.h" // temporary for debug text
+#include "Kismet/GameplayStatics.h"
+#include "Player/GameCharacter.h"
 
 UDuelState::UDuelState()
 {
@@ -60,6 +62,9 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 void UDuelState::EndPlayerTurn()
 {
 	this->BoardState->MinionAttack(this->CurrentTurn, [this]() { this->SwitchPlayerTurn(); });
+
+	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	Player->SetView(TableCameraTiltDirection::None, false);
 }
 
 void UDuelState::SwitchPlayerTurn()
