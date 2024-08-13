@@ -88,7 +88,15 @@ bool UDuelState::PlayCard(UCardData* CardData, uint8 Column)
 {
 	if (this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(CardData->CardCost))
 	{
-		return this->BoardState->PlaceCard(CardData, this->CurrentTurn, Column);
+		if (this->BoardState->PlaceCard(CardData, this->CurrentTurn, Column))
+		{
+			return true;
+		}
+		else
+		{
+			this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(-CardData->CardCost); // refund mana
+			return false;
+		}
 	}
 	else
 	{

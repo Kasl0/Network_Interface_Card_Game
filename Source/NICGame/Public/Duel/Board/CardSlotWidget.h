@@ -19,9 +19,9 @@ protected:
 	UOverlay* Overlay;
 
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool IsOccupied();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	UCardWidget* GetCardWidget();
 };

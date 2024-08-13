@@ -60,6 +60,7 @@ public:
 	* @param Column The column to get the card from
 	* @return The card at the specified position, or NULL if there is no card
 	*/
+	UFUNCTION(BlueprintCallable)
 	UCardData* GetCardAt(EBoardSide Side, uint8 Column);
 
 	/*
