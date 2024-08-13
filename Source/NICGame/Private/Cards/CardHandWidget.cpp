@@ -17,7 +17,7 @@ void UCardHandWidget::DrawCard()
 	if (!this->BattleDeck) 
 	{
 		this->BattleDeck = NewObject<UBattleDeck>();
-		this->BattleDeck->InitializeDeck(GetWorld()); 
+		this->BattleDeck->InitializeDeck(GetWorld());
 	}
 	UCardData* NewCardData = this->BattleDeck->DrawCard();
 	if (NewCardData)

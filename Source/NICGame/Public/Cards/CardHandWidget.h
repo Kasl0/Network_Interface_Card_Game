@@ -23,7 +23,7 @@ protected:
 	UPROPERTY()
 	UBattleDeck* BattleDeck;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void CreateCardWidget(UCardData* CardData);
 
 	UFUNCTION(BlueprintCallable)
