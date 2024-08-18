@@ -3,6 +3,7 @@
 #include <Cards/CardWidget.h>
 #include "Duel/EBoardSide.h"
 #include "Cards/CardHandWidget.h"
+#include "Duel/DuelCharacter.h"
 #include "Duel/DuelState.h"
 
 void UCardHUDWidget::NativeConstruct()
@@ -41,6 +42,14 @@ void UCardHUDWidget::EndTurn()
 {
 	if (this->DuelState and this->DuelState->GetCurrentTurn() == Friendly)
 	{
-		this->DuelState->EndPlayerTurn();
+		UDuelCharacter* CurrentTurnCharacter = this->DuelState->GetCurrentTurnCharacter();
+		if (CurrentTurnCharacter->GetCardDrawInCurrentTurn() > 0)
+		{
+			this->DuelState->EndPlayerTurn();
+		}
+		else
+		{
+			this->HighlightDrawCardButton();
+		}
 	}
 }
