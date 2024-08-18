@@ -11,7 +11,7 @@ void UEnemyDuelCharacter::StartTurn()
 {
 	Super::StartTurn();
 	this->PlayCards();
-	this->EndTurn();
+	this->DuelState->EndPlayerTurn();
 }
 
 void UEnemyDuelCharacter::PlayCards()
@@ -82,9 +82,4 @@ uint8 UEnemyDuelCharacter::GetPreferredEmptyColumn()
 
 	// Select a random column
 	return PrefferableColumns[FMath::RandRange(0, PrefferableColumns.Num() - 1)];
-}
-
-void UEnemyDuelCharacter::EndTurn()
-{
-	this->DuelState->EndPlayerTurn();
 }

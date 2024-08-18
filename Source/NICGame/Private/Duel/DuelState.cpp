@@ -73,6 +73,8 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::EndPlayerTurn()
 {
+	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->EndTurn();
+
 	this->BoardState->MinionAttack(this->CurrentTurn, [this]() { this->SwitchPlayerTurn(); });
 
 	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
