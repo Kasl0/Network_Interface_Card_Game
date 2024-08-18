@@ -32,7 +32,9 @@ void UCardHUDWidget::NativeConstruct()
 
 void UCardHUDWidget::DrawCard()
 {
-	this->CardHand->DrawCard();
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UCardHand* Hand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
+	Hand->DrawCard();
 }
 
 void UCardHUDWidget::EndTurn()

@@ -13,7 +13,7 @@
  * 
  */
 UCLASS()
-class NICGAME_API UBattleDeck : public UObject
+class NICGAME_API UBattleDeck : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -24,8 +24,6 @@ protected:
 	TArray<UCardData*> CardDataArray;
 
 	std::vector<int> CardOrder;
-
-	bool isInitialized = false;
 
 public:
 	void InitializeDeck(UWorld* World);

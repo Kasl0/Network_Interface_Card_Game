@@ -1,9 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Deck/BattleDeck.h"
+#include "Cards/CardHand.h"
 #include "CardWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "CardHandWidget.generated.h"
@@ -17,21 +15,22 @@ class NICGAME_API UCardHandWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY()
-	TArray<UCardData*> CardDataArray;
-	
-	UPROPERTY()
-	UBattleDeck* BattleDeck;
+	virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void CreateCardWidget(UCardData* CardData);
-
-	UFUNCTION(BlueprintCallable)
-	void RemoveCardData(UCardData* CardData);
 	
 public:
-	void DrawCard();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void RemoveCard(UCardWidget* CardWidget);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void RemoveCardByCardData(UCardData* CardData);
+
+	UFUNCTION(BlueprintCallable)
+	void OnCardHandAdded(UCardData* CardData);
+
+	UFUNCTION(BlueprintCallable)
+	void OnCardHandRemoved(UCardData* CardData);
 };

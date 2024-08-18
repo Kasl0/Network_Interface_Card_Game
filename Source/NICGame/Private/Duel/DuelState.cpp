@@ -6,6 +6,8 @@
 #include "Engine/Engine.h" // temporary for debug text
 #include "Kismet/GameplayStatics.h"
 #include "Player/GameCharacter.h"
+#include "Deck/BattleDeck.h"
+#include "Cards/CardHand.h"
 
 UDuelState::UDuelState()
 {
@@ -21,6 +23,16 @@ bool UDuelState::IsDuelInProgress()
 
 void UDuelState::StartDuel(EBoardSide StartingSide)
 {
+	// initialize deck
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
+	BattleDeck->InitializeDeck(GetWorld());
+
+	// initialize card hand
+	UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
+	CardHand->RemoveAllCardData();
+
+	// initialize characters
 	for (EBoardSide Side : {Friendly, Enemy})
 	{
 		if (this->DuelCharacters.Contains(Side))
