@@ -39,7 +39,7 @@ void UCardHUDWidget::DrawCard()
 
 void UCardHUDWidget::EndTurn()
 {
-	if (this->DuelState)
+	if (this->DuelState and this->DuelState->GetCurrentTurn() == Friendly)
 	{
 		this->DuelState->EndPlayerTurn();
 	}

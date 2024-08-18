@@ -6,10 +6,10 @@ void UCardHand::DrawCard()
 {
 	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 	UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
-	UDuelCharacter* FriendlyCharacter = DuelState->GetCharacters()[TEnumAsByte(Friendly)];
+	UDuelCharacter* CurrentTurnCharacter = DuelState->GetCurrentTurnCharacter();
 
-	// Check if the player has already drawn a card in the current turn
-	if (FriendlyCharacter->GetCardDrawInCurrentTurn() > 0)
+	// Check if it's the player's turn and the player has already drawn a card in the current turn
+	if (DuelState->GetCurrentTurn() != Friendly and CurrentTurnCharacter->GetCardDrawInCurrentTurn() > 0)
 	{
 		return;
 	}
@@ -19,9 +19,7 @@ void UCardHand::DrawCard()
 	if (NewCardData)
 	{
 		this->AddCardData(NewCardData);
-
-		// Increment card draw count for the current turn
-		FriendlyCharacter->SetCardDrawInCurrentTurn(FriendlyCharacter->GetCardDrawInCurrentTurn() + 1);
+		CurrentTurnCharacter->IncrementCardDrawInCurrentTurn();
 	}
 }
 

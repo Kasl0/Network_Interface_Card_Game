@@ -107,7 +107,7 @@ void UBoardState::MoveUpcomingCardsToBattlefield()
 	}
 }
 
-void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void()> OnMinionAttackComplete)
+void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void(EBoardSide EndingTurn)> OnMinionAttackComplete)
 {
 	this->CurrentAttackerSide = AttackerSide;
 	this->CurrentlyAttackingMinion = 0;
@@ -166,7 +166,7 @@ void UBoardState::MinionAttackInColumn()
 	}
 	else {
 		this->BroadcastBoardChanged();
-		this->AfterMinionAttack();
+		this->AfterMinionAttack(CurrentAttackerSide);
 	}
 }
 

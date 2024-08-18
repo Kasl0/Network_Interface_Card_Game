@@ -73,24 +73,25 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::EndPlayerTurn()
 {
-	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->EndTurn();
+	EBoardSide EndingTurn = this->CurrentTurn;
+	this->CurrentTurn = None;
 
-	this->BoardState->MinionAttack(this->CurrentTurn, [this]() { this->SwitchPlayerTurn(); });
+	this->DuelCharacters[TEnumAsByte(EndingTurn)]->EndTurn();
 
-	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	Player->SetView(TableCameraTiltDirection::None, false);
+	this->BoardState->MinionAttack(EndingTurn, [this](EBoardSide EndingTurn) { this->SwitchPlayerTurn(EndingTurn); });
 }
 
-void UDuelState::SwitchPlayerTurn()
+void UDuelState::SwitchPlayerTurn(EBoardSide EndingTurn)
 {
-	//this->BoardState->MinionAttack(this->CurrentTurn);
-	this->CurrentTurn = this->CurrentTurn == Friendly ? Enemy : Friendly;
+	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	Player->SetView(TableCameraTiltDirection::None, false);
+	
+	this->CurrentTurn = EndingTurn == Friendly ? Enemy : Friendly;
 	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
 	{
 		return;
 	}
 	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
-	
 }
 
 TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
@@ -146,4 +147,14 @@ void UDuelState::EndDuel(EBoardSide WiningSide, uint8 excessiveDamage)
 	// very temporary, for the demo
 	this->BoardState->Init(this, 4, GetWorld());
 	this->StartDuel(TEnumAsByte(Enemy));
+}
+
+EBoardSide UDuelState::GetCurrentTurn()
+{
+	return this->CurrentTurn;
+}
+
+UDuelCharacter* UDuelState::GetCurrentTurnCharacter()
+{
+	return this->DuelCharacters[TEnumAsByte(this->CurrentTurn)];
 }

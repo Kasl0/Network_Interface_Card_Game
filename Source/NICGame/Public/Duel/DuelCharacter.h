@@ -52,7 +52,8 @@ public:
 	
 	int32 GetHealth();
 
-	void SetCardDrawInCurrentTurn(uint8 CardDraw);
+	void IncrementCardDrawInCurrentTurn();
 
+	UFUNCTION(BlueprintCallable)
 	uint8 GetCardDrawInCurrentTurn();
 };

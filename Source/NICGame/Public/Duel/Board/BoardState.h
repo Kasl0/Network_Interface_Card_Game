@@ -23,7 +23,7 @@ class NICGAME_API UBoardState : public UObject
 	* Function to call after Minion Attack is complete
 	* Continues turn switch logic
 	*/
-	TFunction<void()> AfterMinionAttack;
+	TFunction<void(EBoardSide EndingTurn)> AfterMinionAttack;
 
 	/*
 	* Helper variables to use during minion attack
@@ -89,7 +89,7 @@ public:
 	* Attack the minions on the opposite side
 	* @param AttackerSide The side that is attacking
 	*/
-	void MinionAttack(EBoardSide AttackerSide, TFunction<void()> OnMinionAttackComplete);
+	void MinionAttack(EBoardSide AttackerSide, TFunction<void(EBoardSide EndingTurn)> OnMinionAttackComplete);
 
 	/*
 	* Attack with minion in a specific column (in a separate column to set intervals between attacks).
