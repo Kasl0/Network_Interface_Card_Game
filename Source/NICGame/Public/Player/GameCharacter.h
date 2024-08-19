@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
-#include "MovementController.h"
+#include "Player/MovementController.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "GameCharacter.generated.h"
@@ -59,4 +59,8 @@ public:
 	// Hide card overlay
 	UFUNCTION(BlueprintImplementableEvent)
 	void HideCardOverlay();
+
+	// Move to the desired transform
+	UFUNCTION(BlueprintCallable)
+	void SetView(enum TableCameraTiltDirection Location, bool IgnoreInput);
 };

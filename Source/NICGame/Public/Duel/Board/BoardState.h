@@ -23,7 +23,7 @@ class NICGAME_API UBoardState : public UObject
 	* Function to call after Minion Attack is complete
 	* Continues turn switch logic
 	*/
-	TFunction<void()> AfterMinionAttack;
+	TFunction<void(EBoardSide EndingTurn)> AfterMinionAttack;
 
 	/*
 	* Helper variables to use during minion attack
@@ -60,6 +60,7 @@ public:
 	* @param Column The column to get the card from
 	* @return The card at the specified position, or NULL if there is no card
 	*/
+	UFUNCTION(BlueprintCallable)
 	UCardData* GetCardAt(EBoardSide Side, uint8 Column);
 
 	/*
@@ -88,7 +89,7 @@ public:
 	* Attack the minions on the opposite side
 	* @param AttackerSide The side that is attacking
 	*/
-	void MinionAttack(EBoardSide AttackerSide, TFunction<void()> OnMinionAttackComplete);
+	void MinionAttack(EBoardSide AttackerSide, TFunction<void(EBoardSide EndingTurn)> OnMinionAttackComplete);
 
 	/*
 	* Attack with minion in a specific column (in a separate column to set intervals between attacks).
@@ -107,6 +108,20 @@ public:
 	* @return The number of columns on the board
 	*/
 	uint8 GetColumnCount();
+
+	/*
+	* Check if the board side is full
+	* @param Side The side to check
+	* @return True if the board side is full, false otherwise
+	*/
+	bool IsBoardSideFull(EBoardSide Side);
+
+	/*
+	* Check if the board side is empty
+	* @param Side The side to check
+	* @return True if the board side is empty, false otherwise
+	*/
+	bool IsBoardSideEmpty(EBoardSide Side);
 
 private:
 	UPROPERTY()

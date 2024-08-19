@@ -1,4 +1,5 @@
 #include "Player/GameCharacter.h"
+#include "Player/MovementController.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter()
@@ -60,4 +61,9 @@ void AGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 			Input->BindAction(MoveBackwardAction, ETriggerEvent::Triggered, MovementController, &UMovementController::MoveBackward);
 		}
 	}
+}
+
+void AGameCharacter::SetView(enum TableCameraTiltDirection Location, bool IgnoreInput)
+{
+	MovementController->SetView(Location, IgnoreInput);
 }

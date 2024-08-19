@@ -4,6 +4,7 @@
 #include "Duel/Damageable.h"
 #include "Cards/Effects/MinionModifier.h"
 #include "Cards/CardTypes/CardData.h"
+#include "Duel/EBoardSide.h"
 #include "Minion.generated.h"
 
 /**
@@ -30,6 +31,8 @@ public:
 	int32 CurrentHealth;
 
 	void Init(uint8 Cost, std::string Name, std::string Description, int32 Attack, int32 Health);
+
+	bool IsPlayable(EBoardSide Side) override;
 
 	// Get Attack value with modifiers
 	UFUNCTION(BlueprintCallable)

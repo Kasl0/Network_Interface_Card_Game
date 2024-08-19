@@ -4,6 +4,10 @@
 #include "Duel/Board/BoardState.h"
 #include "Duel/DuelCharacter.h"
 #include "Engine/Engine.h" // temporary for debug text
+#include "Kismet/GameplayStatics.h"
+#include "Player/GameCharacter.h"
+#include "Deck/BattleDeck.h"
+#include "Cards/CardHand.h"
 
 UDuelState::UDuelState()
 {
@@ -19,6 +23,16 @@ bool UDuelState::IsDuelInProgress()
 
 void UDuelState::StartDuel(EBoardSide StartingSide)
 {
+	// initialize deck
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
+	BattleDeck->InitializeDeck(GetWorld());
+
+	// initialize card hand
+	UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
+	CardHand->RemoveAllCardData();
+
+	// initialize characters
 	for (EBoardSide Side : {Friendly, Enemy})
 	{
 		if (this->DuelCharacters.Contains(Side))
@@ -59,19 +73,25 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::EndPlayerTurn()
 {
-	this->BoardState->MinionAttack(this->CurrentTurn, [this]() { this->SwitchPlayerTurn(); });
+	EBoardSide EndingTurn = this->CurrentTurn;
+	this->CurrentTurn = None;
+
+	this->DuelCharacters[TEnumAsByte(EndingTurn)]->EndTurn();
+
+	this->BoardState->MinionAttack(EndingTurn, [this](EBoardSide EndingTurn) { this->SwitchPlayerTurn(EndingTurn); });
 }
 
-void UDuelState::SwitchPlayerTurn()
+void UDuelState::SwitchPlayerTurn(EBoardSide EndingTurn)
 {
-	//this->BoardState->MinionAttack(this->CurrentTurn);
-	this->CurrentTurn = this->CurrentTurn == Friendly ? Enemy : Friendly;
+	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	Player->SetView(TableCameraTiltDirection::None, false);
+	
+	this->CurrentTurn = EndingTurn == Friendly ? Enemy : Friendly;
 	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
 	{
 		return;
 	}
 	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
-	
 }
 
 TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
@@ -83,7 +103,15 @@ bool UDuelState::PlayCard(UCardData* CardData, uint8 Column)
 {
 	if (this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(CardData->CardCost))
 	{
-		return this->BoardState->PlaceCard(CardData, this->CurrentTurn, Column);
+		if (this->BoardState->PlaceCard(CardData, this->CurrentTurn, Column))
+		{
+			return true;
+		}
+		else
+		{
+			this->DuelCharacters[TEnumAsByte(Friendly)]->UseMana(-CardData->CardCost); // refund mana
+			return false;
+		}
 	}
 	else
 	{
@@ -119,4 +147,18 @@ void UDuelState::EndDuel(EBoardSide WiningSide, uint8 excessiveDamage)
 	// very temporary, for the demo
 	this->BoardState->Init(this, 4, GetWorld());
 	this->StartDuel(TEnumAsByte(Enemy));
+}
+
+EBoardSide UDuelState::GetCurrentTurn()
+{
+	return this->CurrentTurn;
+}
+
+UDuelCharacter* UDuelState::GetCurrentTurnCharacter()
+{
+	if (this->CurrentTurn == None)
+	{
+		return nullptr;
+	}
+	return this->DuelCharacters[TEnumAsByte(this->CurrentTurn)];
 }

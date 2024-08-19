@@ -4,6 +4,11 @@
 void UDuelCharacter::StartTurn()
 {
 	this->CurrentMana = this->BaseMana;
+	this->CardDrawInCurrentTurn = 0;
+}
+
+void UDuelCharacter::EndTurn()
+{
 }
 
 void UDuelCharacter::Init(int32 Health, int32 Mana)
@@ -62,4 +67,14 @@ bool UDuelCharacter::UseMana(int32 Mana)
 int32 UDuelCharacter::GetHealth()
 {
 	return this->CurrentHealth;
+}
+
+void UDuelCharacter::IncrementCardDrawInCurrentTurn()
+{
+	this->CardDrawInCurrentTurn++;
+}
+
+uint8 UDuelCharacter::GetCardDrawInCurrentTurn()
+{
+	return this->CardDrawInCurrentTurn;
 }

@@ -32,7 +32,4 @@ private:
 
 	UFUNCTION()
 	uint8 GetPreferredEmptyColumn();
-
-	UFUNCTION()
-	void EndTurn();
 };

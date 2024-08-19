@@ -28,9 +28,14 @@ protected:
 	// Mana left during this turn
 	UPROPERTY(BlueprintReadOnly)
 	int32 CurrentMana;
+
+	UPROPERTY()
+	uint8 CardDrawInCurrentTurn;
 	
 public:
 	virtual void StartTurn();
+
+	void EndTurn();
 	
 	void Init(int32 Health = 15, int32 Mana = 3);
 	
@@ -46,4 +51,9 @@ public:
 	bool UseMana(int32 Mana);
 	
 	int32 GetHealth();
+
+	void IncrementCardDrawInCurrentTurn();
+
+	UFUNCTION(BlueprintCallable)
+	uint8 GetCardDrawInCurrentTurn();
 };

@@ -3,6 +3,7 @@
 #include <Cards/CardWidget.h>
 #include "Duel/EBoardSide.h"
 #include "Cards/CardHandWidget.h"
+#include "Duel/DuelCharacter.h"
 #include "Duel/DuelState.h"
 
 void UCardHUDWidget::NativeConstruct()
@@ -32,13 +33,23 @@ void UCardHUDWidget::NativeConstruct()
 
 void UCardHUDWidget::DrawCard()
 {
-	this->CardHand->DrawCard();
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UCardHand* Hand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
+	Hand->DrawCard();
 }
 
 void UCardHUDWidget::EndTurn()
 {
-	if (this->DuelState)
+	if (this->DuelState and this->DuelState->GetCurrentTurn() == Friendly)
 	{
-		this->DuelState->EndPlayerTurn();
+		UDuelCharacter* CurrentTurnCharacter = this->DuelState->GetCurrentTurnCharacter();
+		if (CurrentTurnCharacter->GetCardDrawInCurrentTurn() > 0)
+		{
+			this->DuelState->EndPlayerTurn();
+		}
+		else
+		{
+			this->HighlightDrawCardButton();
+		}
 	}
 }

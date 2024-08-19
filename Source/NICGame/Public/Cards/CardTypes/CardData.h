@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "Duel/EBoardSide.h"
 #include "CardData.generated.h"
 
 /**
@@ -23,4 +24,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText CardDescription;
+
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsPlayable(EBoardSide Side);
 };

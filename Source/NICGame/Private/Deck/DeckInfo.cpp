@@ -58,6 +58,7 @@ TArray<UCardData*> UDeckInfo::GetSinglePlayerDeck()
 		this->CreateMockDeck();
 	}
 
+	DeckCopy.Empty();
 	for (int i = 0; i < this->SinglePlayerDeck.Num(); i++)
 	{
 		UCardData* Card = DuplicateObject(this->SinglePlayerDeck[i], this->GetOuter());

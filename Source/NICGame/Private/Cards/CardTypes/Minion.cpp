@@ -23,6 +23,17 @@ void UMinion::Init(uint8 Cost, std::string Name, std::string Description, int32 
 	this->CurrentHealth = this->BaseHealth;
 }
 
+bool UMinion::IsPlayable(EBoardSide Side)
+{
+	if (!Super::IsPlayable(Side))
+	{
+		return false;
+	}
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
+	return !DuelState->GetBoardState()->IsBoardSideFull(Side);
+}
+
 int32 UMinion::GetAttack()
 {
 	int32 Attack = this->BaseAttack;

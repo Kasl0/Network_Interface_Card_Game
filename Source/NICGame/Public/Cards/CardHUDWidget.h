@@ -35,4 +35,7 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UCardHandWidget* CardHand;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void HighlightDrawCardButton();
 };

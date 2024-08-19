@@ -107,7 +107,7 @@ void UBoardState::MoveUpcomingCardsToBattlefield()
 	}
 }
 
-void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void()> OnMinionAttackComplete)
+void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void(EBoardSide EndingTurn)> OnMinionAttackComplete)
 {
 	this->CurrentAttackerSide = AttackerSide;
 	this->CurrentlyAttackingMinion = 0;
@@ -166,7 +166,7 @@ void UBoardState::MinionAttackInColumn()
 	}
 	else {
 		this->BroadcastBoardChanged();
-		this->AfterMinionAttack();
+		this->AfterMinionAttack(CurrentAttackerSide);
 	}
 }
 
@@ -186,6 +186,30 @@ void UBoardState::DestroyCard(UCardData* Card)
 uint8 UBoardState::GetColumnCount()
 {
 	return this->ColumnCount;
+}
+
+bool UBoardState::IsBoardSideFull(EBoardSide Side)
+{
+	for (int i = 0; i < this->ColumnCount; i++)
+	{
+		if (this->Board[Side * this->ColumnCount + i] == NULL)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool UBoardState::IsBoardSideEmpty(EBoardSide Side)
+{
+	for (int i = 0; i < this->ColumnCount; i++)
+	{
+		if (this->Board[Side * this->ColumnCount + i] != NULL)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 void UBoardState::BroadcastBoardChanged()

@@ -1,30 +1,32 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Cards/CardHandWidget.h"
-#include "Cards/CardTypes/CardData.h"
-
+#include "Duel/DuelState.h"
 #include "Deck/BattleDeck.h"
 
-
-void UCardHandWidget::RemoveCardData(UCardData* CardData)
+void UCardHandWidget::NativeConstruct()
 {
-	this->CardDataArray.Remove(CardData);
-}
+	Super::NativeConstruct();
 
-void UCardHandWidget::DrawCard()
-{
-	if (!this->BattleDeck) 
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
 	{
-		this->BattleDeck = NewObject<UBattleDeck>();
-		this->BattleDeck->InitializeDeck(GetWorld()); 
-	}
-	UCardData* NewCardData = this->BattleDeck->DrawCard();
-	if (NewCardData)
-	{
-		this->CardDataArray.Add(NewCardData);
-		this->CreateCardWidget(NewCardData);
+		UDuelState* DuelState = GameInstance->GetSubsystem<UDuelState>();
+		if (DuelState && !DuelState->IsDuelInProgress())
+		{
+			UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
+			CardHand->OnCardHandAdd.AddDynamic(this, &UCardHandWidget::OnCardHandAdded);
+			CardHand->OnCardHandRemove.AddDynamic(this, &UCardHandWidget::OnCardHandRemoved);
+		}
 	}
 }
 
+void UCardHandWidget::OnCardHandAdded(UCardData* CardData)
+{
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
+	this->CreateCardWidget(CardData);
+}
 
+void UCardHandWidget::OnCardHandRemoved(UCardData* CardData)
+{
+	this->RemoveCardByCardData(CardData);
+}

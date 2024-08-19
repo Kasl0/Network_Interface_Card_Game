@@ -1,5 +1,6 @@
 #include "Player/MovementController.h"
 #include "Player/GameCharacter.h"
+#include "Player/TableCameraTiltDirection.h"
 
 // Sets default values for this component's properties
 UMovementController::UMovementController()
@@ -22,8 +23,10 @@ UMovementController::UMovementController()
 	IsAtTable = false;
 	TableCameraTranslation = FVector(-10.0f, 0.0f, 12.0f);
 	TableCameraDownRotation = FRotator(54.0f, 0.0f, 0.0f);
-	TableCameraTiltDirection = 0;
+	TableCameraTiltDirection = TableCameraTiltDirection::None;
 	TableCameraTiltRotation = FRotator(15.0f, 30.0f, 0.0f);
+	TableCameraForwardTiltTranslation = FVector(-30.0f, 0.0f, 5.0f);
+	IsIgnoringInput = false;
 }
 
 
@@ -61,19 +64,24 @@ void UMovementController::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UMovementController::TurnLeft(const FInputActionInstance& Instance)
 {
-	if (IsAtTable and TableCameraTiltDirection > -1)
+	if (IsIgnoringInput)
 	{
-		if (TableCameraTiltDirection == 1)
+		return;
+	}
+	if (IsAtTable)
+	{
+		if (TableCameraTiltDirection == TableCameraTiltDirection::Right)
 		{
 			DesiredRotation -= TableCameraTiltRotation;
+			TableCameraTiltDirection = TableCameraTiltDirection::None;
 		}
-		else
+		else if (TableCameraTiltDirection == TableCameraTiltDirection::None)
 		{
 			DesiredRotation -= FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+			TableCameraTiltDirection = TableCameraTiltDirection::Left;
 		}
-		TableCameraTiltDirection--;
 	}
-	else if (!IsAtTable)
+	else
 	{
 		DesiredRotation -= FRotator(0.0f, 90.0f, 0.0f);
 	}
@@ -82,19 +90,24 @@ void UMovementController::TurnLeft(const FInputActionInstance& Instance)
 
 void UMovementController::TurnRight(const FInputActionInstance& Instance)
 {
-	if (IsAtTable and TableCameraTiltDirection < 1)
+	if (IsIgnoringInput)
 	{
-		if (TableCameraTiltDirection == -1)
+		return;
+	}
+	if (IsAtTable)
+	{
+		if (TableCameraTiltDirection == TableCameraTiltDirection::Left)
 		{
 			DesiredRotation += FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+			TableCameraTiltDirection = TableCameraTiltDirection::None;
 		}
-		else
+		else if (TableCameraTiltDirection == TableCameraTiltDirection::None)
 		{
 			DesiredRotation += TableCameraTiltRotation;
+			TableCameraTiltDirection = TableCameraTiltDirection::Right;
 		}
-		TableCameraTiltDirection++;
 	}
-	else if (!IsAtTable)
+	else
 	{
 		DesiredRotation += FRotator(0.0f, 90.0f, 0.0f);
 	}
@@ -103,10 +116,21 @@ void UMovementController::TurnRight(const FInputActionInstance& Instance)
 
 void UMovementController::MoveForward(const FInputActionInstance& Instance)
 {
-	if (!IsAtTable)
+	if (IsIgnoringInput)
 	{
-		DesiredLocation += (DesiredRotation.Vector() * DistanceToMove);
-
+		return;
+	}
+	if (IsAtTable)
+	{
+		if (TableCameraTiltDirection == TableCameraTiltDirection::None)
+		{
+			DesiredRotation -= (FRotator(90.0f, 0.0f, 0.0f) - TableCameraDownRotation);
+			DesiredLocation += TableCameraForwardTiltTranslation;
+			TableCameraTiltDirection = TableCameraTiltDirection::Forward;
+		}
+	}
+	else
+	{
 		if (DesiredLocation.Equals(TableLocation, 0.1f) and DesiredRotation.Equals(TableRotation, 0.1f))
 		{
 			IsAtTable = true;
@@ -115,27 +139,79 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 			AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 			GameCharacter->ShowCardOverlay();
 		}
-		bMoveToDesiredTransform = true;
+		else
+		{
+			DesiredLocation += (DesiredRotation.Vector() * DistanceToMove);
+		}	
 	}
+	bMoveToDesiredTransform = true;
 }
 
 void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 {
-	if (IsAtTable and TableCameraTiltDirection != 0)
+	if (IsIgnoringInput)
 	{
-		DesiredRotation -= FRotator(TableCameraTiltRotation.Pitch, TableCameraTiltDirection * TableCameraTiltRotation.Yaw, TableCameraTiltDirection * TableCameraTiltRotation.Roll);
-		TableCameraTiltDirection = 0;
+		return;
 	}
-	else if (IsAtTable and TableCameraTiltDirection == 0)
+	if (IsAtTable)
 	{
-		IsAtTable = false;
-		DesiredLocation -= TableCameraTranslation;
-		DesiredRotation += TableCameraDownRotation;
-		AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
-		GameCharacter->HideCardOverlay();
+		if (TableCameraTiltDirection == TableCameraTiltDirection::Left)
+		{
+			DesiredRotation += FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+			TableCameraTiltDirection = TableCameraTiltDirection::None;
+		}
+		else if (TableCameraTiltDirection == TableCameraTiltDirection::Right)
+		{
+			DesiredRotation -= TableCameraTiltRotation;
+			TableCameraTiltDirection = TableCameraTiltDirection::None;
+		}
+		else if (TableCameraTiltDirection == TableCameraTiltDirection::Forward)
+		{
+			DesiredRotation += (FRotator(90.0f, 0.0f, 0.0f) - TableCameraDownRotation);
+			DesiredLocation -= TableCameraForwardTiltTranslation;
+			TableCameraTiltDirection = TableCameraTiltDirection::None;
+		}
+		else if (TableCameraTiltDirection == TableCameraTiltDirection::None)
+		{
+			IsAtTable = false;
+			DesiredLocation -= TableCameraTranslation;
+			DesiredRotation += TableCameraDownRotation;
+			AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+			GameCharacter->HideCardOverlay();
+		}
 	}
-	if (!IsAtTable) {
+	else
+	{
 		DesiredLocation -= (DesiredRotation.Vector() * DistanceToMove);
 	}
 	bMoveToDesiredTransform = true;
+}
+
+void UMovementController::SetView(enum TableCameraTiltDirection Location, bool IgnoreInput)
+{
+	switch (Location)
+	{
+		case TableCameraTiltDirection::None:
+			DesiredRotation = TableRotation - TableCameraDownRotation;
+			DesiredLocation = TableLocation + TableCameraTranslation;
+			break;
+		case TableCameraTiltDirection::Forward:
+			DesiredRotation = TableRotation - FRotator(90.0f, 0.0f, 0.0f);
+			DesiredLocation = TableLocation + TableCameraTranslation + TableCameraForwardTiltTranslation;
+			break;
+		case TableCameraTiltDirection::Left:
+			DesiredRotation = TableRotation - TableCameraDownRotation - FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+			DesiredLocation = TableLocation + TableCameraTranslation;
+			break;
+		case TableCameraTiltDirection::Right:
+			DesiredRotation = TableRotation + TableCameraTiltRotation;
+			DesiredLocation = TableLocation + TableCameraTranslation;
+			break;
+	}
+	IsIgnoringInput = IgnoreInput;
+	IsAtTable = true;
+	TableCameraTiltDirection = Location;
+	bMoveToDesiredTransform = true;
+	AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+	GameCharacter->ShowCardOverlay();
 }

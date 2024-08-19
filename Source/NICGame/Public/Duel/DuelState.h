@@ -50,7 +50,7 @@ public:
 
 	// Handles turn change to opposite player
 	UFUNCTION(BlueprintCallable)
-	void SwitchPlayerTurn();
+	void SwitchPlayerTurn(EBoardSide EndingTurn);
 
 	UFUNCTION(BlueprintCallable)
 	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> GetCharacters();
@@ -69,6 +69,14 @@ public:
 
 	UFUNCTION()
 	void EndDuel(EBoardSide WiningSide, uint8 excessiveDamage);
+
+	// Get current turn
+	UFUNCTION(BlueprintCallable)
+	EBoardSide GetCurrentTurn();
+
+	// Get current turn duel character
+	UFUNCTION(BlueprintCallable)
+	UDuelCharacter* GetCurrentTurnCharacter();
 
 protected:
 	EBoardSide CurrentTurn;

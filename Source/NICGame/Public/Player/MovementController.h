@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "InputAction.h"
+#include "Player/TableCameraTiltDirection.h"
 #include "MovementController.generated.h"
 
 
@@ -42,6 +43,9 @@ protected:
 	// Whether the player is at the table
 	bool IsAtTable;
 
+	// Whether to ignore the input
+	bool IsIgnoringInput;
+
 	// Camera movement when sitting down
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FVector TableCameraTranslation;
@@ -50,15 +54,17 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FRotator TableCameraDownRotation;
 
-	// Table camera tilt direction:
-	// -1: left
-	//	0: none
-	//	1: right
-	int TableCameraTiltDirection;
+	// Table camera tilt direction
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	TEnumAsByte<TableCameraTiltDirection> TableCameraTiltDirection;
 
 	// Table camera tilt rotation value
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FRotator TableCameraTiltRotation;
+
+	// Table camera forward tilt translation value
+	UPROPERTY(EditAnywhere, Category = "TableCamera")
+	FVector TableCameraForwardTiltTranslation;
 
 public:	
 	// Called every frame
@@ -69,4 +75,7 @@ public:
 	void TurnRight(const FInputActionInstance& Instance);
 	void MoveForward(const FInputActionInstance& Instance);
 	void MoveBackward(const FInputActionInstance& Instance);
+	
+	// Move to the desired transform
+	void SetView(enum TableCameraTiltDirection Location, bool IgnoreInput);
 };
