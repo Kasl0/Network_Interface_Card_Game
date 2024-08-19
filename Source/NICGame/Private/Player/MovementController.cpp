@@ -26,6 +26,7 @@ UMovementController::UMovementController()
 	TableCameraTiltDirection = TableCameraTiltDirection::None;
 	TableCameraTiltRotation = FRotator(15.0f, 30.0f, 0.0f);
 	TableCameraForwardTiltTranslation = FVector(-30.0f, 0.0f, 5.0f);
+	IsIgnoringInput = false;
 }
 
 
@@ -141,9 +142,9 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 		else
 		{
 			DesiredLocation += (DesiredRotation.Vector() * DistanceToMove);
-		}
-		bMoveToDesiredTransform = true;
+		}	
 	}
+	bMoveToDesiredTransform = true;
 }
 
 void UMovementController::MoveBackward(const FInputActionInstance& Instance)
@@ -211,4 +212,6 @@ void UMovementController::SetView(enum TableCameraTiltDirection Location, bool I
 	IsAtTable = true;
 	TableCameraTiltDirection = Location;
 	bMoveToDesiredTransform = true;
+	AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+	GameCharacter->ShowCardOverlay();
 }
