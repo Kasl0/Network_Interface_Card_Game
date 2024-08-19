@@ -188,6 +188,30 @@ uint8 UBoardState::GetColumnCount()
 	return this->ColumnCount;
 }
 
+bool UBoardState::IsBoardSideFull(EBoardSide Side)
+{
+	for (int i = 0; i < this->ColumnCount; i++)
+	{
+		if (this->Board[Side * this->ColumnCount + i] == NULL)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool UBoardState::IsBoardSideEmpty(EBoardSide Side)
+{
+	for (int i = 0; i < this->ColumnCount; i++)
+	{
+		if (this->Board[Side * this->ColumnCount + i] != NULL)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 void UBoardState::BroadcastBoardChanged()
 {
 	this->OnBoardChanged.Broadcast();

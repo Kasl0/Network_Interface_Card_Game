@@ -109,6 +109,20 @@ public:
 	*/
 	uint8 GetColumnCount();
 
+	/*
+	* Check if the board side is full
+	* @param Side The side to check
+	* @return True if the board side is full, false otherwise
+	*/
+	bool IsBoardSideFull(EBoardSide Side);
+
+	/*
+	* Check if the board side is empty
+	* @param Side The side to check
+	* @return True if the board side is empty, false otherwise
+	*/
+	bool IsBoardSideEmpty(EBoardSide Side);
+
 private:
 	UPROPERTY()
 	class UDuelState* DuelState;

@@ -156,5 +156,9 @@ EBoardSide UDuelState::GetCurrentTurn()
 
 UDuelCharacter* UDuelState::GetCurrentTurnCharacter()
 {
+	if (this->CurrentTurn == None)
+	{
+		return nullptr;
+	}
 	return this->DuelCharacters[TEnumAsByte(this->CurrentTurn)];
 }

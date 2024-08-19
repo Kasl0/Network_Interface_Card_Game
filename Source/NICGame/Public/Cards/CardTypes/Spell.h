@@ -1,10 +1,9 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "CardData.h"
 #include "Cards/Effects/Effect.h"
+#include "Duel/EBoardSide.h"
 #include "Spell.generated.h"
 
 /**
@@ -20,6 +19,8 @@ public:
 	UEffect* SpellEffect;
 
 	void Init(UEffect* Effect);
+
+	bool IsPlayable(EBoardSide Side) override;
 
 	UFUNCTION(BlueprintCallable)
 	void Apply(UObject* SpellTarget);
