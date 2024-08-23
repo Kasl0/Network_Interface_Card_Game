@@ -45,7 +45,7 @@ void UCardHUDWidget::EndTurn()
 		UDuelCharacter* CurrentTurnCharacter = this->DuelState->GetCurrentTurnCharacter();
 		if (CurrentTurnCharacter->GetCardDrawInCurrentTurn() > 0)
 		{
-			this->DuelState->EndPlayerTurn();
+			this->DuelState->PrepareTurnEnd();
 		}
 		else
 		{

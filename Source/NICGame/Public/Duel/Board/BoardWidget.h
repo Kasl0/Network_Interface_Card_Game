@@ -27,6 +27,9 @@ private:
 	UPROPERTY()
 	UBoardState* BoardState;
 
+	// Variable that dictates which column in upcoming row to move a minion from
+	int32 ColumnToMoveMinionFrom;
+
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UHorizontalBox* UpcomingRow;
@@ -39,13 +42,23 @@ public:
 	void OnMinionAttack(int32 MinionIndex, int32 MinionSide);
 
 	UFUNCTION(BlueprintCallable)
-	void OnBoardChanged();
+	void OnMoveMinion();
+
+	// Function called by timer, handles moving cards from upcoming to battlefield
+	void MoveFromUpcomingRow();
+
+	// Function called after all cards are moved to battlefield
+	UFUNCTION(BlueprintCallable)
+	void OnBattlefieldChanged();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateUpcomingCardWidgetAt(uint8 Column, UCardData* CardData);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void RemoveUpcomingCardWidgetAt(uint8 Column);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void MoveUpcomingCardToBoard(uint8 Column);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateCardWidgetAt(uint8 Row, uint8 Column, UCardData* CardData);
@@ -61,4 +74,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	uint8 GetColumnCount() const { return this->ColumnCount; }
+
+	// Checks if all cards on the battlefield finished their animations
+	UFUNCTION(BlueprintImplementableEvent)
+	bool AreAnimationsFinished();
 };

@@ -8,6 +8,7 @@
 #include "Player/GameCharacter.h"
 #include "Deck/BattleDeck.h"
 #include "Cards/CardHand.h"
+#include "Duel/Board/BoardWidget.h"
 
 UDuelState::UDuelState()
 {
@@ -69,6 +70,36 @@ UCardWidget* UDuelState::GetSelectedCard() const
 void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 {
 	this->SelectedCard = NewSelectedCard;
+}
+
+void UDuelState::PrepareTurnEnd()
+{
+	FTimerHandle TurnChangeHandle;
+	if (this->BoardWidget)
+	{
+		if (this->BoardWidget->AreAnimationsFinished())
+		{
+			// if finished, proceed to minion attack
+			this->BoardWidget->GetWorld()->GetTimerManager().SetTimer(
+				TurnChangeHandle,
+				this,
+				&UDuelState::EndPlayerTurn,
+				0.1f,
+				false
+			);
+		}
+		else 
+		{
+			// if not finished, wait
+			this->BoardWidget->GetWorld()->GetTimerManager().SetTimer(
+				TurnChangeHandle,
+				this,
+				&UDuelState::PrepareTurnEnd,
+				0.1f,
+				false
+			);
+		}
+	}
 }
 
 void UDuelState::EndPlayerTurn()
@@ -161,4 +192,9 @@ UDuelCharacter* UDuelState::GetCurrentTurnCharacter()
 		return nullptr;
 	}
 	return this->DuelCharacters[TEnumAsByte(this->CurrentTurn)];
+}
+
+void UDuelState::SetBoardWidget(UBoardWidget* Widget)
+{
+	this->BoardWidget = Widget;
 }

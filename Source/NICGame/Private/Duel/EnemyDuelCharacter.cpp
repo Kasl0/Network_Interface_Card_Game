@@ -11,7 +11,7 @@ void UEnemyDuelCharacter::StartTurn()
 {
 	Super::StartTurn();
 	this->PlayCards();
-	this->DuelState->EndPlayerTurn();
+	this->DuelState->PrepareTurnEnd();
 }
 
 void UEnemyDuelCharacter::PlayCards()
@@ -33,6 +33,16 @@ void UEnemyDuelCharacter::PlayCards()
 	// Place the card
 	this->DuelState->GetBoardState()->PlaceUpcomingCard(Card, Column);
 }
+
+//void UEnemyDuelCharacter::MoveUpcomingCards()
+//{
+//	
+//}
+//
+//void UEnemyDuelCharacter::PlaceUpcomingCards()
+//{
+//	
+//}
 
 uint8 UEnemyDuelCharacter::GetPreferredEmptyColumn()
 {

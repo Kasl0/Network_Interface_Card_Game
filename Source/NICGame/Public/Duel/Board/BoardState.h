@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Delegates/Delegate.h"
 #include "Duel/EBoardSide.h"
 #include "BoardState.generated.h"
 
@@ -36,6 +37,7 @@ public:
 	/*
 	* Event that is broadcasted when the board changes
 	*/
+	FBoardStateDelegate OnMinionMove;
 	FBoardStateDelegate OnBoardChanged;
 	FMinionAttackDelegate OnMinionAttack;
 

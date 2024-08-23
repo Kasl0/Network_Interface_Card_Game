@@ -5,6 +5,8 @@
 #include "Cards/CardTypes/Spell.h"
 #include "Duel/DuelCharacter.h"
 
+#include "Async/Async.h"
+
 void UBoardState::Init(UDuelState* State, uint8 ColumnCnt, UWorld* World)
 {
 	this->DuelState = State;
@@ -103,7 +105,10 @@ void UBoardState::MoveUpcomingCardsToBattlefield()
 	}
 	if (BoardChanged)
 	{
-		this->BroadcastBoardChanged();
+		/*AsyncTask(ENamedThreads::GameThread, [&]() {
+			this->OnMinionMove.Broadcast();
+		});*/
+		this->OnMinionMove.Broadcast();
 	}
 }
 
@@ -112,19 +117,21 @@ void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void(EBoardSid
 	this->CurrentAttackerSide = AttackerSide;
 	this->CurrentlyAttackingMinion = 0;
 	this->AfterMinionAttack = OnMinionAttackComplete;
-	//this->MinionAttackInColumn();
-	FTimerHandle MinionAttackHandle;
+	this->MinionAttackInColumn();
+	/*FTimerHandle MinionAttackHandle;
 	this->CurrentWorld->GetTimerManager().SetTimer(
 		MinionAttackHandle,
 		this,
 		&UBoardState::MinionAttackInColumn,
 		0.2f,
 		false
-	);
+	);*/
 }
 
 void UBoardState::MinionAttackInColumn()
 {
+	bool AttackAnimationPlayed = false;
+
 	int i = this->CurrentlyAttackingMinion;
 	EBoardSide DefenderSide = CurrentAttackerSide == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
 
@@ -135,8 +142,12 @@ void UBoardState::MinionAttackInColumn()
 		UMinion* AttackerMinion = Cast<UMinion>(Attacker);
 		if (AttackerMinion != NULL)
 		{
+			/*AsyncTask(ENamedThreads::GameThread, [this, i]() {
+				this->OnMinionAttack.Execute(i, CurrentAttackerSide == TEnumAsByte(Friendly) ? 1 : 0);
+			});*/
 
 			this->OnMinionAttack.Execute(i, CurrentAttackerSide == TEnumAsByte(Friendly) ? 1 : 0);
+			AttackAnimationPlayed = true;
 
 			UCardData* Defender = this->GetCardAt(DefenderSide, i);
 			UMinion* DefenderMinion = Cast<UMinion>(Defender);
@@ -155,17 +166,22 @@ void UBoardState::MinionAttackInColumn()
 
 	this->CurrentlyAttackingMinion += 1;
 	if (this->CurrentlyAttackingMinion < this->ColumnCount) {
-		FTimerHandle MinionAttackHandle;
-		this->CurrentWorld->GetTimerManager().SetTimer(
-			MinionAttackHandle,
-			this,
-			&UBoardState::MinionAttackInColumn,
-			0.2f,
-			false
-		);
+		if (AttackAnimationPlayed)
+		{
+			FTimerHandle MinionAttackHandle;
+			this->CurrentWorld->GetTimerManager().SetTimer(
+				MinionAttackHandle,
+				this,
+				&UBoardState::MinionAttackInColumn,
+				0.2f,
+				false
+			);
+		}
+		else this->MinionAttackInColumn();
 	}
 	else {
 		this->BroadcastBoardChanged();
+		FTimerHandle MinionAttackHandle;
 		this->AfterMinionAttack(CurrentAttackerSide);
 	}
 }
@@ -214,5 +230,8 @@ bool UBoardState::IsBoardSideEmpty(EBoardSide Side)
 
 void UBoardState::BroadcastBoardChanged()
 {
+	/*AsyncTask(ENamedThreads::GameThread, [&]() {
+		this->OnBoardChanged.Broadcast();
+	});*/
 	this->OnBoardChanged.Broadcast();
 }

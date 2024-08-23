@@ -30,6 +30,12 @@ private:
 	UFUNCTION()
 	void PlayCards();
 
+	/*UFUNCTION()
+	void MoveUpcomingCards();
+
+	UFUNCTION()
+	void PlaceUpcomingCards();*/
+
 	UFUNCTION()
 	uint8 GetPreferredEmptyColumn();
 };

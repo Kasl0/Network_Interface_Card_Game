@@ -9,6 +9,7 @@
 // Forward declarations
 class UCardWidget;
 class UBoardState;
+class UBoardWidget;
 class UDuelCharacter;
 class UCardData;
 
@@ -44,7 +45,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSelectedCard(UCardWidget* NewSelectedCard);
 
-	// Handles turn change to opposite player
+	// Handles preparations for turn end (waiting for animations to finish)
+	UFUNCTION()
+	void PrepareTurnEnd();
+
+	// Handles logic for ending a player's turn
 	UFUNCTION(BlueprintCallable)
 	void EndPlayerTurn();
 
@@ -78,6 +83,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UDuelCharacter* GetCurrentTurnCharacter();
 
+	// Get board state
+	UFUNCTION()
+	void SetBoardWidget(UBoardWidget* Widget);
+
 protected:
 	EBoardSide CurrentTurn;
 
@@ -86,4 +95,7 @@ protected:
 
 	UPROPERTY()
 	UBoardState* BoardState;
+
+	UPROPERTY()
+	UBoardWidget* BoardWidget;
 };
