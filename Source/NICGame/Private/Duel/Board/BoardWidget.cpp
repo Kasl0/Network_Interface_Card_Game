@@ -25,15 +25,14 @@ void UBoardWidget::NativeConstruct()
 void UBoardWidget::OnMoveMinion()
 {
 	this->ColumnToMoveMinionFrom = 0;
-	this->MoveFromUpcomingRow();
-	/*FTimerHandle MoveMinionHandle;
+	FTimerHandle MoveMinionHandle;
 	GetWorld()->GetTimerManager().SetTimer(
 		MoveMinionHandle,
 		this,
 		&UBoardWidget::MoveFromUpcomingRow,
 		0.2f,
 		false
-	);*/
+	);
 }
 
 void UBoardWidget::MoveFromUpcomingRow()
