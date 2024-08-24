@@ -23,7 +23,8 @@ void UBoardState::Init(UDuelState* State, uint8 ColumnCnt, UWorld* World)
 	{
 		this->Board[i] = NULL;
 	}
-	this->BroadcastBoardChanged();
+
+	this->OnBoardReset.Broadcast();
 }
 
 UCardData* UBoardState::GetUpcomingCardAt(uint8 Column)

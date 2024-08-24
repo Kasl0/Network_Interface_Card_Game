@@ -83,9 +83,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UDuelCharacter* GetCurrentTurnCharacter();
 
-	// Get board state
+	// Set Board Widget
 	UFUNCTION()
 	void SetBoardWidget(UBoardWidget* Widget);
+
+	UPROPERTY()
+	UBoardWidget* BoardWidget;
 
 protected:
 	EBoardSide CurrentTurn;
@@ -95,7 +98,4 @@ protected:
 
 	UPROPERTY()
 	UBoardState* BoardState;
-
-	UPROPERTY()
-	UBoardWidget* BoardWidget;
 };

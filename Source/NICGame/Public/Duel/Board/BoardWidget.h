@@ -44,6 +44,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnMoveMinion();
 
+	UFUNCTION(BlueprintCallable)
+	void OnBoardReset();
+
 	// Function called by timer, handles moving cards from upcoming to battlefield
 	void MoveFromUpcomingRow();
 

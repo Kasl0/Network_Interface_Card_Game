@@ -1,6 +1,7 @@
 #include "Duel/EnemyDuelCharacter.h"
 #include "Duel/Board/BoardState.h"
 #include "Duel/EBoardSide.h"
+#include "Duel/Board/BoardWidget.h"
 
 void UEnemyDuelCharacter::InitializeDuelState(UDuelState* State)
 {
@@ -10,39 +11,51 @@ void UEnemyDuelCharacter::InitializeDuelState(UDuelState* State)
 void UEnemyDuelCharacter::StartTurn()
 {
 	Super::StartTurn();
+
+	this->MoveCards();
 	this->PlayCards();
+
 	this->DuelState->PrepareTurnEnd();
+}
+
+void UEnemyDuelCharacter::MoveCards()
+{
+	UBoardState* BoardState = this->DuelState->GetBoardState();
+	BoardState->MoveUpcomingCardsToBattlefield();
 }
 
 void UEnemyDuelCharacter::PlayCards()
 {
-	UBoardState* BoardState = this->DuelState->GetBoardState();
-
-	// Move upcoming cards to the board
-	BoardState->MoveUpcomingCardsToBattlefield();
-
-	uint8 Column = this->GetPreferredEmptyColumn();
-	if (Column == -1)
+	if (this->DuelState->BoardWidget)
 	{
-		return;
+		if (this->DuelState->BoardWidget->AreAnimationsFinished())
+		{
+			uint8 Column = this->GetPreferredEmptyColumn();
+			if (Column == -1)
+			{
+				return;
+			}
+
+			// Get a card from the deck
+			UCardData* Card = this->DuelState->GetEnemyDeckInfo()->GetCard();
+
+			// Place the card
+			this->DuelState->GetBoardState()->PlaceUpcomingCard(Card, Column);
+		}
+		else
+		{
+			// if animations not finished, wait
+			FTimerHandle Handle;
+			this->GetWorld()->GetTimerManager().SetTimer(
+				Handle,
+				this,
+				&UEnemyDuelCharacter::PlayCards,
+				0.1f,
+				false
+			);
+		}
 	}
-
-	// Get a card from the deck
-	UCardData* Card = this->DuelState->GetEnemyDeckInfo()->GetCard();
-
-	// Place the card
-	this->DuelState->GetBoardState()->PlaceUpcomingCard(Card, Column);
 }
-
-//void UEnemyDuelCharacter::MoveUpcomingCards()
-//{
-//	
-//}
-//
-//void UEnemyDuelCharacter::PlaceUpcomingCards()
-//{
-//	
-//}
 
 uint8 UEnemyDuelCharacter::GetPreferredEmptyColumn()
 {

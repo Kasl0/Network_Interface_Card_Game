@@ -26,9 +26,7 @@ class NICGAME_API UBoardState : public UObject
 	*/
 	TFunction<void(EBoardSide EndingTurn)> AfterMinionAttack;
 
-	/*
-	* Helper variables to use during minion attack
-	*/
+	// Helper variables to use during minion attack
 	EBoardSide CurrentAttackerSide;
 	int CurrentlyAttackingMinion;
 
@@ -37,6 +35,7 @@ public:
 	/*
 	* Event that is broadcasted when the board changes
 	*/
+	FBoardStateDelegate OnBoardReset;
 	FBoardStateDelegate OnMinionMove;
 	FBoardStateDelegate OnBoardChanged;
 	FMinionAttackDelegate OnMinionAttack;

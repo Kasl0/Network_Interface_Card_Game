@@ -20,6 +20,7 @@ void UBoardWidget::NativeConstruct()
 	this->BoardState->OnMinionMove.AddDynamic(this, &UBoardWidget::OnMoveMinion);
 	this->BoardState->OnBoardChanged.AddDynamic(this, &UBoardWidget::OnBattlefieldChanged);
 	this->BoardState->OnMinionAttack.BindDynamic(this, &UBoardWidget::OnMinionAttack);
+	this->BoardState->OnBoardReset.AddDynamic(this, &UBoardWidget::OnBoardReset);
 }
 
 void UBoardWidget::OnMoveMinion()
@@ -33,6 +34,21 @@ void UBoardWidget::OnMoveMinion()
 		0.2f,
 		false
 	);
+}
+
+void UBoardWidget::OnBoardReset()
+{
+	for (int i = 0; i < this->ColumnCount; i++)
+	{
+		this->RemoveUpcomingCardWidgetAt(i);
+	}
+	for (int j = 0; j < 2; j++)
+	{
+		for (int i = 0; i < this->ColumnCount; i++)
+		{
+			this->RemoveCardWidgetAt(j, i);
+		}
+	}
 }
 
 void UBoardWidget::MoveFromUpcomingRow()
