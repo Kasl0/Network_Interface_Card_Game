@@ -8,6 +8,7 @@
 #include "Player/GameCharacter.h"
 #include "Deck/BattleDeck.h"
 #include "Cards/CardHand.h"
+#include "Duel/Board/BoardWidget.h"
 
 UDuelState::UDuelState()
 {
@@ -71,6 +72,36 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 	this->SelectedCard = NewSelectedCard;
 }
 
+void UDuelState::PrepareTurnEnd()
+{
+	FTimerHandle TurnChangeHandle;
+	if (this->BoardWidget)
+	{
+		if (this->BoardWidget->AreAnimationsFinished())
+		{
+			// if finished, proceed to minion attack
+			this->BoardWidget->GetWorld()->GetTimerManager().SetTimer(
+				TurnChangeHandle,
+				this,
+				&UDuelState::EndPlayerTurn,
+				0.1f,
+				false
+			);
+		}
+		else 
+		{
+			// if not finished, wait
+			this->BoardWidget->GetWorld()->GetTimerManager().SetTimer(
+				TurnChangeHandle,
+				this,
+				&UDuelState::PrepareTurnEnd,
+				0.1f,
+				false
+			);
+		}
+	}
+}
+
 void UDuelState::EndPlayerTurn()
 {
 	EBoardSide EndingTurn = this->CurrentTurn;
@@ -130,23 +161,46 @@ UEnemyDeckInfo* UDuelState::GetEnemyDeckInfo()
 	return Cast<UEnemyDeckInfo>(GameInstance->GetSubsystem<UEnemyDeckInfo>());
 }
 
-void UDuelState::EndDuel(EBoardSide WiningSide, uint8 excessiveDamage)
+void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 {
-	// temporary debug text
-	FString Text1 = "GAME OVER! Winner: ";
-	Text1.Append(WiningSide == TEnumAsByte(Friendly) ? "Player" : "Enemy");
-	Text1.Append(" with excessiveDamage = ");
-	Text1.Append(FString::FromInt(excessiveDamage));
-	FString Text2 = "New game automatically started";
+	if (this->BoardWidget)
+	{
+		if (this->BoardWidget->AreAnimationsFinished())
+		{
+			// temporary debug text
+			FString Text1 = "GAME OVER! Winner: ";
+			Text1.Append(WinningSide == TEnumAsByte(Friendly) ? "Player" : "Enemy");
+			Text1.Append(" with excessiveDamage = ");
+			Text1.Append(FString::FromInt(excessiveDamage));
+			FString Text2 = "New game automatically started";
 
-	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text2);
+			if (GEngine) {
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text2);
+			}
+
+			// very temporary, for the demo
+			this->BoardState->Init(this, 4, GetWorld());
+			this->StartDuel(TEnumAsByte(Enemy));
+		}
+		else
+		{
+			// if not finished, wait
+
+			auto MyLambda = [this, WinningSide, excessiveDamage]()
+				{
+					this->EndDuel(WinningSide, excessiveDamage);
+				};
+
+			FTimerHandle Handle;
+			this->BoardWidget->GetWorld()->GetTimerManager().SetTimer(
+				Handle,
+				MyLambda,
+				0.1f,
+				false
+			);
+		}
 	}
-
-	// very temporary, for the demo
-	this->BoardState->Init(this, 4, GetWorld());
-	this->StartDuel(TEnumAsByte(Enemy));
 }
 
 EBoardSide UDuelState::GetCurrentTurn()
@@ -161,4 +215,9 @@ UDuelCharacter* UDuelState::GetCurrentTurnCharacter()
 		return nullptr;
 	}
 	return this->DuelCharacters[TEnumAsByte(this->CurrentTurn)];
+}
+
+void UDuelState::SetBoardWidget(UBoardWidget* Widget)
+{
+	this->BoardWidget = Widget;
 }

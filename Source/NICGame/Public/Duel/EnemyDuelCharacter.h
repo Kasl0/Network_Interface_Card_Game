@@ -27,6 +27,11 @@ private:
 	UPROPERTY()
 	UDuelState* DuelState;
 
+	// Move upcoming cards
+	UFUNCTION()
+	void MoveCards();
+
+	// After animations are finished, play new cards
 	UFUNCTION()
 	void PlayCards();
 
