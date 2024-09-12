@@ -129,6 +129,9 @@ void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void(EBoardSid
 	);*/
 }
 
+// TODO
+//  Bug! Minion atakuje, zanim się przesunie
+
 void UBoardState::MinionAttackInColumn()
 {
 	bool AttackAnimationPlayed = false;

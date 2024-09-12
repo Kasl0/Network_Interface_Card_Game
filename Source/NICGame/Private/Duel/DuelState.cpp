@@ -14,7 +14,8 @@ UDuelState::UDuelState()
 {
 	this->BoardState = NewObject<UBoardState>();
 	this->BoardState->Init(this, 4, GetWorld());
-	this->BoardState->AddToRoot();
+	// Moved to StartDuel()
+	// this->BoardState->AddToRoot();
 }
 
 bool UDuelState::IsDuelInProgress()
@@ -32,6 +33,8 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 	// initialize card hand
 	UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
 	CardHand->RemoveAllCardData();
+
+	this->BoardState->Init(this, 4, GetWorld());
 
 	// initialize characters
 	for (EBoardSide Side : {Friendly, Enemy})
@@ -172,16 +175,22 @@ void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 			Text1.Append(WinningSide == TEnumAsByte(Friendly) ? "Player" : "Enemy");
 			Text1.Append(" with excessiveDamage = ");
 			Text1.Append(FString::FromInt(excessiveDamage));
-			FString Text2 = "New game automatically started";
+			//FString Text2 = "New game automatically started";
 
 			if (GEngine) {
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text2);
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text2);
 			}
 
-			// very temporary, for the demo
-			this->BoardState->Init(this, 4, GetWorld());
-			this->StartDuel(TEnumAsByte(Enemy));
+			UGameInstance* GameInstance = this->GetWorld()->GetGameInstance();
+			if (GameInstance)
+			{
+				UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
+				if (GamePhaseSubsystem)
+				{
+					GamePhaseSubsystem->MapPhase();
+				}
+			}
 		}
 		else
 		{

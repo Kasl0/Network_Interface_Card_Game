@@ -136,8 +136,10 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 			IsAtTable = true;
 			DesiredLocation += TableCameraTranslation;
 			DesiredRotation -= TableCameraDownRotation;
-			AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
-			GameCharacter->ShowCardOverlay();
+			
+			// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+			// GameCharacter->ShowCardOverlay();
+			this->GamePhaseSubsystem->ChangeOverlay(1);
 		}
 		else
 		{
@@ -176,8 +178,9 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 			IsAtTable = false;
 			DesiredLocation -= TableCameraTranslation;
 			DesiredRotation += TableCameraDownRotation;
-			AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
-			GameCharacter->HideCardOverlay();
+			// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+			// GameCharacter->HideCardOverlay();
+			this->GamePhaseSubsystem->ChangeOverlay(0);
 		}
 	}
 	else
@@ -212,6 +215,13 @@ void UMovementController::SetView(enum TableCameraTiltDirection Location, bool I
 	IsAtTable = true;
 	TableCameraTiltDirection = Location;
 	bMoveToDesiredTransform = true;
-	AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
-	GameCharacter->ShowCardOverlay();
+	
+	// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
+	// GameCharacter->ShowCardOverlay();
+	this->GamePhaseSubsystem->ChangeOverlay(1);
+}
+
+void UMovementController::SetGamePhaseSubsystem(UGamePhaseSubsystem* Subsystem)
+{
+	this->GamePhaseSubsystem = Subsystem;
 }

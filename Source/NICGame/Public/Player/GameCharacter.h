@@ -53,12 +53,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Show card overlay
-	UFUNCTION(BlueprintImplementableEvent)
-	void ShowCardOverlay();
+	// UFUNCTION(BlueprintImplementableEvent)
+	// void ShowCardOverlay();
 
 	// Hide card overlay
-	UFUNCTION(BlueprintImplementableEvent)
-	void HideCardOverlay();
+	// UFUNCTION(BlueprintImplementableEvent)
+	// void HideCardOverlay();
 
 	// Move to the desired transform
 	UFUNCTION(BlueprintCallable)

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "InputAction.h"
+#include "GamePhase/GamePhaseSubsystem.h"
 #include "Player/TableCameraTiltDirection.h"
 #include "MovementController.generated.h"
 
@@ -66,6 +67,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "TableCamera")
 	FVector TableCameraForwardTiltTranslation;
 
+	// Used to show/hide overlay
+	UPROPERTY(BlueprintReadOnly)
+	UGamePhaseSubsystem* GamePhaseSubsystem;
+	
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -78,4 +83,7 @@ public:
 	
 	// Move to the desired transform
 	void SetView(enum TableCameraTiltDirection Location, bool IgnoreInput);
+
+	UFUNCTION(BlueprintCallable)
+	void SetGamePhaseSubsystem(UGamePhaseSubsystem* Subsystem);
 };

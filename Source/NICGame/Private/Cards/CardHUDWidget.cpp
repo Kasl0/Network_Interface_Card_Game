@@ -25,7 +25,7 @@ void UCardHUDWidget::NativeConstruct()
 			{
 				this->EndTurnButton->OnClicked.AddDynamic(this, &UCardHUDWidget::EndTurn);
 			}
-			this->DuelState->StartDuel(TEnumAsByte(Enemy));
+			// this->DuelState->StartDuel(TEnumAsByte(Enemy));
 		}
 	}
 }
