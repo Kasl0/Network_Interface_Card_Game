@@ -5,6 +5,8 @@
 
 void UMapState::CreateMockMap()
 {
+	if (IsMockMapCreated) return;
+
 	UMapNodeWidget* Start = NewObject<UMapNodeWidget>();
 	Start->Init(EMapNodeType::EnemyNode, 0);
 	UMapNodeWidget* Enemy1 = NewObject<UMapNodeWidget>();
@@ -19,9 +21,6 @@ void UMapState::CreateMockMap()
 	Enemy1->AddNextNode(Boss);
 	Enemy2->AddNextNode(Boss);
 
-	this->CurrentNode = Enemy1;
-
-
 	FMapLevel L1;
 	FMapLevel L2;
 	FMapLevel L3;
@@ -33,4 +32,8 @@ void UMapState::CreateMockMap()
 	this->Map[1].Add(Enemy1);
 	this->Map[1].Add(Enemy2);
 	this->Map[2].Add(Boss);
+
+	this->IsMockMapCreated = true;
+
+	this->CurrentNode = nullptr;
 }

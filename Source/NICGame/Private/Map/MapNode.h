@@ -36,5 +36,5 @@ public:
 
 	// Called when node is clicked on the map, changes the Game Phase to corresponding to node type (for now simply starts a fight)
 	UFUNCTION(BlueprintCallable)
-	void NodeChosen();
+	void NodeChosen(UMapNodeWidget* Node);
 };

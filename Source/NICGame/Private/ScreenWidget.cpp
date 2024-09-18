@@ -18,7 +18,7 @@ void UScreenWidget::NativeConstruct()
 		if (GamePhaseSubsystem)
 		{
 			GamePhaseSubsystem->SetScreenWidget(this);
-			GamePhaseSubsystem->DuelPhase();
+			GamePhaseSubsystem->MapPhase();
 		}
 	}
 }

@@ -17,6 +17,8 @@ class NICGAME_API UMapState : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 	
+	// Temporary variable that dictates if mock map should be created
+	bool IsMockMapCreated = false;
 public:
 	// Temporary function to create a placeholder map
 	UFUNCTION(BlueprintCallable)
@@ -25,6 +27,6 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FMapLevel> Map;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	UMapNodeWidget* CurrentNode;
 };
