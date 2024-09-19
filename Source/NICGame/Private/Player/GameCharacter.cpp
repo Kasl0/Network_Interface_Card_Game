@@ -1,4 +1,6 @@
 #include "Player/GameCharacter.h"
+
+#include "GamePhase/GamePhaseSubsystem.h"
 #include "Player/MovementController.h"
 
 // Sets default values
@@ -16,14 +18,20 @@ AGameCharacter::AGameCharacter()
 void AGameCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	UGameInstance* GameInstance = this->GetWorld()->GetGameInstance();
+	if (GameInstance)
+	{
+		UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
+		this->MovementController->SetGamePhaseSubsystem(GamePhaseSubsystem);
+	}
 }
 
 // Called every frame
 void AGameCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input
