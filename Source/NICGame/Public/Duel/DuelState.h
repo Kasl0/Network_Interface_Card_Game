@@ -4,6 +4,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Duel/EBoardSide.h"
 #include "Deck/EnemyDeckInfo.h"
+#include "Duel/Board/BoardWidgetWithActors.h"
 #include "DuelState.generated.h"
 
 // Forward declarations
