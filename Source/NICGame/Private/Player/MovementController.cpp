@@ -22,7 +22,7 @@ UMovementController::UMovementController()
 	TableRotation = FRotator(0.0f, 180.0f, 0.0f);
 	IsAtTable = false;
 	TableCameraTranslation = FVector(-10.0f, 0.0f, 12.0f);
-	TableCameraDownRotation = FRotator(54.0f, 0.0f, 0.0f);
+	TableCameraDownRotation = FRotator(47.0f, 0.0f, 0.0f);
 	TableCameraTiltDirection = TableCameraTiltDirection::None;
 	TableCameraTiltRotation = FRotator(15.0f, 30.0f, 0.0f);
 	TableCameraForwardTiltTranslation = FVector(-30.0f, 0.0f, 5.0f);
@@ -140,6 +140,7 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 			// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 			// GameCharacter->ShowCardOverlay();
 			this->GamePhaseSubsystem->ChangeOverlay(1);
+			this->GamePhaseSubsystem->ScreenWidgetComponent->RenderOnScreen();
 		}
 		else
 		{
@@ -181,6 +182,7 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 			// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 			// GameCharacter->HideCardOverlay();
 			this->GamePhaseSubsystem->ChangeOverlay(0);
+			this->GamePhaseSubsystem->ScreenWidgetComponent->RenderInWorld();
 		}
 	}
 	else
@@ -219,6 +221,7 @@ void UMovementController::SetView(enum TableCameraTiltDirection Location, bool I
 	// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 	// GameCharacter->ShowCardOverlay();
 	this->GamePhaseSubsystem->ChangeOverlay(1);
+	this->GamePhaseSubsystem->ScreenWidgetComponent->RenderOnScreen();
 }
 
 void UMovementController::SetGamePhaseSubsystem(UGamePhaseSubsystem* Subsystem)

@@ -27,7 +27,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ShowBoard();
-	
+
 	/**
 	 * Change visibility of overlay corresponding to game phase (e.g. CardHUD for Duel).
 	 * Would make more sense to put this in UGamePhaseSubsystem, but it's easier to do a Blueprint Event here.

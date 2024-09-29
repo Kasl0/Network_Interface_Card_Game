@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ScreenWidget.h"
+#include "ScreenWidgetComponent.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "GamePhase/EGamePhase.h"
 #include "GamePhaseSubsystem.generated.h"
@@ -20,6 +21,9 @@ class NICGAME_API UGamePhaseSubsystem : public UGameInstanceSubsystem
 public:	
 	UPROPERTY(BlueprintReadWrite)
 	UScreenWidget* ScreenWidget;
+
+	UPROPERTY(BlueprintReadWrite)
+	UScreenWidgetComponent* ScreenWidgetComponent;
 
 	// Switch to duel phase
 	UFUNCTION(BlueprintCallable)
