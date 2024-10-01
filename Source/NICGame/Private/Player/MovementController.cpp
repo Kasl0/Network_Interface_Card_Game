@@ -124,9 +124,9 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 	{
 		if (TableCameraTiltDirection == TableCameraTiltDirection::None)
 		{
-			DesiredRotation -= (FRotator(90.0f, 0.0f, 0.0f) - TableCameraDownRotation);
+			/*DesiredRotation -= (FRotator(90.0f, 0.0f, 0.0f) - TableCameraDownRotation);
 			DesiredLocation += TableCameraForwardTiltTranslation;
-			TableCameraTiltDirection = TableCameraTiltDirection::Forward;
+			TableCameraTiltDirection = TableCameraTiltDirection::Forward;*/
 		}
 	}
 	else
@@ -170,9 +170,9 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 		}
 		else if (TableCameraTiltDirection == TableCameraTiltDirection::Forward)
 		{
-			DesiredRotation += (FRotator(90.0f, 0.0f, 0.0f) - TableCameraDownRotation);
+			/*DesiredRotation += (FRotator(90.0f, 0.0f, 0.0f) - TableCameraDownRotation);
 			DesiredLocation -= TableCameraForwardTiltTranslation;
-			TableCameraTiltDirection = TableCameraTiltDirection::None;
+			TableCameraTiltDirection = TableCameraTiltDirection::None;*/
 		}
 		else if (TableCameraTiltDirection == TableCameraTiltDirection::None)
 		{
@@ -200,10 +200,10 @@ void UMovementController::SetView(enum TableCameraTiltDirection Location, bool I
 			DesiredRotation = TableRotation - TableCameraDownRotation;
 			DesiredLocation = TableLocation + TableCameraTranslation;
 			break;
-		case TableCameraTiltDirection::Forward:
+		/*case TableCameraTiltDirection::Forward:
 			DesiredRotation = TableRotation - FRotator(90.0f, 0.0f, 0.0f);
 			DesiredLocation = TableLocation + TableCameraTranslation + TableCameraForwardTiltTranslation;
-			break;
+			break;*/
 		case TableCameraTiltDirection::Left:
 			DesiredRotation = TableRotation - TableCameraDownRotation - FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
 			DesiredLocation = TableLocation + TableCameraTranslation;

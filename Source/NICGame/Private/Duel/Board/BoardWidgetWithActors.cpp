@@ -17,7 +17,7 @@ void UBoardWidgetWithActors::NativeConstruct()
 	//DuelState->SetBoardWidget(this);
 	this->BoardState = DuelState->GetBoardState();
 
-	this->BoardState->OnMinionMove.AddDynamic(this, &UBoardWidgetWithActors::OnMoveMinion);
+	this->BoardState->OnMinionMove.BindDynamic(this, &UBoardWidgetWithActors::OnMoveMinion);
 	this->BoardState->OnBoardChanged.AddDynamic(this, &UBoardWidgetWithActors::OnBattlefieldChanged);
 	this->BoardState->OnMinionAttack.BindDynamic(this, &UBoardWidgetWithActors::OnMinionAttack);
 	this->BoardState->OnBoardReset.AddDynamic(this, &UBoardWidgetWithActors::OnBoardReset);

@@ -17,7 +17,7 @@ void UBoardWidget::NativeConstruct()
 	DuelState->SetBoardWidget(this);
 	this->BoardState = DuelState->GetBoardState();
 
-	this->BoardState->OnMinionMove.AddDynamic(this, &UBoardWidget::OnMoveMinion);
+	this->BoardState->OnMinionMove.BindDynamic(this, &UBoardWidget::OnMoveMinion);
 	this->BoardState->OnBoardChanged.AddDynamic(this, &UBoardWidget::OnBattlefieldChanged);
 	this->BoardState->OnMinionAttack.BindDynamic(this, &UBoardWidget::OnMinionAttack);
 	this->BoardState->OnBoardReset.AddDynamic(this, &UBoardWidget::OnBoardReset);
@@ -27,13 +27,14 @@ void UBoardWidget::OnMoveMinion()
 {
 	this->ColumnToMoveMinionFrom = 0;
 	FTimerHandle MoveMinionHandle;
-	GetWorld()->GetTimerManager().SetTimer(
+	/*GetWorld()->GetTimerManager().SetTimer(
 		MoveMinionHandle,
 		this,
 		&UBoardWidget::MoveFromUpcomingRow,
 		0.2f,
 		false
-	);
+	);*/
+	this->MoveFromUpcomingRow();
 }
 
 void UBoardWidget::OnBoardReset()
@@ -66,7 +67,7 @@ void UBoardWidget::MoveFromUpcomingRow()
 	this->ColumnToMoveMinionFrom += 1;
 	if (this->ColumnToMoveMinionFrom < this->ColumnCount)
 	{
-		if (MoveAnimationPlayed)
+		/*if (MoveAnimationPlayed)
 		{
 			FTimerHandle MoveMinionHandle;
 			GetWorld()->GetTimerManager().SetTimer(
@@ -77,7 +78,8 @@ void UBoardWidget::MoveFromUpcomingRow()
 				false
 			);
 		}
-		else this->MoveFromUpcomingRow();
+		else */
+		this->MoveFromUpcomingRow();
 	}
 }
 
