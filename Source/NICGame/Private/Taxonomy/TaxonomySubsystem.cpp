@@ -2,7 +2,7 @@
 
 
 #include "Taxonomy/TaxonomySubsystem.h"
-#include "TaxonomySubsystem.h"
+
 
 void UTaxonomySubsystem::ChangeXAxisValue(int32 Change)
 {
