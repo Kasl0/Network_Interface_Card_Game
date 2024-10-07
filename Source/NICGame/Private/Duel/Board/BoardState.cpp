@@ -109,7 +109,7 @@ void UBoardState::MoveUpcomingCardsToBattlefield()
 		/*AsyncTask(ENamedThreads::GameThread, [&]() {
 			this->OnMinionMove.Broadcast();
 		});*/
-		this->OnMinionMove.Broadcast();
+		this->OnMinionMove.Execute();
 	}
 }
 

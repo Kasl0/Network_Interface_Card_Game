@@ -10,6 +10,7 @@ class UDuelState;
 class UCardData;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBoardStateDelegate);
+DECLARE_DYNAMIC_DELEGATE(FMinionMoveDelegate);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FMinionAttackDelegate, int32, MinionIndex, int32, MinionSide);
 
 /**
@@ -36,7 +37,7 @@ public:
 	* Event that is broadcasted when the board changes
 	*/
 	FBoardStateDelegate OnBoardReset;
-	FBoardStateDelegate OnMinionMove;
+	FMinionMoveDelegate OnMinionMove;
 	FBoardStateDelegate OnBoardChanged;
 	FMinionAttackDelegate OnMinionAttack;
 
