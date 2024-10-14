@@ -13,7 +13,7 @@ void UMinion::CheckDeath()
 	}
 }
 
-void UMinion::Init(uint8 Cost, std::string Name, std::string Description, int32 Attack, int32 Health)
+void UMinion::Init(uint8 Cost, std::string Name, std::string Description, int32 Attack, int32 Health, FString Image)
 {
 	this->CardCost = Cost;
 	this->CardName = FText::FromString(UTF8_TO_TCHAR(Name.c_str()));
@@ -21,6 +21,7 @@ void UMinion::Init(uint8 Cost, std::string Name, std::string Description, int32 
 	this->BaseAttack = Attack;
 	this->BaseHealth = Health;
 	this->CurrentHealth = this->BaseHealth;
+	this->SetCardImage(Image);
 }
 
 bool UMinion::IsPlayable(EBoardSide Side)

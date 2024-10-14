@@ -30,7 +30,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	int32 CurrentHealth;
 
-	void Init(uint8 Cost, std::string Name, std::string Description, int32 Attack, int32 Health);
+	void Init(uint8 Cost, std::string Name, std::string Description, int32 Attack, int32 Health, FString Image);
 
 	bool IsPlayable(EBoardSide Side) override;
 
