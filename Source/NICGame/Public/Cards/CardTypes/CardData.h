@@ -15,7 +15,7 @@ class NICGAME_API UCardData : public UObject
 	GENERATED_BODY()
 
 public:
-	virtual void SetData(uint8 Cost, std::string Name, std::string Description, FString ImageFilename);
+	virtual void SetData(uint8 Cost, std::string Name, std::string GameDescription, std::string IrlDescription, FString ImageFilename, int32 Layer);
 
 	void SetCardImage(FString ImageFilename);
 
@@ -26,7 +26,13 @@ public:
 	FText CardName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText CardDescription;
+	FText CardGameDescription;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText CardIrlDescription;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 CardLayer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FSlateBrush CardBrush;

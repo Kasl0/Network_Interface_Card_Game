@@ -26,7 +26,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* CardName;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	UTextBlock* CardDescription;
+	UTextBlock* CardGameDescription;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* CardImage;
 };

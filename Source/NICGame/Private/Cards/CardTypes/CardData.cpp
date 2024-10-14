@@ -4,11 +4,13 @@
 
 #include <string>
 
-void UCardData::SetData(uint8 Cost, std::string Name, std::string Description, FString ImageFilename)
+void UCardData::SetData(uint8 Cost, std::string Name, std::string GameDescription, std::string IrlDescription, FString ImageFilename, int32 Layer)
 {
 	this->CardCost = Cost;
 	this->CardName = FText::FromString(UTF8_TO_TCHAR(Name.c_str()));
-	this->CardDescription = FText::FromString(UTF8_TO_TCHAR(Description.c_str()));
+	this->CardGameDescription = FText::FromString(UTF8_TO_TCHAR(GameDescription.c_str()));
+	this->CardIrlDescription = FText::FromString(UTF8_TO_TCHAR(IrlDescription.c_str()));
+	this->CardLayer = Layer;
 	this->SetCardImage(ImageFilename);
 }
 

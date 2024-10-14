@@ -13,7 +13,7 @@ Json file structure:
 	{
 		"id": 1,
 		"name": "Device name",
-		"spell": "Damage",
+		"spellType": "Damage",
 		"manaCost": 1,
 		"baseHealth": 1,
 		"baseAttack": 1,
@@ -90,9 +90,9 @@ UCardData* CardService::GetRandomEnemyCard(int8 layer)
 
 UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 {
-	int32 id = GetIntValue(CardObject, "id", true);									// currently not passed to CardData object, do we need it?
+	int32 id = GetIntValue(CardObject, "id", true);
 	FString name = GetStringValue(CardObject, "name", true);
-	FString spell = GetStringValue(CardObject, "spell", false);
+	FString spellType = GetStringValue(CardObject, "spellType", false);
 	int32 manaCost = GetIntValue(CardObject, "manaCost", true);
 	int32 baseAttack = GetIntValue(CardObject, "baseAttack", false);
 	int32 baseHealth = GetIntValue(CardObject, "baseHealth", false);
@@ -106,20 +106,20 @@ UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 	{
 		imageFilename = TEXT("/Script/Engine.Texture2D'/Game/Data/Cards/ImageNotFound.ImageNotFound'");
 	}
-	int32 layer = GetIntValue(CardObject, "layer", false);							// currently not passed to CardData object, do we need it?
+	int32 layer = GetIntValue(CardObject, "layer", false);
 	FString gameDescription = GetStringValue(CardObject, "gameDescription", false);
-	FString irlDescription = GetStringValue(CardObject, "irlDescription", false);	// TODO add to CardData object
+	FString irlDescription = GetStringValue(CardObject, "irlDescription", false);
 
-	if (spell == "")
+	if (spellType == "")
 	{
 		UMinion* Minion = NewObject<UMinion>();
-		Minion->Init(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), baseAttack, baseHealth, imageFilename);
+		Minion->Init(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), baseAttack, baseHealth, imageFilename, layer);
 		return Minion;
 	}
-	else if (spell == "Minion")
+	else if (spellType == "Minion")
 	{
 		USpell* Spell = NewObject<USpell>();
-		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), imageFilename);
+		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), imageFilename, layer);
 		UMinionModiferEffect* Effect = NewObject<UMinionModiferEffect>();
 		UMinionModifier* Modifier = NewObject<UMinionModifier>();
 		Modifier->AttackModifier = baseAttack;

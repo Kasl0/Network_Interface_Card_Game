@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "Cisco Catalyst C8300",
-        "spell": null,
+        "spellType": null,
         "manaCost": 2,
         "baseHealth": 3,
         "baseAttack": 4,
@@ -17,7 +17,7 @@
     {
         "id": 2,
         "name": "Asus ROG Rapture",
-        "spell": null,
+        "spellType": null,
         "manaCost": 3,
         "baseHealth": 6,
         "baseAttack": 6,
@@ -31,7 +31,7 @@
     {
         "id": 3,
         "name": "TP-Link WR741ND",
-        "spell": null,
+        "spellType": null,
         "manaCost": 1,
         "baseHealth": 1,
         "baseAttack": 2,
@@ -45,7 +45,7 @@
     {
         "id": 4,
         "name": "D-Link DGS-1210",
-        "spell": null,
+        "spellType": null,
         "manaCost": 3,
         "baseHealth": 4,
         "baseAttack": 2,
@@ -59,7 +59,7 @@
     {
         "id": 5,
         "name": "Intel Adapter I350-T4",
-        "spell": null,
+        "spellType": null,
         "manaCost": 1,
         "baseHealth": 1,
         "baseAttack": 1,
@@ -73,7 +73,7 @@
     {
         "id": 6,
         "name": "Netgear EX3700",
-        "spell": null,
+        "spellType": null,
         "manaCost": 2,
         "baseHealth": 2,
         "baseAttack": 2,
@@ -87,7 +87,7 @@
     {
         "id": 7,
         "name": "Ubiquiti AP AC Pro",
-        "spell": null,
+        "spellType": null,
         "manaCost": 1,
         "baseHealth": 1,
         "baseAttack": 3,
@@ -102,7 +102,7 @@
     {
         "id": 8,
         "name": "VLAN",
-        "spell": "Minion",
+        "spellType": "Minion",
         "manaCost": 1,
         "baseHealth": 2,
         "baseAttack": 2,
@@ -116,7 +116,7 @@
     {
         "id": 9,
         "name": "PAT/NAT",
-        "spell": "Minion",
+        "spellType": "Minion",
         "manaCost": 3,
         "baseHealth": 1,
         "baseAttack": 3,
