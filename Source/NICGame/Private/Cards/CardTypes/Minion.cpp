@@ -1,5 +1,8 @@
 ﻿#include "Cards/CardTypes/Minion.h"
 #include "Duel/DuelState.h"
+#include "Cards/Effects/MinionModifiers/StatModifier.h"
+#include "Cards/Effects/MinionModifiers/StatusModifier.h"
+#include "Cards/Effects/MinionModifiers/EModifierType.h"
 #include "Duel/Board/BoardState.h"
 //#include "Damageable.h"
 
@@ -42,7 +45,11 @@ int32 UMinion::GetAttack()
 	int32 Attack = this->BaseAttack;
 	for (int i = 0; i < this->MinionModifiers.Num(); ++i)
 	{
-		Attack += this->MinionModifiers[i]->AttackModifier;
+		if (this->MinionModifiers[i]->Type == TEnumAsByte<EModifierType>(Stat))
+		{
+			UStatModifier* StatModifier = Cast<UStatModifier>(this->MinionModifiers[i]);
+			Attack += StatModifier->AttackModifier;
+		}
 	}
 	return Attack;
 }
@@ -56,11 +63,24 @@ void UMinion::AttackTarget(TScriptInterface<IDamageable> Target)
 {
 	int32 Damage = this->GetAttack();
 	Target->TakeDamage(Damage, this);
+	// If the target was a minion, damage self as well
+	UMinion* TargetMinion = Cast<UMinion>(Target.GetObject());
+	if (TargetMinion)
+	{
+		this->TakeDamage(TargetMinion->GetAttack(), TargetMinion);
+	}
 }
 
 void UMinion::TakeDamage(int32 DamageValue, UObject* Source)
 {
 	this->CurrentHealth -= DamageValue;
+
+	UMinion* SourceMinion = Cast<UMinion>(Source);
+	if (SourceMinion && SourceMinion->HasPoison && DamageValue > 0)
+	{
+		this->CurrentHealth = 0;
+	}
+
 	this->CheckDeath();
 }
 
@@ -69,7 +89,18 @@ void UMinion::AddMinionModifier(UMinionModifier* Modifier)
 	Modifier->AddToRoot();
 	this->MinionModifiers.Add(Modifier);
 
-	this->BaseHealth += Modifier->HealthModifier;
-	this->CurrentHealth += Modifier->HealthModifier;
+	if (Modifier->Type == TEnumAsByte<EModifierType>(Stat))
+	{
+		UStatModifier* StatModifier = Cast<UStatModifier>(Modifier);
+		this->BaseHealth += StatModifier->HealthModifier;
+		this->CurrentHealth += StatModifier->HealthModifier;
+	}
+	else if (Modifier->Type == TEnumAsByte<EModifierType>(Status))
+	{
+		UStatusModifier* StatusModifier = Cast<UStatusModifier>(Modifier);
+		this->HasTaunt = StatusModifier->applyTaunt;
+		this->HasPoison = StatusModifier->applyPoison;
+	}
+
 	this->CheckDeath();
 }

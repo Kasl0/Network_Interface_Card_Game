@@ -5,7 +5,8 @@
 #include "JsonUtilities.h"
 #include "Cards/CardTypes/Minion.h"
 #include "Cards/CardTypes/Spell.h"
-#include "Cards/Effects/MinionModiferEffect.h"
+#include "Cards/Effects/MinionModifiers/StatModifier.h"
+#include "Cards/Effects/MinionModifiers/StatusModifier.h"
 
 /*
 Json file structure:
@@ -14,9 +15,10 @@ Json file structure:
 		"id": 1,
 		"name": "Device name",
 		"spellType": "Damage",
+		"args": {
+			// Arguments specific to the type of card, e.g. baseAttack and baseHealth for Minion
+		},
 		"manaCost": 1,
-		"baseHealth": 1,
-		"baseAttack": 1,
 		"imageFilename": "image.png",
 		"layer": 1,
 		"isForUser": true,
@@ -94,8 +96,7 @@ UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 	FString name = GetStringValue(CardObject, "name", true);
 	FString spellType = GetStringValue(CardObject, "spellType", false);
 	int32 manaCost = GetIntValue(CardObject, "manaCost", true);
-	int32 baseAttack = GetIntValue(CardObject, "baseAttack", false);
-	int32 baseHealth = GetIntValue(CardObject, "baseHealth", false);
+	TSharedPtr<FJsonObject> args = this->GetNestedObject(CardObject, "args", true);
 	FString filename = GetStringValue(CardObject, "imageFilename", false);
 	FString imageFilename;
 	if (FPaths::FileExists(FPaths::ProjectContentDir() + TEXT("Data/Cards/Images/" + filename + ".png")))
@@ -112,20 +113,35 @@ UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 
 	if (spellType == "")
 	{
+		int32 baseAttack = GetIntValue(args, "baseAttack", false);
+		int32 baseHealth = GetIntValue(args, "baseHealth", false);
+
 		UMinion* Minion = NewObject<UMinion>();
 		Minion->Init(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), baseAttack, baseHealth, imageFilename, layer);
 		return Minion;
 	}
-	else if (spellType == "Minion")
+	else if (spellType == "MinionStat")
 	{
+		int32 baseAttack = GetIntValue(args, "attack", false);
+		int32 baseHealth = GetIntValue(args, "health", false);
+
 		USpell* Spell = NewObject<USpell>();
 		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), imageFilename, layer);
-		UMinionModiferEffect* Effect = NewObject<UMinionModiferEffect>();
-		UMinionModifier* Modifier = NewObject<UMinionModifier>();
-		Modifier->AttackModifier = baseAttack;
-		Modifier->HealthModifier = baseHealth;
-		Effect->Init(Modifier);
-		Spell->Init(Effect);
+		UStatModifier* Modifier = NewObject<UStatModifier>();
+		Modifier->Init(baseAttack, baseHealth);
+		Spell->Init(Modifier);
+		return Spell;
+	}
+	else if (spellType == "MinionStatus")
+	{
+		bool SetPoison = GetBoolValue(args, "poison", false);
+		bool SetTaunt = GetBoolValue(args, "taunt", false);
+
+		USpell* Spell = NewObject<USpell>();
+		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), imageFilename, layer);
+		UStatusModifier* Modifier = NewObject<UStatusModifier>();
+		Modifier->Init(SetPoison, SetTaunt);
+		Spell->Init(Modifier);
 		return Spell;
 	}
 	// TODO: here handle other spell types
@@ -185,4 +201,11 @@ bool CardService::GetBoolValue(TSharedPtr<FJsonObject> CardObject, FString Field
 		}
 		return false;
 	}
+}
+
+TSharedPtr<FJsonObject> CardService::GetNestedObject(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
+{
+	TSharedPtr<FJsonValue> nested = CardObject->GetField<EJson::Object>(FieldName);
+	TSharedPtr<FJsonObject> nestedParsed = nested->AsObject();
+	return nestedParsed;
 }

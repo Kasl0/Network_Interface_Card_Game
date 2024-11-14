@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Cards/Effects/OnPlayEffect.h"
+#include "Cards/Effects/MinionModifiers/OnPlayEffect.h"
 
 void UOnPlayEffect::Init(UEffect* OnPlayEffect)
 {

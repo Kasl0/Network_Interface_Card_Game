@@ -2,9 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Duel/Damageable.h"
-#include "Cards/Effects/MinionModifier.h"
+#include "Cards/Effects/MinionModifiers/MinionModifier.h"
 #include "Cards/CardTypes/CardData.h"
 #include "Duel/EBoardSide.h"
+#include "Cards/CardTypes/MinionFactionEnum.h"
 #include "Minion.generated.h"
 
 /**
@@ -48,4 +49,11 @@ public:
 	virtual void TakeDamage(int32 DamageValue, UObject* Source) override;
 
 	void AddMinionModifier(UMinionModifier* Modifier);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TEnumAsByte<EMinionFaction> MinionFaction;
+
+	bool HasTaunt = false;
+
+	bool HasPoison = false;
 };

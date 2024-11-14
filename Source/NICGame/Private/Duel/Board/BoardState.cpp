@@ -113,20 +113,13 @@ void UBoardState::MoveUpcomingCardsToBattlefield()
 	}
 }
 
-void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void(EBoardSide EndingTurn)> OnMinionAttackComplete)
+void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void()> OnMinionAttackComplete)
 {
 	this->CurrentAttackerSide = AttackerSide;
 	this->CurrentlyAttackingMinion = 0;
 	this->AfterMinionAttack = OnMinionAttackComplete;
+
 	this->MinionAttackInColumn();
-	/*FTimerHandle MinionAttackHandle;
-	this->CurrentWorld->GetTimerManager().SetTimer(
-		MinionAttackHandle,
-		this,
-		&UBoardState::MinionAttackInColumn,
-		0.2f,
-		false
-	);*/
 }
 
 // TODO
@@ -139,32 +132,32 @@ void UBoardState::MinionAttackInColumn()
 	int i = this->CurrentlyAttackingMinion;
 	EBoardSide DefenderSide = CurrentAttackerSide == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
 
-	UCardData* Attacker = this->GetCardAt(CurrentAttackerSide, i);
-	if (Attacker != NULL)
+	UMinion* AttackerMinion = Cast<UMinion>(this->GetCardAt(CurrentAttackerSide, i));
+	if (AttackerMinion)
 	{
+		this->OnMinionAttack.Execute(i, CurrentAttackerSide == TEnumAsByte(Friendly) ? 1 : 0);
+		AttackAnimationPlayed = true;
 
-		UMinion* AttackerMinion = Cast<UMinion>(Attacker);
-		if (AttackerMinion != NULL)
+		// If any minion has taunt, attack the leftmost taunt. Else, attack opposite minion
+		UMinion* DefenderMinion = nullptr;
+		TArray<UMinion*> CurrentDefenders;
+		for (int32 j = 0; j < ColumnCount; ++j)
 		{
-			/*AsyncTask(ENamedThreads::GameThread, [this, i]() {
-				this->OnMinionAttack.Execute(i, CurrentAttackerSide == TEnumAsByte(Friendly) ? 1 : 0);
-			});*/
+			UMinion* Minion = Cast<UMinion>(this->GetCardAt(DefenderSide, j));
+			CurrentDefenders.Add(Minion);
+			if (!DefenderMinion && Minion && Minion->HasTaunt) DefenderMinion = Minion;
+		}
+		if (!DefenderMinion) DefenderMinion = CurrentDefenders[i];
 
-			this->OnMinionAttack.Execute(i, CurrentAttackerSide == TEnumAsByte(Friendly) ? 1 : 0);
-			AttackAnimationPlayed = true;
-
-			UCardData* Defender = this->GetCardAt(DefenderSide, i);
-			UMinion* DefenderMinion = Cast<UMinion>(Defender);
-			if (Defender != NULL && DefenderMinion != NULL)
-			{
-				// Attack the minion in front
-				DefenderMinion->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
-			}
-			else
-			{
-				// Attack the enemy player
-				this->DuelState->GetCharacters()[DefenderSide]->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
-			}
+		if (DefenderMinion)
+		{
+			// Attack the minion in front
+			DefenderMinion->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
+		}
+		else
+		{
+			// Attack the enemy player
+			this->DuelState->GetCharacters()[DefenderSide]->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
 		}
 	}
 
@@ -185,8 +178,7 @@ void UBoardState::MinionAttackInColumn()
 	}
 	else {
 		this->BroadcastBoardChanged();
-		FTimerHandle MinionAttackHandle;
-		this->AfterMinionAttack(CurrentAttackerSide);
+		this->AfterMinionAttack();
 	}
 }
 

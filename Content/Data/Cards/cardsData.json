@@ -1,11 +1,13 @@
-[
+﻿[
     {
         "id": 1,
         "name": "Cisco Catalyst C8300",
         "spellType": null,
+        "args": {
+            "baseHealth": 3,
+            "baseAttack": 4
+        },
         "manaCost": 2,
-        "baseHealth": 3,
-        "baseAttack": 4,
         "imageFilename": "C8300",
         "layer": 3,
         "playerCard": true,
@@ -18,9 +20,11 @@
         "id": 2,
         "name": "Asus ROG Rapture",
         "spellType": null,
+        "args": {
+            "baseHealth": 6,
+            "baseAttack": 6
+        },
         "manaCost": 3,
-        "baseHealth": 6,
-        "baseAttack": 6,
         "imageFilename": "RogRapture",
         "layer": 3,
         "playerCard": true,
@@ -32,9 +36,11 @@
         "id": 3,
         "name": "TP-Link WR741ND",
         "spellType": null,
+        "args": {
+            "baseHealth": 1,
+            "baseAttack": 2
+        },
         "manaCost": 1,
-        "baseHealth": 1,
-        "baseAttack": 2,
         "imageFilename": "WR741ND",
         "layer": 3,
         "playerCard": true,
@@ -46,9 +52,11 @@
         "id": 4,
         "name": "D-Link DGS-1210",
         "spellType": null,
+        "args": {
+            "baseHealth": 4,
+            "baseAttack": 2
+        },
         "manaCost": 3,
-        "baseHealth": 4,
-        "baseAttack": 2,
         "imageFilename": "DGS1210",
         "layer": 2,
         "playerCard": true,
@@ -60,9 +68,11 @@
         "id": 5,
         "name": "Intel Adapter I350-T4",
         "spellType": null,
+        "args": {
+            "baseHealth": 1,
+            "baseAttack": 1
+        },
         "manaCost": 1,
-        "baseHealth": 1,
-        "baseAttack": 1,
         "imageFilename": "I350-T4",
         "layer": 1,
         "playerCard": true,
@@ -74,9 +84,11 @@
         "id": 6,
         "name": "Netgear EX3700",
         "spellType": null,
+        "args": {
+            "baseHealth": 2,
+            "baseAttack": 2
+        },
         "manaCost": 2,
-        "baseHealth": 2,
-        "baseAttack": 2,
         "imageFilename": "EX3700",
         "layer": 1,
         "playerCard": true,
@@ -88,9 +100,11 @@
         "id": 7,
         "name": "Ubiquiti AP AC Pro",
         "spellType": null,
+        "args": {
+            "baseHealth": 1,
+            "baseAttack": 3
+        },
         "manaCost": 1,
-        "baseHealth": 1,
-        "baseAttack": 3,
         "imageFilename": "UbiquitiUniFi",
         "layer": 1,
         "playerCard": true,
@@ -102,10 +116,12 @@
     {
         "id": 8,
         "name": "VLAN",
-        "spellType": "Minion",
+        "spellType": "MinionStat",
+        "args": {
+            "attack": 2,
+            "health": 2
+        },
         "manaCost": 1,
-        "baseHealth": 2,
-        "baseAttack": 2,
         "imageFilename": "vlan",
         "layer": 2,
         "playerCard": true,
@@ -116,15 +132,32 @@
     {
         "id": 9,
         "name": "PAT/NAT",
-        "spellType": "Minion",
+        "spellType": "MinionStat",
+        "args": {
+            "attack": 1,
+            "health": 3
+        },
         "manaCost": 3,
-        "baseHealth": 1,
-        "baseAttack": 3,
         "imageFilename": "patnat",
         "layer": 4,
         "playerCard": true,
         "enemyCard": false,
         "gameDescription": "Give minion +3/+1 for each PAT/NAT in your network.",
         "irlDescription": "Port Address Translation (PAT) and Network Address Translation (NAT) are techniques used to map multiple private IP addresses to a single public IP address, conserving the number of public IP addresses needed and enhancing security."
+    },
+    {
+        "id": 10,
+        "name": "Zatrucie",
+        "spellType": "MinionStatus",
+        "args": {
+            "poison": true
+        },
+        "manaCost": 3,
+        "imageFilename": null,
+        "layer": 2,
+        "playerCard": true,
+        "enemyCard": false,
+        "gameDescription": "Daj stronnikowi truciznę.",
+        "irlDescription": ""
     }
 ]

@@ -19,6 +19,7 @@ protected:
 	FString GetStringValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed);
 	int32 GetIntValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed);
 	bool GetBoolValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed);
+	TSharedPtr<FJsonObject> GetNestedObject(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed);
 
 	TArray<TSharedPtr<FJsonValue>> JsonArray;
 };
