@@ -1,0 +1,30 @@
+{
+    "dialogues": [
+      {
+        "class_id": 0,
+        "question": "Info example",
+        "answers": {
+
+        }
+      }, 
+      {
+        "class_id": 1,
+        "question": "Dialogue example",
+        "answers": {
+          "Answer 1": "x+",
+          "Answer 2": "x-",
+          "Answer 3": "y-",
+          "Answer 4": "x0"
+        }
+      },
+      {
+        "class_id": 2,
+        "question": "Quiz example",
+        "answers": {
+            "Correct answer": "true",
+            "Incorrect answer 1": "false",
+            "Incorrect answer 2": "false"
+        }
+      }
+    ]
+  }
