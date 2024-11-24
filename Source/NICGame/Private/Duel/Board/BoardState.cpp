@@ -3,6 +3,10 @@
 #include "Cards/CardTypes/CardData.h"
 #include "Cards/CardTypes/Minion.h"
 #include "Cards/CardTypes/Spell.h"
+#include "Cards/Effects/DrawEffect.h"
+#include "Cards/Effects/ShuffleIntoDeckEffect.h"
+#include "Cards/Effects/ChooseOneEffect.h"
+#include "Cards/Effects/SummonEffect.h"
 #include "Duel/DuelCharacter.h"
 
 #include "Async/Async.h"
@@ -68,28 +72,59 @@ bool UBoardState::PlaceCard(UCardData* Card, EBoardSide Side, uint8 Column)
 		return false;
 	}
 
-	if (this->Board[Side * this->ColumnCount + Column] != NULL)
+	USpell* Spell = Cast<USpell>(Card);
+	if (Spell)
 	{
-		// if spell
-		USpell* Spell = Cast<USpell>(Card);
-		if (Spell != NULL)
+		if (Spell->SpellEffect->Target == Minion)
 		{
-			Spell->Apply(this->Board[Side * this->ColumnCount + Column]);
+			if (this->Board[Side * this->ColumnCount + Column] != NULL)
+			{
+				Spell->Apply(this->Board[Side * this->ColumnCount + Column]);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if (UDrawEffect* DrawSpell = Cast<UDrawEffect>(Spell->SpellEffect))
+		{
+			DrawSpell->Apply(DuelState->GetCharacters()[Friendly]);
 			return true;
 		}
-		return false;
-	}
-	else {
-		// if minion
-		UMinion* Minion = Cast<UMinion>(Card);
-		if (Minion != NULL)
+		else if (UShuffleIntoDeckEffect* ShuffleSpell = Cast<UShuffleIntoDeckEffect>(Spell->SpellEffect))
 		{
-			this->Board[Side * this->ColumnCount + Column] = Card;
-			this->BroadcastBoardChanged();
+			UGameInstance* Ins = Cast<UGameInstance>(DuelState->GetWorld()->GetGameInstance());
+			UBattleDeck* BattleDeck = Cast<UBattleDeck>(Ins->GetSubsystem<UBattleDeck>());
+			ShuffleSpell->ApplyShuffle(BattleDeck);
 			return true;
 		}
-		return false;
+		else if (USummonEffect* SummonSpell = Cast<USummonEffect>(Spell->SpellEffect))
+		{
+			SummonSpell->ApplySummonEffect(Side);
+			return true;
+		}
+		else if (UChooseOneEffect* ChooseSpell = Cast<UChooseOneEffect>(Spell->SpellEffect))
+		{
+			ChooseSpell->Apply(NULL, NULL);
+			return true;
+		}
+		else
+		{
+			Spell->Apply(NULL); // Target not needed
+			return true;
+		}
 	}
+
+	UMinion* Minion = Cast<UMinion>(Card);
+	if (Minion != NULL)
+	{
+		this->Board[Side * this->ColumnCount + Column] = Card;
+		this->BroadcastBoardChanged();
+		return true;
+	}
+
+	return false;
 }
 
 void UBoardState::MoveUpcomingCardsToBattlefield()
@@ -127,69 +162,93 @@ void UBoardState::MinionAttack(EBoardSide AttackerSide, TFunction<void()> OnMini
 
 void UBoardState::MinionAttackInColumn()
 {
-	bool AttackAnimationPlayed = false;
-
-	int i = this->CurrentlyAttackingMinion;
-	EBoardSide DefenderSide = CurrentAttackerSide == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
-
-	UMinion* AttackerMinion = Cast<UMinion>(this->GetCardAt(CurrentAttackerSide, i));
-	if (AttackerMinion)
+	if (this->CurrentlyAttackingMinion >= this->ColumnCount) {
+		this->OnBoardChanged.Broadcast();
+		this->AfterMinionAttack();
+	}
+	else
 	{
-		this->OnMinionAttack.Execute(i, CurrentAttackerSide == TEnumAsByte(Friendly) ? 1 : 0);
-		AttackAnimationPlayed = true;
+		bool AttackAnimationPlayed = false;
+		int i = this->CurrentlyAttackingMinion;
+		EBoardSide DefenderSide = CurrentAttackerSide == TEnumAsByte(Friendly) ? TEnumAsByte(Enemy) : TEnumAsByte(Friendly);
 
-		// If any minion has taunt, attack the leftmost taunt. Else, attack opposite minion
-		UMinion* DefenderMinion = nullptr;
-		TArray<UMinion*> CurrentDefenders;
-		for (int32 j = 0; j < ColumnCount; ++j)
-		{
-			UMinion* Minion = Cast<UMinion>(this->GetCardAt(DefenderSide, j));
-			CurrentDefenders.Add(Minion);
-			if (!DefenderMinion && Minion && Minion->HasTaunt) DefenderMinion = Minion;
-		}
-		if (!DefenderMinion) DefenderMinion = CurrentDefenders[i];
+		// Create a shared pointer to manage the flag
+		auto AttackAnimationPlayedPtr = MakeShared<bool>(false);
 
-		if (DefenderMinion)
+		// Create the callback using a capture list that uses a shared pointer
+		auto Callback = [this, AttackAnimationPlayedPtr]()
+			{
+				if (!ensure(this != nullptr))
+				{
+					UE_LOG(LogTemp, Error, TEXT("Invalid 'this' pointer in Callback"));
+					return;
+				}
+				if (!ensure(CurrentWorld != nullptr))
+				{
+					UE_LOG(LogTemp, Error, TEXT("Invalid CurrentWorld in Callback"));
+					return;
+				}
+
+				this->CurrentlyAttackingMinion += 1;
+
+				if (*AttackAnimationPlayedPtr)
+				{
+					FTimerHandle MinionAttackHandle;
+					this->CurrentWorld->GetTimerManager().SetTimer(
+						MinionAttackHandle,
+						this,
+						&UBoardState::MinionAttackInColumn,
+						0.2f,
+						false
+					);
+				}
+				else this->MinionAttackInColumn();
+			};
+
+		UMinion* AttackerMinion = Cast<UMinion>(this->GetCardAt(CurrentAttackerSide, i));
+		if (AttackerMinion)
 		{
-			// Attack the minion in front
-			DefenderMinion->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
+			this->OnMinionAttack.Execute(i, CurrentAttackerSide == TEnumAsByte(Friendly) ? 1 : 0);
+
+			// Set the value through the shared pointer
+			*AttackAnimationPlayedPtr = true;
+
+			UMinion* DefenderMinion = nullptr;
+			TArray<UMinion*> CurrentDefenders;
+			for (int32 j = 0; j < ColumnCount; ++j)
+			{
+				UMinion* Minion = Cast<UMinion>(this->GetCardAt(DefenderSide, j));
+				CurrentDefenders.Add(Minion);
+				if (!DefenderMinion && Minion && Minion->HasTaunt) DefenderMinion = Minion;
+			}
+			if (!DefenderMinion) DefenderMinion = CurrentDefenders[i];
+
+			if (DefenderMinion)
+			{
+				// Attack the minion in front
+				AttackerMinion->AttackTarget(DefenderMinion, Callback);
+			}
+			else
+			{
+				// Attack the enemy player
+				AttackerMinion->AttackTarget(this->DuelState->GetCharacters()[DefenderSide], Callback);
+			}
 		}
 		else
 		{
-			// Attack the enemy player
-			this->DuelState->GetCharacters()[DefenderSide]->TakeDamage(AttackerMinion->GetAttack(), AttackerMinion);
+			Callback();
 		}
-	}
-
-	this->CurrentlyAttackingMinion += 1;
-	if (this->CurrentlyAttackingMinion < this->ColumnCount) {
-		if (AttackAnimationPlayed)
-		{
-			FTimerHandle MinionAttackHandle;
-			this->CurrentWorld->GetTimerManager().SetTimer(
-				MinionAttackHandle,
-				this,
-				&UBoardState::MinionAttackInColumn,
-				0.2f,
-				false
-			);
-		}
-		else this->MinionAttackInColumn();
-	}
-	else {
-		this->BroadcastBoardChanged();
-		this->AfterMinionAttack();
 	}
 }
 
-void UBoardState::DestroyCard(UCardData* Card)
+void UBoardState::DestroyCard(UCardData* Card, bool Broadcast)
 {
 	for (int i = 0; i < this->ColumnCount * 2; i++)
 	{
 		if (this->Board[i] == Card)
 		{
 			this->Board[i] = NULL;
-			this->BroadcastBoardChanged();
+			if (Broadcast) this->BroadcastBoardChanged();
 			return;
 		}
 	}

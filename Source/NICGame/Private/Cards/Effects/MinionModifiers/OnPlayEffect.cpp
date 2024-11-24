@@ -5,6 +5,8 @@
 
 void UOnPlayEffect::Init(UEffect* OnPlayEffect)
 {
+	Super::Init();
+
 	this->Effect = OnPlayEffect;
 	this->Effect->AddToRoot();
 }

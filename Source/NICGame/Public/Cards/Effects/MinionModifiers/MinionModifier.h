@@ -17,8 +17,12 @@ class NICGAME_API UMinionModifier : public UEffect
 	GENERATED_BODY()
 
 public:
+	virtual void Init();
+
 	// Add modifier to a minion's modifier list
 	virtual void Apply(UObject* EffectTarget) override;
+
+	virtual void ApplyEffect(UObject* EffectTarget);
 
 	TEnumAsByte<EModifierType> Type = Base;
 };

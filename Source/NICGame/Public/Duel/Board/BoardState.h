@@ -97,7 +97,7 @@ public:
 	* Destroy the card
 	* @param Card The card to destroy
 	*/
-	void DestroyCard(UCardData* Card);
+	void DestroyCard(UCardData* Card, bool Broadcast = true);
 
 	/*
 	* Get the number of columns on the board

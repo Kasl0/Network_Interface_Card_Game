@@ -16,12 +16,13 @@ class NICGAME_API UMinion : public UCardData, public IDamageable
 {
 	GENERATED_BODY()
 
-	// Potentially temporary way to apply buffs or other modifiers
-	TArray<UMinionModifier*> MinionModifiers;
-
 	void CheckDeath();
 	
 public:	
+	// Potentially temporary way to apply buffs or other modifiers
+	UPROPERTY(BlueprintReadOnly)
+	TArray<UMinionModifier*> MinionModifiers;
+
 	UPROPERTY(BlueprintReadOnly)
 	int32 BaseAttack;
 
@@ -31,7 +32,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	int32 CurrentHealth;
 
-	void Init(uint8 Cost, std::string Name, std::string GameDescription, std::string IrlDescription, int32 Attack, int32 Health, FString Image, int32 layer);
+	virtual void Init(uint8 Cost, std::string Name, std::string GameDescription, std::string IrlDescription, int32 Attack, int32 Health, FString Image, int32 Layer);
 
 	bool IsPlayable(EBoardSide Side) override;
 
@@ -43,8 +44,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 GetCurrentHealth();
 
-	UFUNCTION(BlueprintCallable)
-	void AttackTarget(TScriptInterface<IDamageable> Target);
+	//UFUNCTION(BlueprintCallable)
+	void AttackTarget(TScriptInterface<IDamageable> Target, TFunction<void()> Callback);
+
+	bool ApplyAfterAttackModifiers(TFunction<void()> Callback);
 
 	virtual void TakeDamage(int32 DamageValue, UObject* Source) override;
 

@@ -4,9 +4,15 @@
 #include "Json.h"
 #include "JsonUtilities.h"
 #include "Cards/CardTypes/Minion.h"
+#include "Cards/CardTypes/JadeGolemMinion.h"
 #include "Cards/CardTypes/Spell.h"
 #include "Cards/Effects/MinionModifiers/StatModifier.h"
 #include "Cards/Effects/MinionModifiers/StatusModifier.h"
+#include "Cards/Effects/MinionModifiers/OnAttackModifier.h"
+#include "Cards/Effects/DrawEffect.h"
+#include "Cards/Effects/SummonEffect.h"
+#include "Cards/Effects/ShuffleIntoDeckEffect.h"
+#include "Cards/Effects/ChooseOneEffect.h"
 
 /*
 Json file structure:
@@ -113,11 +119,10 @@ UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 
 	if (spellType == "")
 	{
-		int32 baseAttack = GetIntValue(args, "baseAttack", false);
-		int32 baseHealth = GetIntValue(args, "baseHealth", false);
+		//int32 baseAttack = GetIntValue(args, "baseAttack", false);
+		//int32 baseHealth = GetIntValue(args, "baseHealth", false);
 
-		UMinion* Minion = NewObject<UMinion>();
-		Minion->Init(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), baseAttack, baseHealth, imageFilename, layer);
+		UMinion* Minion = GetMinionFromJson(manaCost, name, gameDescription, irlDescription, imageFilename, layer, args);
 		return Minion;
 	}
 	else if (spellType == "MinionStat")
@@ -142,6 +147,45 @@ UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 		UStatusModifier* Modifier = NewObject<UStatusModifier>();
 		Modifier->Init(SetPoison, SetTaunt);
 		Spell->Init(Modifier);
+		return Spell;
+	}
+	else if (spellType == "Draw")
+	{
+		int32 CardsToDraw = GetIntValue(args, "cards", false);
+		USpell* Spell = NewObject<USpell>();
+		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), imageFilename, layer);
+		UDrawEffect* Effect = NewObject<UDrawEffect>();
+		Effect->Init(CardsToDraw);
+		Spell->Init(Effect);
+		return Spell;
+	}
+	else if (spellType == "Summon")
+	{
+		USpell* Spell = NewObject<USpell>();
+		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), imageFilename, layer);
+		USummonEffect* Effect = NewObject<USummonEffect>();
+		Effect->Init(args, GetWorld());
+		Spell->Init(Effect);
+		return Spell;
+	}
+	else if (spellType == "ShuffleIntoDeck")
+	{
+		int32 CardToShuffleId = GetIntValue(args, "id", true);
+		int32 Count = GetIntValue(args, "count", true);
+
+		USpell* Spell = NewObject<USpell>();
+		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), imageFilename, layer);
+		UShuffleIntoDeckEffect* Effect = NewObject<UShuffleIntoDeckEffect>();
+		Effect->Init(CardToShuffleId, Count, GetWorld());
+		Spell->Init(Effect);
+		return Spell;
+	}
+	else if (spellType == "chooseOne")
+	{
+		USpell* Spell = NewObject<USpell>();
+		Spell->SetData(manaCost, TCHAR_TO_UTF8(*name), TCHAR_TO_UTF8(*gameDescription), TCHAR_TO_UTF8(*irlDescription), imageFilename, layer);
+		UEffect* Effect = ParseEffect(args);
+		Spell->Init(Effect);
 		return Spell;
 	}
 	// TODO: here handle other spell types
@@ -208,4 +252,70 @@ TSharedPtr<FJsonObject> CardService::GetNestedObject(TSharedPtr<FJsonObject> Car
 	TSharedPtr<FJsonValue> nested = CardObject->GetField<EJson::Object>(FieldName);
 	TSharedPtr<FJsonObject> nestedParsed = nested->AsObject();
 	return nestedParsed;
+}
+
+UMinion* CardService::GetMinionFromJson(int32 Mana, FString Name, FString GameDescription, FString IrlDescription, FString ImageFilename, int32 layer, TSharedPtr<FJsonObject> args)
+{
+	int32 baseAttack = GetIntValue(args, "baseAttack", false);
+	int32 baseHealth = GetIntValue(args, "baseHealth", false);
+
+	UMinion* Minion = NewObject<UMinion>();
+	Minion->Init(Mana, TCHAR_TO_UTF8(*Name), TCHAR_TO_UTF8(*GameDescription), TCHAR_TO_UTF8(*IrlDescription), baseAttack, baseHealth, ImageFilename, layer);
+
+	bool onAttack = GetBoolValue(args, "onAttack", false);
+	if (GetBoolValue(args, "onAttack", false))
+	{
+		UOnAttackModifier* Modifier = NewObject<UOnAttackModifier>();
+		TSharedPtr<FJsonObject> onAttackArgs = this->GetNestedObject(args, "onAttackArgs", true);
+		UEffect* Effect = ParseEffect(onAttackArgs);
+		Modifier->Init(Effect);
+		Minion->AddMinionModifier(Modifier);
+	}
+
+	return Minion;
+}
+
+UEffect* CardService::ParseEffect(TSharedPtr<FJsonObject> EffectObject)
+{
+	FString effectType = GetStringValue(EffectObject, "effect", false);
+	if (effectType == "chooseOne") {
+		int32 id1 = GetIntValue(EffectObject, "id1", false);
+		int32 id2 = GetIntValue(EffectObject, "id2", false);
+		int32 id3 = GetIntValue(EffectObject, "id3", false);
+		UChooseOneEffect* effect = NewObject<UChooseOneEffect>();
+		effect->Init(this, id1, id2, id3);
+		return effect;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+TArray<UMinion*> CardService::ParseSummonMinion(TSharedPtr<FJsonObject> args)
+{
+	int32 Stats = GetIntValue(args, "stats", false);
+	int32 Count = GetIntValue(args, "count", false);
+	FString TokenName = GetStringValue(args, "name", false);
+	TArray<UMinion*> Minions;
+	if (GetBoolValue(args, "jadeGolem", false))
+	{
+		UJadeGolemMinion* Minion = NewObject<UJadeGolemMinion>();
+		//Minion->AddToRoot();
+		Minion->Rename(NULL, GetOuter());
+		Minion->Init(1, "", "", "", 0, 0, "/Script/Engine.Texture2D'/Game/Data/Cards/ImageNotFound.ImageNotFound'", 0);
+		Minions.Add(Minion);
+	}
+	else
+	{
+		for (int32 i = 0; i < Count; i++)
+		{
+			UMinion* Minion = NewObject<UMinion>();
+			//Minion->AddToRoot();
+			Minion->Rename(NULL, GetOuter()); // Necessary to ensure Minion has access to GetWorld(); other cards don't need this, because their outer is set during copying in DeckInfo
+			Minion->Init(0, TCHAR_TO_UTF8(*TokenName), "", "", Stats, Stats, "/Script/Engine.Texture2D'/Game/Data/Cards/ImageNotFound.ImageNotFound'", 0);
+			Minions.Add(Minion);
+		}
+	}
+	return Minions;
 }

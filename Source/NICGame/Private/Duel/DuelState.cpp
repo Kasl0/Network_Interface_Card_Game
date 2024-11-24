@@ -1,6 +1,7 @@
 ﻿#include "Duel/DuelState.h"
 #include "Cards/CardWidget.h"
 #include "Duel/EnemyDuelCharacter.h"
+#include "Duel/FriendlyDuelCharacter.h"
 #include "Duel/Board/BoardState.h"
 #include "Duel/DuelCharacter.h"
 #include "Engine/Engine.h" // temporary for debug text
@@ -8,6 +9,8 @@
 #include "Player/GameCharacter.h"
 #include "Deck/BattleDeck.h"
 #include "Cards/CardHand.h"
+#include "Cards/CardTypes/Spell.h"
+#include "Cards/CardTypes/JadeGolemMinion.h"
 #include "Duel/Board/BoardWidget.h"
 
 UDuelState::UDuelState()
@@ -34,6 +37,9 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 	UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
 	CardHand->RemoveAllCardData();
 
+	// Initialize jade golem stats
+	UJadeGolemMinion::Stats = 1;
+
 	this->BoardState->Init(this, 4, GetWorld());
 
 	// initialize characters
@@ -54,10 +60,10 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 			this->DuelCharacters.Add(Side, Character);
 		}
 		else {
-			UDuelCharacter* Character0 = NewObject<UDuelCharacter>();
-			Character0->Init();
+			UFriendlyDuelCharacter* Character0 = NewObject<UFriendlyDuelCharacter>();
+			Character0->Init(GetWorld());
 			Character0->AddToRoot();
-			UDuelCharacter* Character = DuplicateObject(Character0, this->GetOuter());
+			UFriendlyDuelCharacter* Character = DuplicateObject(Character0, this->GetOuter());
 			this->DuelCharacters.Add(Side, Character);
 		}
 	}
@@ -72,7 +78,27 @@ UCardWidget* UDuelState::GetSelectedCard() const
 
 void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 {
-	this->SelectedCard = NewSelectedCard;
+	if (NewSelectedCard)
+	{
+		USpell* Spell = Cast<USpell>(NewSelectedCard->CardData);
+		if (Spell && Spell->SpellEffect->Target == NoTarget)
+		{
+			if (PlayCard(Spell, 0))
+			{
+				UGameInstance* Ins = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+				UCardHand* CardHand = Cast<UCardHand>(Ins->GetSubsystem<UCardHand>());
+				CardHand->RemoveCardData(Spell);
+			}
+		}
+		else
+		{
+			this->SelectedCard = NewSelectedCard;
+		}
+	}
+	else
+	{
+		this->SelectedCard = NewSelectedCard;
+	}
 }
 
 void UDuelState::PrepareTurnEnd()
@@ -245,7 +271,7 @@ void UDuelState::SetBoardWidget(UBoardWidget* Widget)
 
 void UDuelState::DrawCardForFriendly()
 {
-	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	/*UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 	UCardHand* Hand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
-	Hand->DrawCard();
+	Hand->DrawCard();*/
 }

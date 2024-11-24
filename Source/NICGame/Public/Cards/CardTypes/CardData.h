@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class NICGAME_API UCardData : public UObject
 {
 	GENERATED_BODY()

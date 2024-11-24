@@ -5,6 +5,8 @@
 
 void UStatModifier::Init(int32 Attack, int32 Health)
 {
+	Super::Init();
+
 	this->AttackModifier = Attack;
 	this->HealthModifier = Health;
 	this->Type = Stat;

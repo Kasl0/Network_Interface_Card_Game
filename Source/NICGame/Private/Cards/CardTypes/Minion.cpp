@@ -3,6 +3,7 @@
 #include "Cards/Effects/MinionModifiers/StatModifier.h"
 #include "Cards/Effects/MinionModifiers/StatusModifier.h"
 #include "Cards/Effects/MinionModifiers/EModifierType.h"
+#include "Cards/Effects/MinionModifiers/OnAttackModifier.h"
 #include "Duel/Board/BoardState.h"
 //#include "Damageable.h"
 
@@ -12,7 +13,7 @@ void UMinion::CheckDeath()
 	{
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 		UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
-		DuelState->GetBoardState()->DestroyCard(this);
+		DuelState->GetBoardState()->DestroyCard(this, false);
 	}
 }
 
@@ -59,16 +60,55 @@ int32 UMinion::GetCurrentHealth()
 	return this->CurrentHealth;
 }
 
-void UMinion::AttackTarget(TScriptInterface<IDamageable> Target)
+void UMinion::AttackTarget(TScriptInterface<IDamageable> Target, TFunction<void()> Callback)
 {
+	// Ensure the Callback is valid before using it
+	if (!Callback)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid Callback passed to AttackTarget"));
+		return;
+	}
+
 	int32 Damage = this->GetAttack();
 	Target->TakeDamage(Damage, this);
+
+	// Use a local copy of the Callback to prevent potential invalidation
+	auto LocalCallback = Callback;
+	bool CallbackUsed = this->ApplyAfterAttackModifiers(LocalCallback);
+
 	// If the target was a minion, damage self as well
 	UMinion* TargetMinion = Cast<UMinion>(Target.GetObject());
 	if (TargetMinion)
 	{
 		this->TakeDamage(TargetMinion->GetAttack(), TargetMinion);
 	}
+
+	if (!CallbackUsed)
+	{
+		LocalCallback();
+	}
+}
+
+bool UMinion::ApplyAfterAttackModifiers(TFunction<void()> Callback)
+{
+	bool CallbackUsed = false;
+	for (UMinionModifier* Modifier : this->MinionModifiers)
+	{
+		if (Modifier->Type == TEnumAsByte<EModifierType>(AfterAttack))
+		{
+			UOnAttackModifier* NewModifier = Cast<UOnAttackModifier>(Modifier);
+			if (NewModifier->TakesCallback && !CallbackUsed)
+			{
+				CallbackUsed = true;
+				NewModifier->ApplyEffect(this, Callback);
+			}
+			else 
+			{
+				Modifier->ApplyEffect(this);
+			}
+		}
+	}
+	return CallbackUsed;
 }
 
 void UMinion::TakeDamage(int32 DamageValue, UObject* Source)
@@ -98,8 +138,14 @@ void UMinion::AddMinionModifier(UMinionModifier* Modifier)
 	else if (Modifier->Type == TEnumAsByte<EModifierType>(Status))
 	{
 		UStatusModifier* StatusModifier = Cast<UStatusModifier>(Modifier);
-		this->HasTaunt = StatusModifier->applyTaunt;
-		this->HasPoison = StatusModifier->applyPoison;
+		if (StatusModifier->applyTaunt && !this->HasTaunt) {
+			this->HasTaunt = true;
+			this->CardGameDescription = this->CardGameDescription.Join(FText::FromString("\n"), FText::FromString("Prowokacja"));
+		}
+		if (StatusModifier->applyPoison && !this->HasPoison) {
+			this->HasPoison = true;
+			this->CardGameDescription = this->CardGameDescription.Join(FText::FromString("\n"), FText::FromString("Trucizna"));
+		}
 	}
 
 	this->CheckDeath();
