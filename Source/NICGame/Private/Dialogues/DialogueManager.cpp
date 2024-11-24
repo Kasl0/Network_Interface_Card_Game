@@ -3,34 +3,80 @@
 
 #include "Dialogues/DialogueManager.h"
 #include "Misc/FileHelper.h"
+#include "Blueprint/UserWidget.h"
+#include "Dialogues/DialogueWidget.h"
 #include "JsonObjectConverter.h"
 
-UDialogueManager::UDialogueManager()
-{
-    // Konstruktor
-}
-
-TArray<FDialogueOption> UDialogueManager::GetDialogues() const
+TArray<FDialogueOption> UDialogueManager::GetDialogues()
 {
     return Dialogues;
 }
 
-bool UDialogueManager::LoadDialoguesFromFile(const FString& FilePath)
+FDialogueOption UDialogueManager::GetDialogueById(int32 Id)
+{
+    for (auto Option : Dialogues) {
+        if (Option.ClassID == Id)
+        {
+            return Option;
+        }
+    }
+    return FDialogueOption();
+}
+
+
+
+void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString AnswerKey)
+{
+
+}
+
+void UDialogueManager::CreateDialogueWidget(int32 Id)
+{
+    FDialogueOption Option = GetDialogueById(Id);
+    if (DialogueWidgetClass)
+    {
+        UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), DialogueWidgetClass);
+        UDialogueWidget* DialogueWidget = Cast<UDialogueWidget>(Widget);
+        if (DialogueWidget)
+        {
+            DialogueWidget->SetDialogue(Option);
+            DialogueWidget->AddToViewport();
+        }
+    }
+}
+
+UDialogueManager::UDialogueManager()
+{
+    static ConstructorHelpers::FClassFinder<UUserWidget> DialogueWidget(TEXT("/Game/Dialogue/BP_DialogueWidget"));
+    if (DialogueWidget.Class == NULL)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Failed to find DialogueWidget Blueprint class!"));
+    }
+    else 
+    {
+        DialogueWidgetClass = DialogueWidget.Class;
+    }
+
+    LoadDialoguesFromFile(FPaths::ProjectContentDir() + TEXT("Dialogues/Dialogues.json"));
+}
+
+bool UDialogueManager::LoadDialoguesFromFile(const FString FilePath)
 {
     FString JsonString;
 
     if (!FFileHelper::LoadFileToString(JsonString, *FilePath))
     {
-        UE_LOG(LogTemp, Error, TEXT("Nie uda�o si� za�adowa� pliku JSON."));
+        UE_LOG(LogTemp, Error, TEXT("Couldn't load JSON file."));
         return false;
     }
 
     TSharedPtr<FJsonObject> JsonObject;
     TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonString);
+    TArray<TSharedPtr<FJsonValue>> JsonDialogues;
 
-    if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
+    if (FJsonSerializer::Deserialize(Reader, JsonDialogues))
     {
-        TArray<TSharedPtr<FJsonValue>> JsonDialogues = JsonObject->GetArrayField("dialogues");
+        //TArray<TSharedPtr<FJsonValue>> JsonDialogues = JsonObject->GetArrayField("dialogues");
 
         Dialogues.Empty();
 
@@ -45,7 +91,7 @@ bool UDialogueManager::LoadDialoguesFromFile(const FString& FilePath)
             // Wczytanie pytania
             DialogueOption.Question = DialogueObject->GetStringField("question");
 
-            // Wczytanie odpowiedzi jako s�ownik
+            // Wczytanie odpowiedzi jako słownik
             TSharedPtr<FJsonObject> JsonAnswersObject = DialogueObject->GetObjectField("answers");
             for (const auto& AnswerPair : JsonAnswersObject->Values)
             {
@@ -60,6 +106,6 @@ bool UDialogueManager::LoadDialoguesFromFile(const FString& FilePath)
         return true;
     }
 
-    UE_LOG(LogTemp, Error, TEXT("B��d parsowania pliku JSON."));
+    UE_LOG(LogTemp, Error, TEXT("Błąd parsowania pliku JSON."));
     return false;
 }

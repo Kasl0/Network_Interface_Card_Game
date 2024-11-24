@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/VerticalBox.h"
 #include "Components/Button.h"
+#include "DialogueManager.h"
 #include "DialogueWidget.generated.h"
 
 /**
@@ -18,14 +19,23 @@ class NICGAME_API UDialogueWidget : public UUserWidget
 
 public:
     // Funkcja do inicjalizacji odpowiedzi
+    UFUNCTION(BlueprintImplementableEvent)
+    void InitializeAnswers();
+
     UFUNCTION(BlueprintCallable)
-        void InitializeAnswers(const TMap<FString, FString>& Answers);
+    void OnAnswerClicked(FString AnswerKey);
+
     UFUNCTION(BlueprintCallable)
-        void OnAnswerClicked();
+    void SetDialogue(FDialogueOption NewDialogue);
+
+    UDialogueManager* DialogueManager;
 
 protected:
-    // VerticalBox, do którego dodasz przyciski
+    // VerticalBox z przyciskami
     UPROPERTY(meta = (BindWidget))
-        UVerticalBox* AnswersBox;
+    UVerticalBox* AnswersBox;
+
+    UPROPERTY(BlueprintReadOnly)
+    FDialogueOption Dialogue;
 	
 };

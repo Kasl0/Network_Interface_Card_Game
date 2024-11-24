@@ -34,22 +34,36 @@ struct FDialogueOption
     UPROPERTY(BlueprintReadOnly)
         TMap<FString, FString> Answers;
 };
+
 /**
  *
  */
 UCLASS(Blueprintable)
-class NICGAME_API UDialogueManager : public UObject
+class NICGAME_API UDialogueManager : public UGameInstanceSubsystem
 {
     GENERATED_BODY()
-public:
+
     UDialogueManager();
 
+public:
     UFUNCTION(BlueprintCallable, Category = "Dialogue")
-        bool LoadDialoguesFromFile(const FString& FilePath);
+    bool LoadDialoguesFromFile(const FString FilePath);
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue")
-        TArray<FDialogueOption> GetDialogues() const;
+    TArray<FDialogueOption> GetDialogues();
+
+    UFUNCTION(BlueprintCallable, Category = "Dialogue")
+    FDialogueOption GetDialogueById(int32 Id);
+
+    UFUNCTION()
+    void HandleDialogueChoice(FDialogueOption Dialogue, FString AnswerKey);
+
+    UFUNCTION()
+    void CreateDialogueWidget(int32 Id);
 
 private:
+    TSubclassOf<UUserWidget> DialogueWidgetClass;
+
+    UPROPERTY()
     TArray<FDialogueOption> Dialogues;
 };
