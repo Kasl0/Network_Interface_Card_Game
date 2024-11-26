@@ -38,6 +38,7 @@ void UDialogueWidget::OnAnswerClicked(FString AnswerKey)
 {
     if (DialogueManager)
     {
+        this->RemoveFromParent();
         DialogueManager->HandleDialogueChoice(Dialogue, AnswerKey);
     }
 }

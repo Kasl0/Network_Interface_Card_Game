@@ -28,12 +28,10 @@ public:
     UFUNCTION(BlueprintCallable)
     void SetDialogue(FDialogueOption NewDialogue);
 
+    UPROPERTY()
     UDialogueManager* DialogueManager;
 
 protected:
-    // VerticalBox z przyciskami
-    UPROPERTY(meta = (BindWidget))
-    UVerticalBox* AnswersBox;
 
     UPROPERTY(BlueprintReadOnly)
     FDialogueOption Dialogue;
