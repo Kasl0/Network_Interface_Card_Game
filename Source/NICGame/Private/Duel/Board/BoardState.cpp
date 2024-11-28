@@ -120,6 +120,7 @@ bool UBoardState::PlaceCard(UCardData* Card, EBoardSide Side, uint8 Column)
 	if (Minion != NULL)
 	{
 		this->Board[Side * this->ColumnCount + Column] = Card;
+		Minion->ApplyOnPlayModifiers();
 		this->BroadcastBoardChanged();
 		return true;
 	}

@@ -175,7 +175,7 @@
                 "id3": 14
             }
         },
-        "manaCost": 1,
+        "manaCost": 8,
         "imageFilename": "UbiquitiUniFi",
         "layer": 3,
         "playerCard": true,
@@ -211,7 +211,7 @@
         "layer": 4,
         "playerCard": false,
         "enemyCard": false,
-        "gameDescription": "Grubasek otrzymuje +3 do zdrowia.",
+        "gameDescription": "Stronnik otrzymuje +3 do zdrowia.",
         "irlDescription": ""
     },
     {
@@ -221,7 +221,7 @@
         "args": {
             "stats": 3,
             "count": 1,
-            "name": "Switch"
+            "name": "Router"
         },
         "manaCost": 0,
         "imageFilename": "patnat",
@@ -277,6 +277,40 @@
         "playerCard": false,
         "enemyCard": false,
         "gameDescription": "Wtasuj 3 kopie Topologii Sieci do swojej talii",
+        "irlDescription": ""
+    },
+    {
+        "id": 18,
+        "name": "Switch przyzywacz",
+        "spellType": "",
+        "args": {
+            "baseHealth": 1,
+            "baseAttack": 2,
+            "onPlay": 19
+        },
+        "manaCost": 1,
+        "imageFilename": "",
+        "layer": 0,
+        "playerCard": true,
+        "enemyCard": false,
+        "gameDescription": "Po zagraniu, przyzwij Switch 1/1",
+        "irlDescription": ""
+    },
+    {
+        "id": 19,
+        "name": "Przyzwanie",
+        "spellType": "Summon",
+        "args": {
+            "stats": 1,
+            "count": 1,
+            "name": "Switch"
+        },
+        "manaCost": 0,
+        "imageFilename": "",
+        "layer": 0,
+        "playerCard": false,
+        "enemyCard": false,
+        "gameDescription": "",
         "irlDescription": ""
     }
 ]

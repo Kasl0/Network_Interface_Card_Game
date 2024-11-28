@@ -47,6 +47,8 @@ public:
 	//UFUNCTION(BlueprintCallable)
 	void AttackTarget(TScriptInterface<IDamageable> Target, TFunction<void()> Callback);
 
+	void ApplyOnPlayModifiers();
+
 	bool ApplyAfterAttackModifiers(TFunction<void()> Callback);
 
 	virtual void TakeDamage(int32 DamageValue, UObject* Source) override;

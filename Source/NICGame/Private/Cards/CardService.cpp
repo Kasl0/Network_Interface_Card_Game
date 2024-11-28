@@ -13,6 +13,7 @@
 #include "Cards/Effects/SummonEffect.h"
 #include "Cards/Effects/ShuffleIntoDeckEffect.h"
 #include "Cards/Effects/ChooseOneEffect.h"
+#include "Cards/Effects/MinionModifiers/OnPlayEffect.h"
 
 /*
 Json file structure:
@@ -262,7 +263,6 @@ UMinion* CardService::GetMinionFromJson(int32 Mana, FString Name, FString GameDe
 	UMinion* Minion = NewObject<UMinion>();
 	Minion->Init(Mana, TCHAR_TO_UTF8(*Name), TCHAR_TO_UTF8(*GameDescription), TCHAR_TO_UTF8(*IrlDescription), baseAttack, baseHealth, ImageFilename, layer);
 
-	bool onAttack = GetBoolValue(args, "onAttack", false);
 	if (GetBoolValue(args, "onAttack", false))
 	{
 		UOnAttackModifier* Modifier = NewObject<UOnAttackModifier>();
@@ -270,6 +270,18 @@ UMinion* CardService::GetMinionFromJson(int32 Mana, FString Name, FString GameDe
 		UEffect* Effect = ParseEffect(onAttackArgs);
 		Modifier->Init(Effect);
 		Minion->AddMinionModifier(Modifier);
+	}
+
+	if (int32 OnPlayId = GetIntValue(args, "onPlay", false))
+	{
+		USpell* Spell = Cast<USpell>(GetCardData(OnPlayId));
+		if (Spell)
+		{
+			UOnPlayEffect* Modifier = NewObject<UOnPlayEffect>();
+			UEffect* Effect = Spell->SpellEffect;
+			Modifier->Init(Effect);
+			Minion->AddMinionModifier(Modifier);
+		}
 	}
 
 	return Minion;

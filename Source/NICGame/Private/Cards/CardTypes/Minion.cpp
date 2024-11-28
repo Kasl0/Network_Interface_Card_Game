@@ -5,6 +5,7 @@
 #include "Cards/Effects/MinionModifiers/EModifierType.h"
 #include "Cards/Effects/MinionModifiers/OnAttackModifier.h"
 #include "Duel/Board/BoardState.h"
+#include "Cards/Effects/MinionModifiers/OnPlayEffect.h"
 //#include "Damageable.h"
 
 void UMinion::CheckDeath()
@@ -86,6 +87,18 @@ void UMinion::AttackTarget(TScriptInterface<IDamageable> Target, TFunction<void(
 	if (!CallbackUsed)
 	{
 		LocalCallback();
+	}
+}
+
+void UMinion::ApplyOnPlayModifiers()
+{
+	for (UMinionModifier* Modifier : this->MinionModifiers)
+	{
+		if (Modifier->Type == TEnumAsByte<EModifierType>(OnPlay))
+		{
+			UOnPlayEffect* NewModifier = Cast<UOnPlayEffect>(Modifier);
+			NewModifier->Apply(this);
+		}
 	}
 }
 
