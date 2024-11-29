@@ -5,21 +5,21 @@
 void UCardHand::DrawCard()
 {
 	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
-	UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
-	UDuelCharacter* CurrentTurnCharacter = DuelState->GetCurrentTurnCharacter();
+	//UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
+	//UDuelCharacter* CurrentTurnCharacter = DuelState->GetCurrentTurnCharacter();
 
-	// Check if it's the player's turn and the player has already drawn a card in the current turn
-	if (DuelState->GetCurrentTurn() != Friendly and CurrentTurnCharacter->GetCardDrawInCurrentTurn() > 0)
-	{
-		return;
-	}
+	//// Check if it's the player's turn and the player has already drawn a card in the current turn
+	//if (DuelState->GetCurrentTurn() != Friendly and CurrentTurnCharacter->GetCardDrawInCurrentTurn() > 0)
+	//{
+	//	return;
+	//}
 
 	UBattleDeck* Deck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
 	UCardData* NewCardData = Deck->DrawCard();
 	if (NewCardData)
 	{
 		this->AddCardData(NewCardData);
-		CurrentTurnCharacter->IncrementCardDrawInCurrentTurn();
+		//DuelState->GetCharacters()[TEnumAsByte(Friendly)]->IncrementCardDrawInCurrentTurn();
 	}
 }
 

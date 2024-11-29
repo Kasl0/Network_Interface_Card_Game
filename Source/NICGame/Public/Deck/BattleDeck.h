@@ -29,4 +29,6 @@ public:
 	void InitializeDeck(UWorld* World);
 
 	UCardData* DrawCard();
+
+	void ShuffleIntoDeck(UCardData* Card);
 };

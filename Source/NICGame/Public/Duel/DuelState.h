@@ -56,7 +56,7 @@ public:
 
 	// Handles turn change to opposite player
 	UFUNCTION(BlueprintCallable)
-	void SwitchPlayerTurn(EBoardSide EndingTurn);
+	void SwitchPlayerTurn();
 
 	UFUNCTION(BlueprintCallable)
 	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> GetCharacters();
@@ -88,6 +88,9 @@ public:
 	UFUNCTION()
 	void SetBoardWidget(UBoardWidget* Widget);
 
+	UFUNCTION()
+	void DrawCardForFriendly();
+
 	UPROPERTY()
 	UBoardWidget* BoardWidget;
 
@@ -99,4 +102,7 @@ protected:
 
 	UPROPERTY()
 	UBoardState* BoardState;
+
+	UPROPERTY()
+	TEnumAsByte<EBoardSide> EndingTurn;
 };

@@ -18,8 +18,6 @@ class NICGAME_API UCardWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn="true"))
-	UCardData* CardData;
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* Background;
@@ -29,4 +27,8 @@ protected:
 	UTextBlock* CardGameDescription;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UImage* CardImage;
+
+public:
+	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	UCardData* CardData;
 };

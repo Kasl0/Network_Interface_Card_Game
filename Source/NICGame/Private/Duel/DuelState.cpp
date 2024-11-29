@@ -1,6 +1,7 @@
 ﻿#include "Duel/DuelState.h"
 #include "Cards/CardWidget.h"
 #include "Duel/EnemyDuelCharacter.h"
+#include "Duel/FriendlyDuelCharacter.h"
 #include "Duel/Board/BoardState.h"
 #include "Duel/DuelCharacter.h"
 #include "Engine/Engine.h" // temporary for debug text
@@ -8,6 +9,8 @@
 #include "Player/GameCharacter.h"
 #include "Deck/BattleDeck.h"
 #include "Cards/CardHand.h"
+#include "Cards/CardTypes/Spell.h"
+#include "Cards/CardTypes/JadeGolemMinion.h"
 #include "Duel/Board/BoardWidget.h"
 
 UDuelState::UDuelState()
@@ -34,6 +37,9 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 	UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
 	CardHand->RemoveAllCardData();
 
+	// Initialize jade golem stats
+	UJadeGolemMinion::Stats = 1;
+
 	this->BoardState->Init(this, 4, GetWorld());
 
 	// initialize characters
@@ -54,10 +60,10 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 			this->DuelCharacters.Add(Side, Character);
 		}
 		else {
-			UDuelCharacter* Character0 = NewObject<UDuelCharacter>();
-			Character0->Init();
+			UFriendlyDuelCharacter* Character0 = NewObject<UFriendlyDuelCharacter>();
+			Character0->Init(GetWorld());
 			Character0->AddToRoot();
-			UDuelCharacter* Character = DuplicateObject(Character0, this->GetOuter());
+			UFriendlyDuelCharacter* Character = DuplicateObject(Character0, this->GetOuter());
 			this->DuelCharacters.Add(Side, Character);
 		}
 	}
@@ -72,14 +78,40 @@ UCardWidget* UDuelState::GetSelectedCard() const
 
 void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 {
-	this->SelectedCard = NewSelectedCard;
+	if (NewSelectedCard)
+	{
+		USpell* Spell = Cast<USpell>(NewSelectedCard->CardData);
+		if (Spell && Spell->SpellEffect->Target == NoTarget)
+		{
+			if (PlayCard(Spell, 0))
+			{
+				UGameInstance* Ins = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+				UCardHand* CardHand = Cast<UCardHand>(Ins->GetSubsystem<UCardHand>());
+				CardHand->RemoveCardData(Spell);
+			}
+		}
+		else
+		{
+			this->SelectedCard = NewSelectedCard;
+		}
+	}
+	else
+	{
+		this->SelectedCard = NewSelectedCard;
+	}
 }
 
 void UDuelState::PrepareTurnEnd()
 {
-	FTimerHandle TurnChangeHandle;
+	if (this->CurrentTurn != None)
+	{
+		EndingTurn = this->CurrentTurn;
+		this->CurrentTurn = None;
+	}
+
 	if (this->BoardWidget)
 	{
+		FTimerHandle TurnChangeHandle;
 		if (this->BoardWidget->AreAnimationsFinished())
 		{
 			// if finished, proceed to minion attack
@@ -87,7 +119,7 @@ void UDuelState::PrepareTurnEnd()
 				TurnChangeHandle,
 				this,
 				&UDuelState::EndPlayerTurn,
-				0.1f,
+				0.5f,
 				false
 			);
 		}
@@ -107,25 +139,33 @@ void UDuelState::PrepareTurnEnd()
 
 void UDuelState::EndPlayerTurn()
 {
-	EBoardSide EndingTurn = this->CurrentTurn;
-	this->CurrentTurn = None;
-
 	this->DuelCharacters[TEnumAsByte(EndingTurn)]->EndTurn();
 
-	this->BoardState->MinionAttack(EndingTurn, [this](EBoardSide EndingTurn) { this->SwitchPlayerTurn(EndingTurn); });
+	this->BoardState->MinionAttack(EndingTurn, [this]() { this->SwitchPlayerTurn(); });
 }
 
-void UDuelState::SwitchPlayerTurn(EBoardSide EndingTurn)
+void UDuelState::SwitchPlayerTurn()
 {
 	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	Player->SetView(TableCameraTiltDirection::None, false);
-	
+
 	this->CurrentTurn = EndingTurn == Friendly ? Enemy : Friendly;
 	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
 	{
 		return;
 	}
-	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
+
+	auto SwitchTurnLambda = [this] { this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn(); };
+	FTimerDelegate SwitchTurnDelegate;
+	SwitchTurnDelegate.BindLambda(SwitchTurnLambda);
+
+	FTimerHandle SwitchTimer;
+	GetWorld()->GetTimerManager().SetTimer(
+		SwitchTimer,
+		SwitchTurnDelegate,
+		0.5f,
+		false
+	);
 }
 
 TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> UDuelState::GetCharacters()
@@ -175,11 +215,9 @@ void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 			Text1.Append(WinningSide == TEnumAsByte(Friendly) ? "Player" : "Enemy");
 			Text1.Append(" with excessiveDamage = ");
 			Text1.Append(FString::FromInt(excessiveDamage));
-			//FString Text2 = "New game automatically started";
 
 			if (GEngine) {
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text2);
 			}
 
 			UGameInstance* GameInstance = this->GetWorld()->GetGameInstance();
@@ -229,4 +267,11 @@ UDuelCharacter* UDuelState::GetCurrentTurnCharacter()
 void UDuelState::SetBoardWidget(UBoardWidget* Widget)
 {
 	this->BoardWidget = Widget;
+}
+
+void UDuelState::DrawCardForFriendly()
+{
+	/*UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UCardHand* Hand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
+	Hand->DrawCard();*/
 }

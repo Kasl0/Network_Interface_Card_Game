@@ -17,7 +17,7 @@ class NICGAME_API UDamageEffect : public UEffect
 	uint32 DamageValue;
 
 public:
-	void Init(uint32 Value);
+	void Init(uint32 Value, EEffectTarget EffectTarget = Minion);
 	
 	void Apply(UObject* EffectTarget) override;
 };

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Cards/Effects/Effect.h"
+#include "Cards/Effects/MinionModifiers/MinionModifier.h"
 #include "OnPlayEffect.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class NICGAME_API UOnPlayEffect : public UEffect
+class NICGAME_API UOnPlayEffect : public UMinionModifier
 {
 	GENERATED_BODY()
 

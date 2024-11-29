@@ -5,9 +5,11 @@
 
 #include "Duel/Damageable.h"
 
-void UDamageEffect::Init(uint32 Value)
+
+void UDamageEffect::Init(uint32 Value, EEffectTarget EffectTarget)
 {
 	this->DamageValue = Value;
+	this->Target = Target;
 }
 
 void UDamageEffect::Apply(UObject* EffectTarget)
