@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Engine/DataTable.h"
 #include "Dialogues/EDialogueType.h"
+#include "Dialogues/DialogueChoiceHandler.h"
 #include "DialogueManager.generated.h"
 
 USTRUCT(BlueprintType)
@@ -97,4 +98,7 @@ private:
 
     UPROPERTY()
     TArray<int32> QuizIndexes;
+
+    UPROPERTY()
+    UDialogueChoiceHandler* ChoiceHandler;
 };

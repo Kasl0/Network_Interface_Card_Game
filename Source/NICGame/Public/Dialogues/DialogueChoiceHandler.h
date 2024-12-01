@@ -14,6 +14,15 @@ class NICGAME_API UDialogueChoiceHandler : public UObject
 {
 	GENERATED_BODY()
 	
-	static TMap<FString, FString> ChoiceToClassMap;
+	using MemberFunctionPtr = void(UDialogueChoiceHandler::*)(FString);
+	TMap<FString, MemberFunctionPtr> ChoiceToFunctionMap;
 
+	UWorld* World;
+
+	void HandleBartle(FString Choice);
+
+public:
+	void Init(UWorld* ParentWorld);
+
+	void HandleChoice(FString Choice);
 };
