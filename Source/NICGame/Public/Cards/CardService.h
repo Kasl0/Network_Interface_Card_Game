@@ -3,8 +3,8 @@
 #include "CoreMinimal.h"
 #include "Cards/CardTypes/CardData.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "CardService.generated.h"
 #include "Cards/CardTypes/Minion.h"
+#include "CardService.generated.h"
 
 /**
  * 

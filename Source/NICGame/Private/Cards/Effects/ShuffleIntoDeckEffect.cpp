@@ -14,7 +14,7 @@ void UShuffleIntoDeckEffect::Init(int32 Card, int32 Count, UWorld* WorldInstance
 void UShuffleIntoDeckEffect::ApplyShuffle(UBattleDeck* Deck)
 {
 	UGameInstance* Ins = Cast<UGameInstance>(World->GetGameInstance());
-	CardService* Service = Cast<CardService>(Ins->GetSubsystem<CardService>());
+	UCardService* Service = Cast<UCardService>(Ins->GetSubsystem<UCardService>());
 	for (int32 i = 0; i < CardCount; i++)
 	{
 		UCardData* CardToShuffle = Service->GetCardData(CardToShuffleId);

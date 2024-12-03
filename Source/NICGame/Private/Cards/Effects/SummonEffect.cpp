@@ -26,7 +26,7 @@ void USummonEffect::Init(TSharedPtr<FJsonObject> args, UWorld* Wrld)
 void USummonEffect::ApplySummonEffect(EBoardSide Side)
 {
 	UGameInstance* Ins = Cast<UGameInstance>(World->GetGameInstance());
-	CardService* Service = Cast<CardService>(Ins->GetSubsystem<CardService>());
+	UCardService* Service = Cast<UCardService>(Ins->GetSubsystem<UCardService>());
 	UDuelState* DuelState = Cast<UDuelState>(Ins->GetSubsystem<UDuelState>());
 	
 	TArray<UMinion*> Minions = Service->ParseSummonMinion(MinionsToSummonArgs);

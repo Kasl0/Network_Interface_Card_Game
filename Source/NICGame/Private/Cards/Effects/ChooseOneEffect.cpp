@@ -13,7 +13,7 @@
 #include "Duel/DuelCharacter.h"
 #include "Cards/CreateCardChoice.h"
 
-void UChooseOneEffect::Init(CardService* CardService, int32 id1, int32 id2, int32 id3)
+void UChooseOneEffect::Init(UCardService* CardService, int32 id1, int32 id2, int32 id3)
 {
 	this->World = CardService->GetWorld();
 

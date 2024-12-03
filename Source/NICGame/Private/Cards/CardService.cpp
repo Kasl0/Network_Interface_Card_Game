@@ -248,14 +248,14 @@ bool UCardService::GetBoolValue(TSharedPtr<FJsonObject> CardObject, FString Fiel
 	}
 }
 
-TSharedPtr<FJsonObject> CardService::GetNestedObject(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
+TSharedPtr<FJsonObject> UCardService::GetNestedObject(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
 {
 	TSharedPtr<FJsonValue> nested = CardObject->GetField<EJson::Object>(FieldName);
 	TSharedPtr<FJsonObject> nestedParsed = nested->AsObject();
 	return nestedParsed;
 }
 
-UMinion* CardService::GetMinionFromJson(int32 Mana, FString Name, FString GameDescription, FString IrlDescription, FString ImageFilename, int32 layer, TSharedPtr<FJsonObject> args)
+UMinion* UCardService::GetMinionFromJson(int32 Mana, FString Name, FString GameDescription, FString IrlDescription, FString ImageFilename, int32 layer, TSharedPtr<FJsonObject> args)
 {
 	int32 baseAttack = GetIntValue(args, "baseAttack", false);
 	int32 baseHealth = GetIntValue(args, "baseHealth", false);
@@ -287,7 +287,7 @@ UMinion* CardService::GetMinionFromJson(int32 Mana, FString Name, FString GameDe
 	return Minion;
 }
 
-UEffect* CardService::ParseEffect(TSharedPtr<FJsonObject> EffectObject)
+UEffect* UCardService::ParseEffect(TSharedPtr<FJsonObject> EffectObject)
 {
 	FString effectType = GetStringValue(EffectObject, "effect", false);
 	if (effectType == "chooseOne") {
@@ -304,7 +304,7 @@ UEffect* CardService::ParseEffect(TSharedPtr<FJsonObject> EffectObject)
 	}
 }
 
-TArray<UMinion*> CardService::ParseSummonMinion(TSharedPtr<FJsonObject> args)
+TArray<UMinion*> UCardService::ParseSummonMinion(TSharedPtr<FJsonObject> args)
 {
 	int32 Stats = GetIntValue(args, "stats", false);
 	int32 Count = GetIntValue(args, "count", false);
