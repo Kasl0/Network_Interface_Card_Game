@@ -27,7 +27,7 @@ Json file structure:
 ]
 */
 
-void CardService::InitialiseCardServiceIfNotInitialised()
+void UCardService::InitialiseCardServiceIfNotInitialised()
 {
 	if (JsonArray.Num() > 0)
 		return;
@@ -41,7 +41,7 @@ void CardService::InitialiseCardServiceIfNotInitialised()
 	}
 }
 
-UCardData* CardService::GetCardData(int32 id)
+UCardData* UCardService::GetCardData(int32 id)
 {
 	InitialiseCardServiceIfNotInitialised();
 	for (TSharedPtr<FJsonValue> Value : JsonArray)
@@ -60,7 +60,7 @@ UCardData* CardService::GetCardData(int32 id)
 	return nullptr;
 }
 
-UCardData* CardService::GetRandomEnemyCard(int8 layer)
+UCardData* UCardService::GetRandomEnemyCard(int8 layer)
 {
 	InitialiseCardServiceIfNotInitialised();
 	TArray<TSharedPtr<FJsonObject>> LayerCards;
@@ -88,7 +88,7 @@ UCardData* CardService::GetRandomEnemyCard(int8 layer)
 	return GetCardDataFromJson(LayerCards[RandomIndex]);
 }
 
-UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
+UCardData* UCardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 {
 	int32 id = GetIntValue(CardObject, "id", true);
 	FString name = GetStringValue(CardObject, "name", true);
@@ -136,7 +136,7 @@ UCardData* CardService::GetCardDataFromJson(TSharedPtr<FJsonObject> CardObject)
 	}
 }
 
-FString CardService::GetStringValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
+FString UCardService::GetStringValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
 {
 	FString FieldValue;
 	if (CardObject->HasField(FieldName) && CardObject->TryGetStringField(FieldName, FieldValue))
@@ -153,7 +153,7 @@ FString CardService::GetStringValue(TSharedPtr<FJsonObject> CardObject, FString 
 	}
 }
 
-int32 CardService::GetIntValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
+int32 UCardService::GetIntValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
 {
 	int32 FieldValue;
 	if (CardObject->HasField(FieldName) && CardObject->TryGetNumberField(FieldName, FieldValue))
@@ -170,7 +170,7 @@ int32 CardService::GetIntValue(TSharedPtr<FJsonObject> CardObject, FString Field
 	}
 }
 
-bool CardService::GetBoolValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
+bool UCardService::GetBoolValue(TSharedPtr<FJsonObject> CardObject, FString FieldName, bool nullNotAllowed)
 {
 	bool FieldValue;
 	if (CardObject->HasField(FieldName) && CardObject->TryGetBoolField(FieldName, FieldValue))

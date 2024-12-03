@@ -6,7 +6,7 @@
 UCardData* UEnemyDeckInfo::GetCard()
 {
 	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
-	CardService* CardServ = Cast<CardService>(GameInstance->GetSubsystem<CardService>());
+	UCardService* CardServ = Cast<UCardService>(GameInstance->GetSubsystem<UCardService>());
 
 	// here we need to get a current layer info
 	// for now we will just pass -1 which means random card from all layers

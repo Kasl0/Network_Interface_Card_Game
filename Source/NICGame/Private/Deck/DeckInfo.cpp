@@ -14,7 +14,7 @@ void UDeckInfo::CreateMockDeck()
 		int32 StartingDeckIds[] = { 2, 3, 5, 6, 7, 8, 9 }; // maybe add this info to json file? - field "isStartingDeck": true / false to each card
 
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
-		CardService* CardServ = Cast<CardService>(GameInstance->GetSubsystem<CardService>());
+		UCardService* CardServ = Cast<UCardService>(GameInstance->GetSubsystem<UCardService>());
 
 		for (int id : StartingDeckIds)
 		{
