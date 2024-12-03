@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Damageable.h"
 #include "UObject/Object.h"
+#include "Cards/CardHand.h"
 #include "DuelCharacter.generated.h"
 
 /**
@@ -31,13 +32,13 @@ protected:
 
 	UPROPERTY()
 	uint8 CardDrawInCurrentTurn;
-	
+
 public:
 	virtual void StartTurn();
 
 	void EndTurn();
 	
-	void Init(int32 Health = 15, int32 Mana = 3);
+	void Init(int32 Health = 30, int32 Mana = 0);
 	
 	virtual void TakeDamage(int32 DamageValue, UObject* Source) override;
 

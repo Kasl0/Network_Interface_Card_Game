@@ -5,7 +5,6 @@
 void USpell::Init(UEffect* Effect)
 {
 	this->SpellEffect = Effect;
-	this->SpellEffect->AddToRoot();
 }
 
 bool USpell::IsPlayable(EBoardSide Side)
@@ -16,7 +15,14 @@ bool USpell::IsPlayable(EBoardSide Side)
 	}
 	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 	UDuelState* DuelState = Cast<UDuelState>(GameInstance->GetSubsystem<UDuelState>());
-	return !DuelState->GetBoardState()->IsBoardSideEmpty(Side);
+	if (SpellEffect->Target == TEnumAsByte<EEffectTarget>(Minion))
+	{
+		return !DuelState->GetBoardState()->IsBoardSideEmpty(Side);
+	}
+	else
+	{
+		return true;
+	}
 }
 
 void USpell::Apply(UObject* SpellTarget)

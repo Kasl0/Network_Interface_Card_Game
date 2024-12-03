@@ -1,0 +1,133 @@
+[
+    {
+        "class_id": 0,
+        "question": "Info example",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {"": 1}
+    }, 
+    {
+        "class_id": 1,
+        "question": "Dialogue example",
+        "type": "Dialogue",
+        "answers": {
+            "0": "Answer 1",
+            "1": "Answer 2",
+            "2": "Answer 3",
+            "3": "Answer 4"
+        },
+        "outcomes": {
+            "0": "x+;y+",
+            "1": "x-",
+            "2": "y-",
+            "3": "x0"
+        },
+        "nextQuestion": {
+            "0": 1,
+            "1": 1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2,
+        "question": "Quiz example 1",
+        "type": "Quiz",
+        "answers": {
+            "0": "Correct",
+            "1": "Incorrect",
+            "2": "Incorrect"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 3,
+        "question": "Quiz example 2",
+        "type": "Quiz",
+        "answers": {
+            "0": "Correct",
+            "1": "Incorrect",
+            "2": "Incorrect"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 4,
+        "question": "Quiz example 3",
+        "type": "Quiz",
+        "answers": {
+            "0": "Correct",
+            "1": "Incorrect",
+            "2": "Incorrect"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 5,
+        "question": "Quiz example 4",
+        "type": "Quiz",
+        "answers": {
+            "0": "Correct",
+            "1": "Incorrect",
+            "2": "Incorrect"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 6,
+        "question": "Quiz example 5",
+        "type": "Quiz",
+        "answers": {
+            "0": "Correct",
+            "1": "Incorrect",
+            "2": "Incorrect"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    }
+]

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <chrono>
+#include <random>
 
 #include "Deck/DeckInfo.h"
 #include "Kismet/GameplayStatics.h"
@@ -38,4 +39,18 @@ UCardData* UBattleDeck::DrawCard()
 	// TODO
 	//  What to do if deck is empty
 	return LastCard;
+}
+
+void UBattleDeck::ShuffleIntoDeck(UCardData* Card)
+{
+	//std::random_device rd;     // Only used once to initialise (seed) engine
+	//std::mt19937 rng(rd());    // Random-number engine used (Mersenne-Twister in this case)
+	//std::uniform_int_distribution<int> uni(0, CardDataArray.Num()); // Guaranteed unbiased
+
+	//auto random_integer = uni(rng);
+
+	int32 output = 0 + (rand() % static_cast<int>(this->CardOrder.size() - 0 + 1));
+
+	this->CardDataArray.Add(Card);
+	this->CardOrder.insert(this->CardOrder.begin() + output, CardDataArray.Num() - 1); // Insert Card at random position
 }

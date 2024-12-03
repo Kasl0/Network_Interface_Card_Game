@@ -33,9 +33,7 @@ void UCardHUDWidget::NativeConstruct()
 
 void UCardHUDWidget::DrawCard()
 {
-	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
-	UCardHand* Hand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
-	Hand->DrawCard();
+	this->DuelState->DrawCardForFriendly();
 }
 
 void UCardHUDWidget::EndTurn()

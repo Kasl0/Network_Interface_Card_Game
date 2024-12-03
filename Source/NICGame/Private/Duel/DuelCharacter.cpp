@@ -3,6 +3,7 @@
 
 void UDuelCharacter::StartTurn()
 {
+	this->BaseMana = std::min(this->BaseMana + 1, 10);
 	this->CurrentMana = this->BaseMana;
 	this->CardDrawInCurrentTurn = 0;
 }

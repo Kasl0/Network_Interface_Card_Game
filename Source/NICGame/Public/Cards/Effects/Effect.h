@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "Cards/Effects/EffectTarget.h"
 #include "Effect.generated.h"
 
 /**
@@ -15,5 +16,8 @@ class NICGAME_API UEffect : public UObject
 	GENERATED_BODY()
 public:
 	
-	virtual void Apply(UObject* EffectTarget);
+	virtual void Apply(UObject* Target);
+
+	UPROPERTY()
+	TEnumAsByte<EEffectTarget> Target = NoTarget;
 };
