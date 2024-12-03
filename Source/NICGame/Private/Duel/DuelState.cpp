@@ -13,12 +13,18 @@
 #include "Cards/CardTypes/JadeGolemMinion.h"
 #include "Duel/Board/BoardWidget.h"
 
-UDuelState::UDuelState()
+//UDuelState::UDuelState()
+//{
+//	// Moved to StartDuel()
+//	// this->BoardState->AddToRoot();
+//}
+
+void UDuelState::Initialize(FSubsystemCollectionBase& Collection)
 {
+	Super::Initialize(Collection);
+
 	this->BoardState = NewObject<UBoardState>();
 	this->BoardState->Init(this, 4, GetWorld());
-	// Moved to StartDuel()
-	// this->BoardState->AddToRoot();
 }
 
 bool UDuelState::IsDuelInProgress()
