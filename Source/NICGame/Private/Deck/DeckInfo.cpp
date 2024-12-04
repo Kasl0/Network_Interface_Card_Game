@@ -15,7 +15,7 @@ void UDeckInfo::CreateMockDeck()
 		int32 StartingDeckIds[] = { 1, 10, 11, 15, 18 };
 
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
-		CardService* CardServ = Cast<CardService>(GameInstance->GetSubsystem<CardService>());
+		UCardService* CardServ = Cast<UCardService>(GameInstance->GetSubsystem<UCardService>());
 
 		for (int id : StartingDeckIds)
 		{

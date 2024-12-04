@@ -22,7 +22,7 @@ class NICGAME_API UChooseOneEffect : public UEffect
 	UWorld* World;
 
 public:
-	void Init(CardService* CardService, int32 id1, int32 id2, int32 id3);
+	void Init(UCardService* CardService, int32 id1, int32 id2, int32 id3);
 
 	void Apply(UObject* EffectTarget, TFunction<void()> AfterChoiceCallback = NULL);
 	
