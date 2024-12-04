@@ -22,13 +22,15 @@ class NICGAME_API UDuelState : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 protected:
-	UDuelState();
+	//UDuelState();
 
 	//bool DuelInProgress = false;
 	
 	// Selected card
 	UPROPERTY(EditAnywhere, Category = "Card")
 	UCardWidget* SelectedCard = nullptr;
+
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 public:
 

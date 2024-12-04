@@ -72,15 +72,17 @@ void UDialogueManager::CreateQuizChain(int32 Count, TFunction<void(int32)> Callb
 
     if (Count < 1 || 5 < Count)
     {
-        return; // arbitrary count limits
+        Callback(0); // arbitrary count limits
     }
+
 
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 gen(rd()); // seed the generator
-    std::uniform_int_distribution<> rng(0, QuizIndexes.Num() - 1); // define the range
+    std::uniform_int_distribution<> rng(0, std::max(QuizIndexes.Num() - 1, 0)); // define the range
     
+
     TSet<int32> ChosenQuestions;
-    while (ChosenQuestions.Num() < Count){
+    while (ChosenQuestions.Num() < Count && QuizIndexes.Num() >= Count){
         int32 number = rng(gen);
         if (true) // add any necessary checks
         {
@@ -99,7 +101,14 @@ void UDialogueManager::CreateQuizChain(int32 Count, TFunction<void(int32)> Callb
         NextQuestionId = QuestionId;
     }
 
-    CreateDialogueWidget(NextQuestionId);
+    if (NextQuestionId != -1)
+    {
+        CreateDialogueWidget(NextQuestionId);
+    }
+    else
+    {
+        Callback(0);
+    }
 }
 
 void UDialogueManager::CreateDialogueWidget(int32 Id)
@@ -127,10 +136,15 @@ UDialogueManager::UDialogueManager()
     {
         UE_LOG(LogTemp, Error, TEXT("Failed to find DialogueWidget Blueprint class!"));
     }
-    else 
+    else
     {
         DialogueWidgetClass = DialogueWidget.Class;
     }
+}
+
+void UDialogueManager::Initialize(FSubsystemCollectionBase& Collection)
+{
+    Super::Initialize(Collection);
 
     LoadDialoguesFromFile(FPaths::ProjectContentDir() + TEXT("Dialogues/Dialogues.json"));
 
@@ -183,7 +197,7 @@ bool UDialogueManager::LoadDialoguesFromFile(const FString FilePath)
             else if (Type == "Quiz")
             {
                 DialogueOption.Type = QuizDialogue;
-                this->QuizIndexes.Add(i);
+                //this->QuizIndexes.Add(i);
             }
 
             // Wczytanie odpowiedzi jako słownik

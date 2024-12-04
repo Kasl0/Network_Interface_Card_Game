@@ -63,6 +63,8 @@ class NICGAME_API UDialogueManager : public UGameInstanceSubsystem
 
     UDialogueManager();
 
+    virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
 public:
     UFUNCTION(BlueprintCallable, Category = "Dialogue")
     bool LoadDialoguesFromFile(const FString FilePath);
@@ -78,7 +80,7 @@ public:
 
     void CreateDialogueChain(int32 FirstId, TFunction<void()> Callback);
 
-    void CreateQuizChain(int32 Count = 3, TFunction<void(int32)> Callback = nullptr);
+    void CreateQuizChain(int32 Count, TFunction<void(int32)> Callback);
 
 private:
     TSubclassOf<UUserWidget> DialogueWidgetClass;
