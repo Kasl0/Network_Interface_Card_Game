@@ -197,7 +197,7 @@ bool UDialogueManager::LoadDialoguesFromFile(const FString FilePath)
             else if (Type == "Quiz")
             {
                 DialogueOption.Type = QuizDialogue;
-                //this->QuizIndexes.Add(i);
+                this->QuizIndexes.Add(i);
             }
 
             // Wczytanie odpowiedzi jako słownik
