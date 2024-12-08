@@ -2,6 +2,7 @@
 
 
 #include "Map/MapState.h"
+#include "GamePhase/GamePhaseSubsystem.h"
 
 void UMapState::CreateMockMap()
 {
@@ -36,4 +37,16 @@ void UMapState::CreateMockMap()
 	this->IsMockMapCreated = true;
 
 	this->CurrentNode = nullptr;
+}
+
+void UMapState::HandleNextNode(UMapNodeWidget* Node)
+{
+	this->CurrentNode = Node;
+
+	if (Node->NodeType == TEnumAsByte<EMapNodeType>(EnemyNode) || Node->NodeType == TEnumAsByte<EMapNodeType>(BossNode))
+	{
+		UGameInstance* Instance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+		UGamePhaseSubsystem* GamePhase = Cast<UGamePhaseSubsystem>(Instance->GetSubsystem<UGamePhaseSubsystem>());
+		GamePhase->DuelPhase();
+	}
 }

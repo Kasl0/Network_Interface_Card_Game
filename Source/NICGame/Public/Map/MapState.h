@@ -29,4 +29,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	UMapNodeWidget* CurrentNode;
+
+	UFUNCTION()
+	void HandleNextNode(UMapNodeWidget* Node);
 };
