@@ -29,7 +29,10 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
 {
     if (AnswerKey != "" || Dialogue.Type == TEnumAsByte<EDialogueType>(Info))
     {
-        this->ChoiceHandler->HandleChoice(Dialogue.Outcomes[AnswerKey]);
+        if (Dialogue.Outcomes.Contains(AnswerKey))
+        {
+            this->ChoiceHandler->HandleChoice(Dialogue.Outcomes[AnswerKey]);
+        }
 
         if (Dialogue.Type == TEnumAsByte<EDialogueType>(QuizDialogue))
         {

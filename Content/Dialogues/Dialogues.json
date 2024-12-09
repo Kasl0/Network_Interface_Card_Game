@@ -6,30 +6,247 @@
         "answers": {},
         "outcomes": {},
         "nextQuestion": {"": 1}
-    }, 
+    },
+
     {
-        "class_id": 1,
-        "question": "Dialogue example",
-        "type": "Dialogue",
-        "answers": {
-            "0": "Answer 1",
-            "1": "Answer 2",
-            "2": "Answer 3",
-            "3": "Answer 4"
-        },
-        "outcomes": {
-            "0": "x+;y+",
-            "1": "x-",
-            "2": "y-",
-            "3": "x0"
-        },
+        "class_id": 1000,
+        "question": "No proszę, kolejny nieszczęśnik. Może trafi się ktoś bardziej użyteczny, niż Token Ring.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
         "nextQuestion": {
-            "0": 1,
-            "1": 1,
-            "2": -1,
-            "3": -1
+            "": 1001
         }
     },
+    {
+        "class_id": 1001,
+        "question": "Pozwól, że pokażę ci, jak się gra w tę... osobliwą grę.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1002
+        }
+    },
+    {
+        "class_id": 1002,
+        "question": "<dialogi w trakcie walki (tłumaczenie zasad)>",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1003
+        }
+    },
+    {
+        "class_id": 1003,
+        "question": "Czy zrozumiałeś zasady?",
+        "type": "Dialogue",
+        "answers": {
+            "0": "Tak",
+            "1": "Nie"
+        },
+        "outcomes": {
+            "0": "",
+            "1": ""
+        },
+        "nextQuestion": {
+            "0": 1004,
+            "1": 1005
+        }
+    },
+    {
+        "class_id": 1004,
+        "question": "No, no... Może będzie z ciebie jeszcze Zakapior",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1006
+        }
+    },
+    {
+        "class_id": 1005,
+        "question": "W moim lesie nie ma miejsca dla opojów. Walcz, albo wracaj tam, skąd przyszedłeś.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1006
+        }
+    },
+    {
+        "class_id": 1006,
+        "question": "Pozwól, że przypomnę ci twoją historię. Nie żeby mnie obchodziła, ale lubię patrzeć, jak nieszczęśnicy mierzą się z własnym losem. <Otwiera się mapa>",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1007
+        }
+    },
+    {
+        "class_id": 1007,
+        "question": "Wszedłeś do mojego lasu, a każda ścieżka, każdy wybór – to teraz moja gra. Szukasz chwały? Zobaczymy, co znajdziesz.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1008
+        }
+    },
+    {
+        "class_id": 1008,
+        "question": "Chcesz zostać Zakapiorem? Tak? Hah, odważny, co? No dobrze. Ścieżka przed tobą jest zarośnięta, pełna niebezpieczeństw. Sprawdźmy, czego jesteś wart.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1009
+        }
+    },
+    {
+        "class_id": 1009,
+        "question": "Ukazuje ci się wąska, zarośnięta ścieżka. Pamiętaj – w lesie cisza to złudzenie, a spokój – pułapka.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": -1
+        }
+    },
+    {
+        "class_id": 1100,
+        "question": "Wstań.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1101
+        }
+    },
+    {
+        "class_id": 1101,
+        "question": "Mówię do ciebie! Wstań od stołu.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1102
+        }
+    },
+    {
+        "class_id": 1102,
+        "question": "Nie próbuj nawet szukać bramy wyjścia. Tutaj nie ma powrotu. Nie dla takich jak ty.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1103
+        }
+    },
+    {
+        "class_id": 1103,
+        "question": "Przynieś mi kabel z końcówką RJ45. Tak, wiszą na ścianie po mojej prawej stronie.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1104
+        }
+    },
+    {
+        "class_id": 1104,
+        "question": "Nie teraz. W tym lesie nie ma czasu na zabawy.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1105
+        }
+    },
+    {
+        "class_id": 1105,
+        "question": "Podaj mi go.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1106
+        }
+    },
+    {
+        "class_id": 1106,
+        "question": "Co to jest?! Czy mówiłem coś o przypadkowym kablu? Miał być z przeplotem/bez przeplotu! Spróbuj jeszcze raz.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1107
+        }
+    },
+    {
+        "class_id": 1107,
+        "question": "Siadaj. Na razie ci odpuszczę, ale następnym razem bądź dokładny.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": -1
+        }
+    },
+    {
+        "class_id": 1200,
+        "question": "W moim lesie potrzeba najlepszych Zakapiorów.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1201
+        }
+    },
+    {
+        "class_id": 1201,
+        "question": "Prawdziwego Zakapiora od zwykłego nieszczęśnika odróżnia wiedza. Widzisz, w tym miejscu niewiedza zabija szybciej niż miecz.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1202
+        }
+    },
+    {
+        "class_id": 1202,
+        "question": "Zobaczymy czy do czegoś się nadajesz.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1203
+        }
+    },
+    {
+        "class_id": 1203,
+        "question": "Tym razem nic ci nie grozi.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1204
+        }
+    },
+    {
+        "class_id": 1204,
+        "question": "Kto wie, może jak dobrze ci pójdzie to dam ci fory!",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": -1
+        }
+    },
+
+
     {
         "class_id": 2,
         "question": "Quiz example 1",
