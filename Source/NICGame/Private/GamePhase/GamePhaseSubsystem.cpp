@@ -15,7 +15,7 @@ void UGamePhaseSubsystem::DuelPhase()
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 		DialogueManager->CreateQuizChain(3, [this](int32 CorrectAnswers) {this->DuelPhase();}); // Give buffs to player based on quiz result
-		//DialogueManager->CreateDialogueChain(1, [this]() {this->DuelPhase(); });
+		//DialogueManager->CreateDialogueChain(1000, [this]() {this->DuelPhase(); });
 	}
 	else if(this->GamePhase == TEnumAsByte<EGamePhase>(Quiz))
 	{

@@ -1,6 +1,7 @@
 #include "Player/MovementController.h"
 #include "Player/GameCharacter.h"
 #include "Player/TableCameraTiltDirection.h"
+#include "Dialogues/DialogueManager.h"
 
 // Sets default values for this component's properties
 UMovementController::UMovementController()
@@ -38,6 +39,10 @@ void UMovementController::BeginPlay()
 	AActor* Owner = GetOwner();
 	DesiredLocation = Owner->GetActorLocation();
 	DesiredRotation = Owner->GetActorRotation();
+
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+	DialogueManager->CreateDialogueChain(1000, [this]() {});
 }
 
 
