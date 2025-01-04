@@ -137,13 +137,13 @@
         "question": "Przy drodze znajdujesz opuszczoną serwerownię. Metalowe szafy i migające światła wydają się dziwnie nie na miejscu w środku lasu. Co tutaj robi takie miejsce? Nie masz czasu na dłuższe rozważania.",
         "type": "Dialogue",
         "answers": {
-            "0": "Przeszukaj serwerownię [otrzymaj losowe karty]",
-            "1": "Przejrzyj dokumenty [darmowy token na powtórzenie quizu]",
-            "2": "Zignoruj serwerownię [bez efektu]"
+            "0": "Przeszukaj serwerownię",
+            "1": "Przejrzyj dokumenty",
+            "2": "Zignoruj serwerownię"
         },
         "outcomes": {
-            "0": "card+;x+;y+",
-            "1": "quizToken+;x+;y-",
+            "0": "card;x+;y+",
+            "1": "quizToken;x+;y-",
             "2": ""
         },
         "nextQuestion": {
@@ -182,8 +182,8 @@
         "question": "Pośród drzew znajdujesz router, który najwyraźniej jest częścią większej infrastruktury. Diody przy jego portach migają w chaotyczny sposób – coś jest nie tak.",
         "type": "Dialogue",
         "answers": {
-            "0": "Spróbuj naprawić router [quiz, nagrody zależne od wyniku]",
-            "1": "Zignoruj router [bez efektu]"
+            "0": "Spróbuj naprawić router",
+            "1": "Zignoruj router"
         },
         "outcomes": {
             "0": "x+;y+",

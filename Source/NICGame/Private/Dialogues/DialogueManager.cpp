@@ -29,6 +29,7 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
 {
     if (AnswerKey != "" || Dialogue.Type == TEnumAsByte<EDialogueType>(Info))
     {
+        this->ChoiceHandler->Init(GetWorld());
         this->ChoiceHandler->HandleChoice(Dialogue.Outcomes[AnswerKey]);
 
         if (Dialogue.Type == TEnumAsByte<EDialogueType>(QuizDialogue))
@@ -149,7 +150,7 @@ void UDialogueManager::Initialize(FSubsystemCollectionBase& Collection)
     LoadDialoguesFromFile(FPaths::ProjectContentDir() + TEXT("Dialogues/Dialogues.json"));
 
     ChoiceHandler = NewObject<UDialogueChoiceHandler>();
-    ChoiceHandler->Init(GetWorld());
+    //ChoiceHandler->Init(GetWorld());
 }
 
 bool UDialogueManager::LoadDialoguesFromFile(const FString FilePath)

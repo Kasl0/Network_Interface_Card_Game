@@ -7,7 +7,7 @@
 #include <random>
 
 TArray<int32> URandomEncounter::EncounterIds = {
-	3000,
+	3000, 3001
 };
 
 int32 URandomEncounter::GetRandomEncounterId()
