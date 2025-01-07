@@ -1,14 +1,5 @@
 [
     {
-        "class_id": 0,
-        "question": "Info example",
-        "type": "Info",
-        "answers": {},
-        "outcomes": {},
-        "nextQuestion": {"": 1}
-    },
-
-    {
         "class_id": 1000,
         "question": "No proszę, kolejny nieszczęśnik. Może trafi się ktoś bardziej użyteczny, niż Token Ring.",
         "type": "Info",
@@ -25,7 +16,7 @@
         "answers": {},
         "outcomes": {},
         "nextQuestion": {
-            "": 1002
+            "": 1003
         }
     },
     {
@@ -245,16 +236,333 @@
             "": -1
         }
     },
-
-
     {
-        "class_id": 2,
-        "question": "Quiz example 1",
+        "class_id": 2000,
+        "question": "Zaznacz prawdziwe stwierdzenie dotyczące warstwy I modelu OSI",
         "type": "Quiz",
         "answers": {
-            "0": "Correct",
-            "1": "Incorrect",
-            "2": "Incorrect"
+            "0": "jednym ze źródeł zakłóceń w światłowodach jest indukcja elektromagnetyczna",
+            "1": "skrót NEXT oznacza zakłócenie, do którego dochodzi na końcu kabla miedzianego",
+            "2": "ekran kabla STP należy podłączyć do uziemienia z obu stron"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2001,
+        "question": "Spośród poniższych wybierz pojęcie warstwy łącza danych",
+        "type": "Quiz",
+        "answers": {
+            "0": "NEXT",
+            "1": "RJ-45",
+            "2": "karta sieciowa",
+            "3": "drukarka sieciowa"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2002,
+        "question": "Zaznacz stan portów (w sensie protokołu STP), w którym ramki BPDU nie są odbierane",
+        "type": "Quiz",
+        "answers": {
+            "0": "disabled",
+            "1": "blocking",
+            "2": "listening",
+            "3": "learning",
+            "4": "forwarding"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect",
+            "4": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1,
+            "4": -1
+        }
+    },
+    {
+        "class_id": 2003,
+        "question": "Przełączenie switcha z trybu fragment free w tryb fast forward powoduje, że:",
+        "type": "Quiz",
+        "answers": {
+            "0": "na łączach trunk będzie stosowana strategia\nCSMA/CD",
+            "1": "zwiększa się ryzyko pojawienia się w sieci ramek zbyt krótkich",
+            "2": "switch sprawdza sumę kontrolną każdej ramki",
+            "3": "switch może realizować przełączanie\nasymetryczne"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2004,
+        "question": "Zaznacz poprawne stwierdzenia odnoszące się do systemów autonomicznych",
+        "type": "Quiz",
+        "answers": {
+            "0": "W systemie autonomicznym routing realizowany jest za pomocą pojedynczego protokołu routingu wewnętrznego",
+            "1": "System autonomiczny stanowi pojedynczy węzeł routingu zewnętrznego",
+            "2": "Protokół EIGRP może być stosowany jako protokół wymiany informacji pomiędzy systemami autonomicznymi"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2005,
+        "question": "Zaznacz poprawne stwierdzenia odnoszące się do protokołów routingu",
+        "type": "Quiz",
+        "answers": {
+            "0": "OSPF implementuje własny protokół dostarczania informacji o zmianach w topologii, oparty bezpośrednio na IP",
+            "1": "RIPv2 implementuje własny protokół dostarczania informacji o zmianach w topologii, oparty bezpośrednio na IP",
+            "2": "EIGRP nawiązuje relacje sąsiedztwa wykorzystując do tego periodycznie wysyłane pakiety AHOY",
+            "3": "RIP nawiązuje relacje sąsiedztwa wykorzystując do tego periodycznie wysyłane pakiety HELLO"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2006,
+        "question": "Które z poniższych wartości są brane pod uwagę w procesie wyboru pomiędzy trasami, z których jedna zostanie zainstalowana w tablicy routingu?",
+        "type": "Quiz",
+        "answers": {
+            "0": "Dystans administracyjny",
+            "1": "Aktualne obciążenie bufora na najczęściej wykorzystywanym interfejsie routera",
+            "2": "Adresy IP i MAC następnego przeskoku, ale tylko wtedy, gdy nie da się podjąć decyzji na podstawie innych kryteriów",
+            "3": "Adres IP routera, który przysłał ostatnią aktualizację"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2007,
+        "question": "Proces wyboru trasy dla pakietu IP, implementowany przez router, bierze pod uwagę:",
+        "type": "Quiz",
+        "answers": {
+            "0": "klasę docelowego adresu IP",
+            "1": "źródłowy oraz docelowy adres IP pakietu do przekazania",
+            "2": "\"dokładność\" prefiksu - w wypadku gdy kilka prefiksów odpowiada pakietowi, wybierany jest ten, który opisuje najmniejszą podsieć"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2008,
+        "question": "Zaznacz niepoprawne stwierdzenie odnoszące się do adresacji IPv6",
+        "type": "Quiz",
+        "answers": {
+            "0": "Długość adresu IPv6 wynosi 128 bitów",
+            "1": "W typowym przypadku (np. komputer PC) host IPv6 posiada dwa adresy - lokalny i globalny",
+            "2": "IPv6 wprowadza adresację \"anycast\"; pakiet wysłany na taki adres zostanie dostarczony do dowolnego hosta w sieci lokalnej",
+            "3": "Adres 2001:dead:beef:00fa:0fa:fa nie jest poprawnym adresem IPv6"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2009,
+        "question": "Zaznacz poprawne stwierdzenie odnoszące się do protokołu IPv6",
+        "type": "Quiz",
+        "answers": {
+            "0": "IPv6 jest wstecznie kompatybilny z IPv4, tzn. każdy host IPv6 ma obowiązek implementować IPv4",
+            "1": "W IPv6 fragmentacja dozwolona jest zarówno na hoście źródłowym, jak i na routerach",
+            "2": "Minimalne MTU wymagane przez IPv6 wynosi 1280"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2010,
+        "question": "Wskaż niepoprawne dokończenie zdania: Protokół ARP",
+        "type": "Quiz",
+        "answers": {
+            "0": "jest bezpołączeniowy",
+            "1": "pracuje na warstwie II modelu OSI",
+            "2": "służy do odwzorowywania adresów multicastowych",
+            "3": "posiada odpowiednik w IPv6, wśród mechanizmów IPv6 Neighbor Discovery"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct",
+            "3": "incorrect"
+        },
+        "nextQuestion":{
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2011,
+        "question": "Zastosowanie której z masek spowoduje, że adresem czternastej (w kolejności rosnącej) podsieci sieci 150.150.0.0 będzie 150.150.56.0?",
+        "type": "Quiz",
+        "answers": {
+            "0": "255.255.252.0",
+            "1": "255.255.248.0",
+            "2": "255.255.240.0",
+            "3": "255.248.248.0",
+            "4": "255.255.254.0"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect",
+            "4": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1,
+            "4": -1
+        }
+    },
+    {
+        "class_id": 2012,
+        "question": "W jakim celu stosuje się kodowanie dwuetapowe?",
+        "type": "Quiz",
+        "answers": {
+            "0": "dla zapewnienia samosynchronizacji",
+            "1": "dla umożliwienia korekcji błędów przez odbiorcę",
+            "2": "dla zmniejszenia zapotrzebowania na przepustowość",
+            "3": "dla zwiększenia bezpieczeństwa transmisji"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2013,
+        "question": "VLAN natywny (native VLAN) to:",
+        "type": "Quiz",
+        "answers": {
+            "0": "VLAN 1 - domyślny dla wszystkich portów switcha",
+            "1": "VLAN, którego ramki domyślnie nie są etykietowane przy przesyłaniu przez łącza trunk",
+            "2": "VLAN przeznaczony wyłącznie do komunikacji lokalnej (bez bramy/routera)",
+            "3": "VLAN, w którym stosowana jest wyłącznie podwójna enkapsulacja (802.3 i 802.2)",
+            "4": "VLAN istniejący wyłącznie pomiędzy switchami"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
+            "2": "incorrect",
+            "3": "incorrect",
+            "4": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1,
+            "4": -1
+        }
+    },
+    {
+        "class_id": 2014,
+        "question": "Protokoły stanu łącza wymagają, aby opisy topologii przechowywane przez routery:",
+        "type": "Quiz",
+        "answers": {
+            "0": "były identyczne wewnątrz pojedynczego obszaru",
+            "1": "były identyczne w całym systemie autonomicznym",
+            "2": "opisywały topologię wszystkich obszarów, do których router należy oraz obszaru \"0\" (backbone)"
         },
         "outcomes": {
             "0": "correct",
@@ -268,13 +576,50 @@
         }
     },
     {
-        "class_id": 3,
-        "question": "Quiz example 2",
+        "class_id": 2015,
+        "question": "Czy z uwagi na wymaganie minimalizacji opóźnienia dla ruchu głosowego szybsze porty switcha asymetrycznego powinny być wykorzystywane do podłączania telefonów IP?",
         "type": "Quiz",
         "answers": {
-            "0": "Correct",
-            "1": "Incorrect",
-            "2": "Incorrect"
+            "0": "Tak",
+            "1": "Nie"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1
+        }
+    },
+    {
+        "class_id": 2016,
+        "question": "Które z podanych adresów sprzętowych mogą występować w FDB?",
+        "type": "Quiz",
+        "answers": {
+            "0": "54:2d:ee:01:f7:2g",
+            "1": "f0:0f:fe:ed:00:00",
+            "2": "2b:00:de:ad:be:ef"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
+            "2": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2017,
+        "question": "Na podstawie których danych host wysyłający pakiet IP podejmuje decyzję o skorzystaniu, bądź nie skorzystaniu z routera?",
+        "type": "Quiz",
+        "answers": {
+            "0": "Własny adres IP",
+            "1": "Maska IP odbiorcy",
+            "2": "Adres IP routera (bramy)"
         },
         "outcomes": {
             "0": "correct",
@@ -288,13 +633,56 @@
         }
     },
     {
-        "class_id": 4,
-        "question": "Quiz example 3",
+        "class_id": 2018,
+        "question": "Które z podanych metod autokonfiguracji cechują się statycznym przypisaniem IP do MAC?",
         "type": "Quiz",
         "answers": {
-            "0": "Correct",
-            "1": "Incorrect",
-            "2": "Incorrect"
+            "0": "AutoIP",
+            "1": "DHCP",
+            "2": "BOOTP"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2019,
+        "question": "Komunikat DHCPREQUEST:",
+        "type": "Quiz",
+        "answers": {
+            "0": "służy do zarezerwowania uprzednio zaoferowanej przez jeden z serwerów DHCP konfiguracji",
+            "1": "jest wysyłany tyle razy, ile ofert otrzymał klient, osobno do każdego serwera DHCP",
+            "2": "służy do odrzucenia konfiguracji, które nie zostały wybrane przez serwer DHCP",
+            "3": "jest ostatnim komunikatem w typowej sekwencji komunikacji DHCP"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2020,
+        "question": "Router dokonuje porównania długości prefiksów tras, gdy:",
+        "type": "Quiz",
+        "answers": {
+            "0": "więcej niż jeden wpis w tablicy routingu odpowiada docelowemu adresowi przetwarzanego pakietu",
+            "1": "dokonuje automatycznej agregacji wpisów w tablicy routingu",
+            "2": "więcej niż jeden protokół routingu dostarcza trasę do tej samej podsieci"
         },
         "outcomes": {
             "0": "correct",
@@ -308,17 +696,283 @@
         }
     },
     {
-        "class_id": 5,
-        "question": "Quiz example 4",
+        "class_id": 2021,
+        "question": "Zaznacz poprawne stwierdzenia odnoszące się do struktur danych protokołu OSPF",
         "type": "Quiz",
         "answers": {
-            "0": "Correct",
-            "1": "Incorrect",
-            "2": "Incorrect"
+            "0": "LSA (Link State Advertisement) jest to pakiet przenoszący LSU (Link State Update), czyli informację o zmianie stanu łącza",
+            "1": "LSDB jest to struktura danych synchronizowana między wszystkimi routerami w systemie autonomicznym",
+            "2": "Tablica sąsiedztwa routera R zawiera identyfikatory i adresy IP wyłącznie routerów bezpośrednio połączonych z R"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2022,
+        "question": "Metryka trasy wewnątrzobszarowej w protokole OSPF według RFC 2328:",
+        "type": "Quiz",
+        "answers":  {
+            "0": "dla całej trasy liczona jest jako odwrotność sumy odwrotności metryk łącz składających się na trasę",
+            "1": "ma wyłącznie znaczenie kosztu - bez powiązania z wartościami typu przepustowość, opóźnienie itp.",
+            "2": "jest powiązana z przepustowością (bandwidth), ale nie z przepływnością (throughput)",
+            "3": "jest powiązana z przepływnością (throughput), ale nie z przepustowością (bandwidth)"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2023,
+        "question": "Designated router w OSPF:",
+        "type": "Quiz",
+        "answers": {
+            "0": "wykorzystuje adresy 224.0.0.5 oraz 224.0.0.6 do obsługi aktualizacji OSPF",
+            "1": "reprezentuje wszystkie routery w obszarze OSPF (z wyjątkiem obszaru 0)",
+            "2": "reprezentuje obszar stub lub total stub",
+            "3": "uczestniczy w co najwyżej dwóch relacjach sąsiedztwa"
         },
         "outcomes": {
             "0": "correct",
             "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2024,
+        "question": "Które z poniższych warunków muszą być spełnione, by dwa bezpośrednio połączone routery mogły nawiązać relację sąsiedztwa w protokole OSPF?",
+        "type": "Quiz",
+        "answers": {
+            "0": "wszystkie interfejsy tych routerów muszą należeć do tego samego obszaru OSPF",
+            "1": "routery muszą wymienić się komunikatami KEEPALIVE przynajmniej trzy razy",
+            "2": "jeśli jeden z tych routerów pełni rolę ABR, drugi nie może pełnić takiej roli",
+            "3": "maski podsieci ustawione na połączonych interfejsach muszą być takie same"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2025,
+        "question": "Oceń prawdziwość zdania: W protokole OSPF warunkiem koniecznym przyjęcia przez router roli ASBR jest posiadanie przynajmniej jednego interfejsu w obszarze 0 lub wirtualnego połączenia do obszaru 0.",
+        "type": "Quiz",
+        "answers": {
+            "0": "Prawda",
+            "1": "Fałsz"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1
+        }
+    },
+    {
+        "class_id": 2026,
+        "question": "Oceń prawdziwość zdania: Wprowadzenie mechanizmu VLSM przyczyniło się do opóźnienia wystąpienia kryzysu adresacji IPv4.",
+        "type": "Quiz",
+        "answers": {
+            "0": "Prawda",
+            "1": "Fałsz"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1
+        }
+    },
+    {
+        "class_id": 2027,
+        "question": "Które z wymienionych protokołów routingu obsługują IPv6?",
+        "type": "Quiz",
+        "answers": {
+            "0": "RIPv2",
+            "1": "OSPFv2",
+            "2": "EIGRP",
+            "3": "IGRP"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2028,
+        "question": "Wskaż nieprawidłowe dokończenie zdania: Aktualizacje w protokole OSPFv2",
+        "type": "Quiz",
+        "answers": {
+            "0": "wysyłane są do wszystkich routerów w obszarze zgodnie z algorytmem zalewania (ang. flooding)",
+            "1": "w sieciach z wybranym routerem reprezentującym (ang. designated router) mogą być wysyłane tylko raz",
+            "2": "wysyłane są niezwłocznie po zmianie stanu łącza oraz - w wypadku braku zmiany - co 30 minut",
+            "3": "przenoszone są przez rekordy różnych typów - w zależności od typu sieci (np. łącze Ethernet jest ogłaszane inaczej, niż szeregowe)"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2029,
+        "question": "Router dokonuje porównania dystansów administracyjnych:",
+        "type": "Quiz",
+        "answers": {
+            "0": "gdy co najmniej dwa różne protokoły routingu dostarczają trasy do tej samej podsieci",
+            "1": "gdy dwie różne trasy do tej samej podsieci mają równe metryki, a równoważenie obciążenia jest wyłączone",
+            "2": "zawsze przy instalacji trasy w tablicy routingu",
+            "3": "przy przetwarzaniu aktualizacji protokołu BGP"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2030,
+        "question": "Oceń prawdziwość zdania: W trakcie istnienia dynamicznego wpisu w tablicy translacji adresów powstałego przez wydanie na hoście A komendy \"ping B\" komenda \"ping A\" wydana na B zakończy się sukcesem.",
+        "type": "Quiz",
+        "answers": {
+            "0": "Prawda",
+            "1": "Fałsz"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1
+        }
+    },
+    {
+        "class_id": 2031,
+        "question": "Oceń prawdziwość zdania: Router realizujący translację adresów PAT jest w stanie dokonać zamiany adresów przekazywanych tekstowo przez protokoły warstw wyższych niż 4 (np. FTP, HTTP).",
+        "type": "Quiz",
+        "answers": {
+            "0": "Prawda",
+            "1": "Fałsz"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1
+        }
+    },
+    {
+        "class_id": 2032,
+        "question": "Oceń prawdziwość zdania: Wprowadzenie mechanizmu translacji adresów z przeciążeniem (PAT) przyczyniło się do opóźnienia wystąpienia kryzysu adresacji IPv4.",
+        "type": "Quiz",
+        "answers": {
+            "0": "Prawda",
+            "1": "Fałsz"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1
+        }
+    },
+    {
+        "class_id": 2033,
+        "question": "Zaznacz poprawne stwierdzenia odnoszące się do translacji adresów.",
+        "type": "Quiz",
+        "answers": {
+            "0": "Translacja PAT różni się od NAT tym, że operuje nie tylko na danych z warstwy III, ale i IV",
+            "1": "Tablica translacji NAT/PAT zawiera odwzorowanie adresu Inside Local w Outside Local",
+            "2": "Tablica translacji NAT/PAT zawiera odwzorowanie adresu Outside Local w Inside Local",
+            "3": "Zastosowanie translacji NAT/PAT (nawet podwójnej) nie pozwala na połączenie sieci o pokrywającej się adresacji"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
+        }
+    },
+    {
+        "class_id": 2034,
+        "question": "Zaznacz poprawne adresy unicastowe IPv6",
+        "type": "Quiz",
+        "answers": {
+            "0": "ff01:442f::1/64",
+            "1": "2001:fffe::27f1/64",
+            "2": "4480:4befe:33f7::1/64"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "correct",
             "2": "incorrect"
         },
         "nextQuestion": {
@@ -328,23 +982,66 @@
         }
     },
     {
-        "class_id": 6,
-        "question": "Quiz example 5",
+        "class_id": 2035,
+        "question": "Wskaż nieprawidłowe dokończenie zdania: Adresy anycast w IPv6",
         "type": "Quiz",
         "answers": {
-            "0": "Correct",
-            "1": "Incorrect",
-            "2": "Incorrect"
+            "0": "są syntaktycznie identyczne z adresami unicastowymi",
+            "1": "mogą być wykorzystywane przez hosty je posiadające do nawiązywania sesji z innymi hostami",
+            "2": "są współdzielone przez wiele hostów potencjalnie rozproszonych geograficznie"
         },
         "outcomes": {
-            "0": "correct",
-            "1": "incorrect",
+            "0": "incorrect",
+            "1": "correct",
             "2": "incorrect"
         },
         "nextQuestion": {
             "0": -1,
             "1": -1,
             "2": -1
+        }
+    },
+    {
+        "class_id": 2036,
+        "question": "Komunikat TTL exceeded:",
+        "type": "Quiz",
+        "answers": {
+            "0": "Jest generowany przez router, który otrzyma pakiet z polem TTL=0",
+            "1": "Powoduje zmianę trasy do hosta docelowego (wpis w tablicy routingu hosta wysyłającego), o ile w sieci z hostem wysyłającym znajduje się inny router",
+            "2": "Jest wykorzystywany przez program traceroute do wykrywania trasy"
+        },
+        "outcomes": {
+            "0": "incorrect",
+            "1": "incorrect",
+            "2": "correct"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1
+        }
+    },
+    {
+        "class_id": 2037,
+        "question": "Komunikat ICMP source quench:",
+        "type": "Quiz",
+        "answers": {
+            "0": "Jest wysyłany przez odbiorcę transmisji w celu spowolnienia tempa przesyłania danych przez nadawcę",
+            "1": "Jest wysyłany przez odbiorcę transmisji w celu zasygnalizowania nadawcy, że na trasie nastąpił zator",
+            "2": "Jest wysyłany przez nadawcę transmisji w celu poinformowania odbiorcy o niemożności przyspieszenia transmisji",
+            "3": "Jest wysyłany przez urządzenie pośredniczące (router lub switch L3) w celu spowolnienia transmisji przez nadawcę"
+        },
+        "outcomes": {
+            "0": "correct",
+            "1": "incorrect",
+            "2": "incorrect",
+            "3": "incorrect"
+        },
+        "nextQuestion": {
+            "0": -1,
+            "1": -1,
+            "2": -1,
+            "3": -1
         }
     }
 ]
