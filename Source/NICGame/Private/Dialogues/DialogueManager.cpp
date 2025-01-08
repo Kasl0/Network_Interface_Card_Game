@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Dialogues/DialogueWidget.h"
 #include "JsonObjectConverter.h"
+#include "Taxonomy/TaxonomySubsystem.h"
 
 #include <random>
 
@@ -34,7 +35,18 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
 
         if (Dialogue.Type == TEnumAsByte<EDialogueType>(QuizDialogue))
         {
-            if (Dialogue.Outcomes[AnswerKey] == "correct") CorrectAnswers++;
+            UGameInstance* Ins = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+            UTaxonomySubsystem* TaxonomySubsystem = Cast<UTaxonomySubsystem>(Ins->GetSubsystem<UTaxonomySubsystem>());
+
+            if (Dialogue.Outcomes[AnswerKey] == "correct") 
+            {
+                CorrectAnswers++;
+                TaxonomySubsystem->QuestionAnswered(true);
+            }
+            else
+            {
+                TaxonomySubsystem->QuestionAnswered(false);
+            }
         }
 
         int32 NextQuestionID = Dialogue.NextQuestion[AnswerKey];
