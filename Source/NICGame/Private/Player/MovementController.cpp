@@ -50,7 +50,7 @@ void UMovementController::BeginPlay()
 		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 		DialogueManager->CreateDialogueChain(1000, [this]() {
 
-			SetView(TableCameraTiltDirection::None, true);
+			SetView(TableCameraTiltDirection::None);
 			UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 			UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
@@ -217,36 +217,40 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 	bMoveToDesiredTransform = true;
 }
 
-void UMovementController::SetView(enum TableCameraTiltDirection Location, bool IgnoreInput)
+void UMovementController::SetView(enum TableCameraTiltDirection Location)
 {
 	switch (Location)
 	{
-		case TableCameraTiltDirection::None:
-			DesiredRotation = TableRotation - TableCameraDownRotation;
-			DesiredLocation = TableLocation + TableCameraTranslation;
-			break;
+	case TableCameraTiltDirection::None:
+		DesiredRotation = TableRotation - TableCameraDownRotation;
+		DesiredLocation = TableLocation + TableCameraTranslation;
+		break;
 		/*case TableCameraTiltDirection::Forward:
 			DesiredRotation = TableRotation - FRotator(90.0f, 0.0f, 0.0f);
 			DesiredLocation = TableLocation + TableCameraTranslation + TableCameraForwardTiltTranslation;
 			break;*/
-		case TableCameraTiltDirection::Left:
-			DesiredRotation = TableRotation - TableCameraDownRotation - FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
-			DesiredLocation = TableLocation + TableCameraTranslation;
-			break;
-		case TableCameraTiltDirection::Right:
-			DesiredRotation = TableRotation + TableCameraTiltRotation;
-			DesiredLocation = TableLocation + TableCameraTranslation;
-			break;
+	case TableCameraTiltDirection::Left:
+		DesiredRotation = TableRotation - TableCameraDownRotation - FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+		DesiredLocation = TableLocation + TableCameraTranslation;
+		break;
+	case TableCameraTiltDirection::Right:
+		DesiredRotation = TableRotation + TableCameraTiltRotation;
+		DesiredLocation = TableLocation + TableCameraTranslation;
+		break;
 	}
-	IsIgnoringInput = IgnoreInput;
 	IsAtTable = true;
 	TableCameraTiltDirection = Location;
 	bMoveToDesiredTransform = true;
-	
+
 	// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 	// GameCharacter->ShowCardOverlay();
 	this->GamePhaseSubsystem->ChangeOverlay(1);
 	this->GamePhaseSubsystem->ScreenWidgetComponent->RenderOnScreen();
+}
+
+void UMovementController::SetIgnoreInput(bool IgnoreInput)
+{
+	IsIgnoringInput = IgnoreInput;
 }
 
 void UMovementController::SetGamePhaseSubsystem(UGamePhaseSubsystem* Subsystem)

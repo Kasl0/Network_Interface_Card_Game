@@ -156,7 +156,7 @@ void UDuelState::EndPlayerTurn()
 void UDuelState::SwitchPlayerTurn()
 {
 	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	Player->SetView(TableCameraTiltDirection::None, false);
+	Player->SetView(TableCameraTiltDirection::None);
 
 	this->CurrentTurn = EndingTurn == Friendly ? Enemy : Friendly;
 	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
@@ -237,7 +237,8 @@ void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 				if (!DialoguesProgressManager->GetIsFirstGameCompleted())
 				{
 					DialoguesProgressManager->SetIsFirstGameCompleted();
-					//set ignoring input to false
+					AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+					Player->SetIgnoreInput(false);
 					DialogueManager->CreateDialogueChain(1200, [this]() {});
 				}
 				UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
