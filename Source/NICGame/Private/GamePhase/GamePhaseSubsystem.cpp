@@ -1,9 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "GamePhase/GamePhaseSubsystem.h"
 #include "Dialogues/DialogueManager.h"
 #include "Duel/DuelState.h"
+#include "Dialogues/DialoguesProgressManager.h"
 
 
 void UGamePhaseSubsystem::DuelPhase()
@@ -14,8 +12,28 @@ void UGamePhaseSubsystem::DuelPhase()
 		this->GamePhase = Quiz;
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
-		DialogueManager->CreateQuizChain(3, [this](int32 CorrectAnswers) {this->DuelPhase();}); // Give buffs to player based on quiz result
-		//DialogueManager->CreateDialogueChain(1, [this]() {this->DuelPhase(); });
+		UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+		if (DialoguesProgressManager->GetIsFirstGameCompleted())
+		{
+			if (!DialoguesProgressManager->GetIsSecondGameCompleted())
+			{
+				DialogueManager->CreateDialogueChain(1300, [this]() {
+					UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+					UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+					UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+					DialoguesProgressManager->SetIsSecondGameCompleted();
+					DialogueManager->CreateQuizChain(3, [this](int32 CorrectAnswers) {this->DuelPhase(); });
+					});
+			}
+			else
+			{
+				DialogueManager->CreateQuizChain(3, [this](int32 CorrectAnswers) {this->DuelPhase(); });
+			}
+		}
+		else
+		{
+			DuelPhase();
+		}
 	}
 	else if(this->GamePhase == TEnumAsByte<EGamePhase>(Quiz))
 	{

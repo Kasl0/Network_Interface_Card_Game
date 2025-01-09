@@ -1,6 +1,8 @@
 #include "Player/MovementController.h"
 #include "Player/GameCharacter.h"
 #include "Player/TableCameraTiltDirection.h"
+#include "Dialogues/DialogueManager.h"
+#include "Dialogues/DialoguesProgressManager.h"
 
 // Sets default values for this component's properties
 UMovementController::UMovementController()
@@ -38,6 +40,29 @@ void UMovementController::BeginPlay()
 	AActor* Owner = GetOwner();
 	DesiredLocation = Owner->GetActorLocation();
 	DesiredRotation = Owner->GetActorRotation();
+
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+	if (!DialoguesProgressManager->GetIsFirstIntroductionCompleted())
+	{
+		IsIgnoringInput = true;
+
+		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+		DialogueManager->CreateDialogueChain(1000, [this]() {
+
+			SetView(TableCameraTiltDirection::None, true);
+			UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+			UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+			DialoguesProgressManager->SetIsFirstIntroductionCompleted();
+			DialogueManager->CreateDialogueChain(1100, [this]() {
+
+				UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+				UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+				DialoguesProgressManager->SetIsSecondIntroductionCompleted();
+				});
+		});
+	}
 }
 
 

@@ -12,6 +12,9 @@
 #include "Cards/CardTypes/Spell.h"
 #include "Cards/CardTypes/JadeGolemMinion.h"
 #include "Duel/Board/BoardWidget.h"
+#include "Dialogues/DialogueManager.h"
+#include "Dialogues/DialoguesProgressManager.h"
+#include "Player/MovementController.h"
 
 //UDuelState::UDuelState()
 //{
@@ -223,12 +226,20 @@ void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 			Text1.Append(FString::FromInt(excessiveDamage));
 
 			if (GEngine) {
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
 			}
 
 			UGameInstance* GameInstance = this->GetWorld()->GetGameInstance();
 			if (GameInstance)
 			{
+				UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+				UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+				if (!DialoguesProgressManager->GetIsFirstGameCompleted())
+				{
+					DialoguesProgressManager->SetIsFirstGameCompleted();
+					//set ignoring input to false
+					DialogueManager->CreateDialogueChain(1200, [this]() {});
+				}
 				UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
 				if (GamePhaseSubsystem)
 				{
