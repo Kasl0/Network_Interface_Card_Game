@@ -32,25 +32,31 @@ void UTaxonomySubsystem::QuestionAnswered(bool Correct)
 
 void UTaxonomySubsystem::SetFrameMinigameStatus(FString status)
 {
-    if (status == "found")
+    if (status == "found" && FrameMinigameStatus < 1)
     {
         this->FrameMinigameStatus = std::max(this->FrameMinigameStatus, 1);
+        this->PlayersVsWorldAxis += 2;
+        this->ActingAxis -= 1; // If found but not completed, the player is an explorer
     }
-    else if (status == "completed")
+    else if (status == "completed" && FrameMinigameStatus < 2)
     {
         this->FrameMinigameStatus = 2;
+        this->ActingAxis += 3;
     }
 }
 
 void UTaxonomySubsystem::SetCableMinigameStatus(FString status)
 {
-    if (status == "found")
+    if (status == "found" && CableMinigameStatus < 1)
     {
         this->CableMinigameStatus = std::max(this->CableMinigameStatus, 1);
+        this->PlayersVsWorldAxis += 2;
+        this->ActingAxis -= 1; // If found but not completed, the player is an explorer
     }
-    else if (status == "completed")
+    else if (status == "completed" && CableMinigameStatus < 2)
     {
         this->CableMinigameStatus = 2;
+        this->ActingAxis += 3;
     }
 }
 
@@ -72,7 +78,7 @@ void UTaxonomySubsystem::GenerateReport()
         else
         {
             FileContent = FString::Printf(
-                TEXT("Wyznaczony typ osobowości: Zabójca\n")
+                TEXT("Wyznaczony typ osobowości: Odkrywca\n")
             );
         }
     } 
@@ -81,7 +87,7 @@ void UTaxonomySubsystem::GenerateReport()
         if (ActingAxis > 0)
         {
             FileContent = FString::Printf(
-                TEXT("Wyznaczony typ osobowości: Odkrywca\n")
+                TEXT("Wyznaczony typ osobowości: Zabójca\n")
             );
         }
         else

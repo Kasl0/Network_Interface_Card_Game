@@ -82,8 +82,8 @@ void UDialogueChoiceHandler::ChooseCard(FString Choice)
     UCardService* CardService = Cast<UCardService>(GameInstance->GetSubsystem<UCardService>());
     TArray<UCardData*> CardsToChoose = {// Hardcoded for now, should be changed to picking 3 cards at random
         CardService->GetCardData(1), 
-        CardService->GetCardData(1),
-        CardService->GetCardData(1),
+        CardService->GetCardData(2),
+        CardService->GetCardData(3),
     };
 
     UCreateCardChoice* CardChoice = NewObject<UCreateCardChoice>();
