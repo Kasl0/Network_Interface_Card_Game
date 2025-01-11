@@ -31,7 +31,11 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
     if (AnswerKey != "" || Dialogue.Type == TEnumAsByte<EDialogueType>(Info))
     {
         this->ChoiceHandler->Init(GetWorld());
-        this->ChoiceHandler->HandleChoice(Dialogue.Outcomes[AnswerKey]);
+
+        if (Dialogue.Type != TEnumAsByte<EDialogueType>(Info))
+        {
+            this->ChoiceHandler->HandleChoice(Dialogue.Outcomes[AnswerKey]);
+        }
 
         if (Dialogue.Type == TEnumAsByte<EDialogueType>(QuizDialogue))
         {
@@ -49,8 +53,8 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
             }
         }
 
-        int32 NextQuestionID = Dialogue.NextQuestion[AnswerKey];
-        if (NextQuestionID == -1)
+        int32* NextQuestionID = Dialogue.NextQuestion.Find(AnswerKey);
+        if (NextQuestionID == nullptr  || *NextQuestionID == -1)
         {
             if (Dialogue.Type != TEnumAsByte<EDialogueType>(QuizDialogue) && CurrentCallback)
             {
@@ -67,7 +71,7 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
         }
         else
         {
-            this->CreateDialogueWidget(NextQuestionID);
+            this->CreateDialogueWidget(*NextQuestionID);
         }
     }
 }
