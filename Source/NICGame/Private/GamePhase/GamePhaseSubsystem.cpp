@@ -12,6 +12,7 @@ void UGamePhaseSubsystem::DuelPhase()
 	{
 		this->GamePhase = Quiz;
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+		UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
 		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 		UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 		if (DialoguesProgressManager->GetIsFirstGameCompleted())
@@ -24,18 +25,17 @@ void UGamePhaseSubsystem::DuelPhase()
 					UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 					DialoguesProgressManager->SetIsSecondGameCompleted();
 					UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
-		      DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
+					DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
 					});
 			}
 			else
 			{
-				UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
-		    DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
+				DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
 			}
 		}
 		else
 		{
-			DuelPhase();
+			QuizCB(0, BattleDeck);
 		}
 	}
 }
