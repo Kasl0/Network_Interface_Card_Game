@@ -2,11 +2,13 @@
 
 #pragma once
 
+#include <functional>
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine/DataTable.h"
 #include "Dialogues/EDialogueType.h"
 #include "Dialogues/DialogueChoiceHandler.h"
+#include "Deck/BattleDeck.h"
 #include "DialogueManager.generated.h"
 
 USTRUCT(BlueprintType)
@@ -78,9 +80,9 @@ public:
     UFUNCTION()
     void HandleDialogueChoice(FDialogueOption Dialogue, FString AnswerKey);
 
-    void CreateDialogueChain(int32 FirstId, TFunction<void()> Callback);
+    void CreateDialogueChain(int32 FirstId, std::function<void()> Callback);
 
-    void CreateQuizChain(int32 Count, TFunction<void(int32)> Callback);
+    void CreateQuizChain(int32 Count, std::function<void(int32)> Callback);
 
 private:
     TSubclassOf<UUserWidget> DialogueWidgetClass;
@@ -91,9 +93,9 @@ private:
     UFUNCTION()
     void CreateDialogueWidget(int32 Id);
 
-    TFunction<void()> CurrentCallback;
+    std::function<void()> CurrentCallback;
 
-    TFunction<void(int32)> QuizCallback;
+    std::function<void(int32)> QuizCallback;
 
     UPROPERTY()
     int32 CorrectAnswers;

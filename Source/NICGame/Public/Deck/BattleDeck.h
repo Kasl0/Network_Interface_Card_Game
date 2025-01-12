@@ -31,4 +31,6 @@ public:
 	UCardData* DrawCard();
 
 	void ShuffleIntoDeck(UCardData* Card);
+
+	TArray<UCardData*> GetDataArray() { return CardDataArray; };
 };

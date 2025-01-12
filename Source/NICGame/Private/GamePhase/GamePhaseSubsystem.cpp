@@ -12,6 +12,7 @@ void UGamePhaseSubsystem::DuelPhase()
 	{
 		this->GamePhase = Quiz;
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+		UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
 		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 		UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 		if (DialoguesProgressManager->GetIsFirstGameCompleted())
@@ -23,20 +24,25 @@ void UGamePhaseSubsystem::DuelPhase()
 					UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 					UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 					DialoguesProgressManager->SetIsSecondGameCompleted();
-					DialogueManager->CreateQuizChain(3, [this](int32 CorrectAnswers) {this->DuelPhase(); });
+					UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
+					DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
 					});
 			}
 			else
 			{
-				DialogueManager->CreateQuizChain(3, [this](int32 CorrectAnswers) {this->DuelPhase(); });
+				DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
 			}
 		}
 		else
 		{
-			DuelPhase();
+			QuizCB(0, BattleDeck);
 		}
 	}
-	else if(this->GamePhase == TEnumAsByte<EGamePhase>(Quiz))
+}
+
+void UGamePhaseSubsystem::StartDuel(UBattleDeck* BattleDeck)
+{
+	if (this->GamePhase == TEnumAsByte<EGamePhase>(Quiz))
 	{
 		this->GamePhase = EGamePhase::Duel;
 
@@ -49,7 +55,7 @@ void UGamePhaseSubsystem::DuelPhase()
 			UDuelState* DuelState = GameInstance->GetSubsystem<UDuelState>();
 			if (DuelState)
 			{
-				DuelState->StartDuel(TEnumAsByte(EBoardSide::Enemy));
+				DuelState->StartDuel(TEnumAsByte(EBoardSide::Enemy), BattleDeck);
 			}
 		}
 	}
@@ -75,11 +81,45 @@ void UGamePhaseSubsystem::ChangeOverlay(int32 Change)
 {
 	if (this->ScreenWidget)
 	{
-		this->ScreenWidget->ChangeOverlay(GamePhase,Change);
+		this->ScreenWidget->ChangeOverlay(GamePhase, Change);
 	}
 }
 
 void UGamePhaseSubsystem::SetScreenWidget(UScreenWidget* Screen)
 {
 	this->ScreenWidget = Screen;
+}
+
+void UGamePhaseSubsystem::QuizCB(int32 CorrectAnswers, UBattleDeck* BattleDeck)
+{
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
+	BattleDeck->InitializeDeck(GetWorld());
+	TArray<UCardData*> CardDataArray = BattleDeck->GetDataArray();
+	if (CorrectAnswers > 0) {
+		// one correct answer -> health bonus for all cards
+		for (int i = 0; i < CardDataArray.Num(); i++) {
+			if (CardDataArray[i]->IsA(UMinion::StaticClass())) {
+				UMinion* ActiveMinion = Cast<UMinion>(CardDataArray[i]);
+				ActiveMinion->BaseHealth++;
+				ActiveMinion->CurrentHealth++;
+			}
+		}
+	}
+	if (CorrectAnswers > 1) {
+		// two correct answers -> attack bonus for all cards
+		for (int i = 0; i < CardDataArray.Num(); i++) {
+			if (CardDataArray[i]->IsA(UMinion::StaticClass())) {
+				UMinion* ActiveMinion = Cast<UMinion>(CardDataArray[i]);
+				ActiveMinion->BaseAttack++;
+			}
+		}
+	}
+	if (CorrectAnswers > 2) {
+		// three correct answers -> mana cost decrease for all cards
+		for (int i = 0; i < CardDataArray.Num(); i++) {
+			CardDataArray[i]->CardCost--;
+		}
+	}
+	this->StartDuel(BattleDeck);
 }
