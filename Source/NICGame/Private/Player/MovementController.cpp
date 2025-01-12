@@ -272,6 +272,7 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 			if (!DialoguesProgressManager->GetWasTaskOrdered())
 			{
+				IsIgnoringInput = true;
 				UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 				DialogueManager->CreateDialogueChain(1202, [this]() {
 
@@ -279,6 +280,7 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 					UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 					UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 					DialoguesProgressManager->SetWasTaskOrdered();
+					IsIgnoringInput = false;
 					});
 			}
 		}
