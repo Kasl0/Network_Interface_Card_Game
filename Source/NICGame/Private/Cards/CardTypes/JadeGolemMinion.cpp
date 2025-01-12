@@ -8,7 +8,7 @@ int32 UJadeGolemMinion::Stats;
 void UJadeGolemMinion::Init(uint8 Cost, std::string Name, std::string GameDescription, std::string IrlDescription, int32 Attack, int32 Health, FString Image, int32 Layer)
 {
 	this->CardCost = 1;
-	this->CardName = FText::FromString("Węzeł Sieci");
+	this->CardName = FText::FromString("Wezel Sieci");
 	this->CardGameDescription = FText::FromString("");
 	this->CardIrlDescription = FText::FromString("");
 	this->CardLayer = 0;

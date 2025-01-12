@@ -115,7 +115,7 @@ void UDialogueManager::CreateQuizChain(int32 Count, TFunction<void(int32)> Callb
         Dialogues[QuestionId].NextQuestion.Add("1", NextQuestionId);
         Dialogues[QuestionId].NextQuestion.Add("2", NextQuestionId);
         Dialogues[QuestionId].NextQuestion.Add("3", NextQuestionId);
-        NextQuestionId = QuestionId;
+        NextQuestionId = Dialogues[QuestionId].ClassID;
     }
 
     if (NextQuestionId != -1)

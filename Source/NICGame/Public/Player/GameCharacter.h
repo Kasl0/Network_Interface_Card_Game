@@ -62,5 +62,9 @@ public:
 
 	// Move to the desired transform
 	UFUNCTION(BlueprintCallable)
-	void SetView(enum TableCameraTiltDirection Location, bool IgnoreInput);
+	void SetView(enum TableCameraTiltDirection Location);
+
+	// Set ignore input
+	UFUNCTION(BlueprintCallable)
+	void SetIgnoreInput(bool IgnoreInput);
 };
