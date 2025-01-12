@@ -67,7 +67,13 @@ void UTaxonomySubsystem::GenerateReport()
 
     FString FileContent;
 
-    if (PlayersVsWorldAxis > 0)
+    if (PlayersVsWorldAxis == 0 && ActingAxis == 0)
+    {
+        FileContent = FString::Printf(
+            TEXT("Wyznaczony typ osobowości: Nieokreślony\n")
+        );
+    }
+    else if (PlayersVsWorldAxis > 0)
     {
         if (ActingAxis > 0)
         {
