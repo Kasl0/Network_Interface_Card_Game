@@ -1,7 +1,7 @@
 ﻿[
     {
         "class_id": 1000,
-        "question": "No proszę, kolejny nieszczęśnik. Może trafi się ktoś bardziej użyteczny, niż ISDN..",
+        "question": "No proszę, kolejny nieszczęśnik. Może trafi się ktoś bardziej użyteczny, niż ISDN...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -11,7 +11,7 @@
     },
     {
         "class_id": 1001,
-        "question": "Pozwól, że pokażę ci, jak się gra w tę... osobliwą grę..",
+        "question": "Pozwól, że pokażę ci, jak się gra w tę... osobliwą grę...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -21,7 +21,7 @@
     },
     {
         "class_id": 1002,
-        "question": "Będziemy grali w karty. Zasady są proste. Wygrywa ten, kto zrozumie, jakie karty trzyma w ręku. Przegra ten, kto nie zrozumie, że karty są już rozdane..",
+        "question": "Będziemy grali w karty. Zasady są proste. Wygrywa ten, kto zrozumie, jakie karty trzyma w ręku. Przegra ten, kto nie zrozumie, że karty są już rozdane...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -39,7 +39,7 @@
         },
         "outcomes": {
             "0": "",
-            "1": ""
+            "1": "y+"
         },
         "nextQuestion": {
             "0": 1004,
@@ -48,7 +48,7 @@
     },
     {
         "class_id": 1004,
-        "question": "No, no... Może będzie z ciebie jeszcze Zakapior..",
+        "question": "No, no... Może będzie z ciebie jeszcze Zakapior...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -58,7 +58,7 @@
     },
     {
         "class_id": 1005,
-        "question": "W moim lesie nie ma miejsca dla opojów. Walcz, albo wracaj tam, skąd przyszedłeś..",
+        "question": "W moim lesie nie ma miejsca dla opojów. Walcz, albo wracaj tam, skąd przyszedłeś...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -78,7 +78,7 @@
     },
     {
         "class_id": 1100,
-        "question": "Wszedłeś do mojego lasu, a każda ścieżka, każdy wybór – to teraz moja gra. Szukasz chwały? Zobaczymy, co znajdziesz..",
+        "question": "Wszedłeś do mojego lasu, a każda ścieżka, każdy wybór – to teraz moja gra. Szukasz chwały? Zobaczymy, co znajdziesz...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -88,7 +88,7 @@
     },
     {
         "class_id": 1101,
-        "question": "Chcesz zostać Zakapiorem? Tak? Hah, odważny, co? No dobrze. Ścieżka przed tobą jest zarośnięta, pełna niebezpieczeństw. Sprawdźmy, czego jesteś wart..",
+        "question": "Chcesz zostać Zakapiorem? Tak? Hah, odważny, co? No dobrze. Ścieżka przed tobą jest zarośnięta, pełna niebezpieczeństw. Sprawdźmy, czego jesteś wart...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -108,7 +108,7 @@
     },
     {
         "class_id": 1200,
-        "question": "Wstań..",
+        "question": "Wstań...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -118,7 +118,7 @@
     },
     {
         "class_id": 1201,
-        "question": "Mówię do ciebie! Wstań od stołu..",
+        "question": "Mówię do ciebie! Wstań od stołu.",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -128,7 +128,7 @@
     },
     {
         "class_id": 1202,
-        "question": "Nie próbuj nawet szukać bramy wyjścia. Tutaj nie ma powrotu. Nie dla takich jak ty..",
+        "question": "Nie próbuj nawet szukać bramy wyjścia. Tutaj nie ma powrotu. Nie dla takich jak ty...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -138,7 +138,7 @@
     },
     {
         "class_id": 1203,
-        "question": "Przynieś mi kabel z końcówką RJ45. Tak, wiszą na ścianie po mojej prawej stronie..",
+        "question": "Przynieś mi kabel z końcówką RJ45. Tak, wiszą na ścianie po mojej prawej stronie.",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -148,7 +148,7 @@
     },
     {
         "class_id": 1204,
-        "question": "Nie teraz. W tym lesie nie ma czasu na zabawy..",
+        "question": "Nie teraz. W tym lesie nie ma czasu na zabawy.",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -158,17 +158,17 @@
     },
     {
         "class_id": 1205,
-        "question": "Podaj mi go..",
+        "question": "Podaj mi go...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
         "nextQuestion": {
-            "": 1206
+            "": -1
         }
     },
     {
         "class_id": 1206,
-        "question": "Co to jest?! Czy mówiłem coś o przypadkowym kablu? Miał być z przeplotem! Spróbuj jeszcze raz..",
+        "question": "Co to jest?! Czy mówiłem coś o przypadkowym kablu? Miał być z przeplotem! Spróbuj jeszcze raz.",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -178,17 +178,7 @@
     },
     {
         "class_id": 1207,
-        "question": "Podaj mi go..",
-        "type": "Info",
-        "answers": {},
-        "outcomes": {},
-        "nextQuestion": {
-            "": 1208
-        }
-    },
-    {
-        "class_id": 1208,
-        "question": "Co to jest?! Czy mówiłem coś o przypadkowym kablu? Miał być bez przeplotu! Spróbuj jeszcze raz..",
+        "question": "Co to jest?! Czy mówiłem coś o przypadkowym kablu? Miał być bez przeplotu! Spróbuj jeszcze raz.",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -197,7 +187,7 @@
         }
     },
     {
-        "class_id": 1209,
+        "class_id": 1208,
         "question": "Siadaj. Na razie ci odpuszczę, ale następnym razem bądź dokładny.",
         "type": "Info",
         "answers": {},
@@ -207,8 +197,18 @@
         }
     },
     {
+        "class_id": 1209,
+        "question": "Czy mówiłem coś o dwóch kablach? Miałeś przynieść jeden...",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {
+            "": 1208
+        }
+    },
+    {
         "class_id": 1300,
-        "question": "W moim lesie potrzeba najlepszych Zakapiorów..",
+        "question": "W moim lesie potrzeba najlepszych Zakapiorów...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -218,7 +218,7 @@
     },
     {
         "class_id": 1301,
-        "question": "Prawdziwego Zakapiora od zwykłego nieszczęśnika odróżnia wiedza. Widzisz, w tym miejscu niewiedza zabija szybciej niż miecz..",
+        "question": "Prawdziwego Zakapiora od zwykłego nieszczęśnika odróżnia wiedza. Widzisz, w tym miejscu niewiedza zabija szybciej niż miecz...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -228,7 +228,7 @@
     },
     {
         "class_id": 1302,
-        "question": "Zobaczymy czy do czegoś się nadajesz..",
+        "question": "Zobaczymy czy do czegoś się nadajesz...",
         "type": "Info",
         "answers": {},
         "outcomes": {},
@@ -238,7 +238,7 @@
     },
     {
         "class_id": 1303,
-        "question": "Tym razem nic ci nie grozi..",
+        "question": "Tym razem nic ci nie grozi...",
         "type": "Info",
         "answers": {},
         "outcomes": {},

@@ -166,26 +166,50 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 				if (DialoguesProgressManager->GetIsWhiteCablePickedUp() && !DialoguesProgressManager->GetIsBlueCablePickedUp())
 				{
 					IsIgnoringInput = true;
-					DialogueManager->CreateDialogueChain(1207, [this]() {
-						IsIgnoringInput = false;
+					bPickedUpWrondCable = true;
+					DialogueManager->CreateDialogueChain(1205, [this]() {
+						UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+						UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+						DialogueManager->CreateDialogueChain(1207, [this]() {
+							IsIgnoringInput = false;
+							});
 						});
 					return;
 				}
 				else if (!DialoguesProgressManager->GetIsWhiteCablePickedUp() && DialoguesProgressManager->GetIsBlueCablePickedUp())
 				{
 					IsIgnoringInput = true;
+					bPickedUpWrondCable = true;
 					DialogueManager->CreateDialogueChain(1205, [this]() {
-						IsIgnoringInput = false; 
+						UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+						UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+						DialogueManager->CreateDialogueChain(1206, [this]() {
+							IsIgnoringInput = false;
+							});
 						});
 					return;
 				}
 				else if (DialoguesProgressManager->GetIsWhiteCablePickedUp() && DialoguesProgressManager->GetIsBlueCablePickedUp())
 				{
 					IsIgnoringInput = true;
-					DialogueManager->CreateDialogueChain(1209, [this]() {
-						IsIgnoringInput = false; 
-						});
-					DialoguesProgressManager->SetIsTaskCompleted();
+					if (bPickedUpWrondCable)
+					{
+						DialogueManager->CreateDialogueChain(1208, [this]() {
+							IsIgnoringInput = false;
+							UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+							UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+							DialoguesProgressManager->SetIsTaskCompleted();
+							});
+					}
+					else
+					{
+						DialogueManager->CreateDialogueChain(1209, [this]() {
+							IsIgnoringInput = false;
+							UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+							UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+							DialoguesProgressManager->SetIsTaskCompleted();
+							});
+					}
 				}
 				else
 				{

@@ -17,6 +17,9 @@ public:
 	// Sets default values for this component's properties
 	UMovementController();
 
+private:
+	bool bPickedUpWrondCable = false;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
