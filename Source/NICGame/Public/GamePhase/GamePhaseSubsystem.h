@@ -10,36 +10,40 @@
 #include "GamePhaseSubsystem.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class NICGAME_API UGamePhaseSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
-	
-public:	
+
+public:
 	UPROPERTY(BlueprintReadWrite)
-	UScreenWidget* ScreenWidget;
+		UScreenWidget* ScreenWidget;
 
 	UPROPERTY(BlueprintReadWrite)
-	UScreenWidgetComponent* ScreenWidgetComponent;
+		UScreenWidgetComponent* ScreenWidgetComponent;
 
 	// Switch to duel phase
 	UFUNCTION(BlueprintCallable)
-	void DuelPhase();
+		void DuelPhase();
 
 	// Switch to duel phase
 	UFUNCTION(BlueprintCallable)
-	void MapPhase();
+		void MapPhase();
 
 	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<EGamePhase> GamePhase;
+		TEnumAsByte<EGamePhase> GamePhase;
 
 	// Helper function, calls UScreenWidget::ChangeOverlay, see for documentation
 	UFUNCTION(BlueprintCallable)
-	void ChangeOverlay(int32 Change);
+		void ChangeOverlay(int32 Change);
 
 	UFUNCTION(BlueprintCallable)
-	void SetScreenWidget(UScreenWidget* Screen);
+		void SetScreenWidget(UScreenWidget* Screen);
+
+	void QuizCB(int CorrectAnswers, UBattleDeck* BattleDeck);
+
+	void StartDuel(UBattleDeck* BattleDeck);
 };

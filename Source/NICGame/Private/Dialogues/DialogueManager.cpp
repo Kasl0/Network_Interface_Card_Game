@@ -59,13 +59,13 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
     }
 }
 
-void UDialogueManager::CreateDialogueChain(int32 FirstId, TFunction<void()> Callback)
+void UDialogueManager::CreateDialogueChain(int32 FirstId, std::function<void()> Callback)
 {
     this->CurrentCallback = Callback;
     this->CreateDialogueWidget(FirstId);
 }
 
-void UDialogueManager::CreateQuizChain(int32 Count, TFunction<void(int32)> Callback)
+void UDialogueManager::CreateQuizChain(int32 Count, std::function<void(int32)> Callback)
 {
     this->QuizCallback = Callback;
     this->CorrectAnswers = 0;

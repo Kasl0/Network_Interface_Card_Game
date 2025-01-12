@@ -5,6 +5,7 @@
 #include "Duel/EBoardSide.h"
 #include "Deck/EnemyDeckInfo.h"
 #include "Duel/Board/BoardWidgetWithActors.h"
+#include "Deck/BattleDeck.h"
 #include "DuelState.generated.h"
 
 // Forward declarations
@@ -15,7 +16,7 @@ class UDuelCharacter;
 class UCardData;
 
 /**
- * 
+ *
  */
 UCLASS()
 class NICGAME_API UDuelState : public UGameInstanceSubsystem
@@ -25,10 +26,10 @@ protected:
 	//UDuelState();
 
 	//bool DuelInProgress = false;
-	
+
 	// Selected card
 	UPROPERTY(EditAnywhere, Category = "Card")
-	UCardWidget* SelectedCard = nullptr;
+		UCardWidget* SelectedCard = nullptr;
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
@@ -38,73 +39,73 @@ public:
 	bool IsDuelInProgress();
 
 	// Initializes duel and necessary variables
-	void StartDuel(EBoardSide StartingSide);
-	
+	void StartDuel(EBoardSide StartingSide, UBattleDeck* BattleDeck);
+
 	// Get selected card
 	UFUNCTION(BlueprintCallable)
-	UCardWidget* GetSelectedCard() const;
+		UCardWidget* GetSelectedCard() const;
 
 	// Set selected card
 	UFUNCTION(BlueprintCallable)
-	void SetSelectedCard(UCardWidget* NewSelectedCard);
+		void SetSelectedCard(UCardWidget* NewSelectedCard);
 
 	// Handles preparations for turn end (waiting for animations to finish)
 	UFUNCTION()
-	void PrepareTurnEnd();
+		void PrepareTurnEnd();
 
 	// Handles logic for ending a player's turn
 	UFUNCTION(BlueprintCallable)
-	void EndPlayerTurn();
+		void EndPlayerTurn();
 
 	// Handles turn change to opposite player
 	UFUNCTION(BlueprintCallable)
-	void SwitchPlayerTurn();
+		void SwitchPlayerTurn();
 
 	UFUNCTION(BlueprintCallable)
-	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> GetCharacters();
+		TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> GetCharacters();
 
 	// Add card to board, handle mana etc.
 	UFUNCTION(BlueprintCallable)
-	bool PlayCard(UCardData* CardData, uint8 Colum);
+		bool PlayCard(UCardData* CardData, uint8 Colum);
 
 	// Get board state
 	UFUNCTION(BlueprintCallable)
-	UBoardState* GetBoardState();
+		UBoardState* GetBoardState();
 
 	// Get enemy deck info
 	UFUNCTION(BlueprintCallable)
-	UEnemyDeckInfo* GetEnemyDeckInfo();
+		UEnemyDeckInfo* GetEnemyDeckInfo();
 
 	UFUNCTION()
-	void EndDuel(EBoardSide WiningSide, uint8 excessiveDamage);
+		void EndDuel(EBoardSide WiningSide, uint8 excessiveDamage);
 
 	// Get current turn
 	UFUNCTION(BlueprintCallable)
-	EBoardSide GetCurrentTurn();
+		EBoardSide GetCurrentTurn();
 
 	// Get current turn duel character
 	UFUNCTION(BlueprintCallable)
-	UDuelCharacter* GetCurrentTurnCharacter();
+		UDuelCharacter* GetCurrentTurnCharacter();
 
 	// Set Board Widget
 	UFUNCTION()
-	void SetBoardWidget(UBoardWidget* Widget);
+		void SetBoardWidget(UBoardWidget* Widget);
 
 	UFUNCTION()
-	void DrawCardForFriendly();
+		void DrawCardForFriendly();
 
 	UPROPERTY()
-	UBoardWidget* BoardWidget;
+		UBoardWidget* BoardWidget;
 
 protected:
 	EBoardSide CurrentTurn;
 
 	UPROPERTY(BlueprintReadOnly)
-	TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> DuelCharacters;
+		TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> DuelCharacters;
 
 	UPROPERTY()
-	UBoardState* BoardState;
+		UBoardState* BoardState;
 
 	UPROPERTY()
-	TEnumAsByte<EBoardSide> EndingTurn;
+		TEnumAsByte<EBoardSide> EndingTurn;
 };

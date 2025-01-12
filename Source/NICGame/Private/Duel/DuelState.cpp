@@ -32,14 +32,10 @@ bool UDuelState::IsDuelInProgress()
 	return this->DuelCharacters.Num() > 0;
 }
 
-void UDuelState::StartDuel(EBoardSide StartingSide)
+void UDuelState::StartDuel(EBoardSide StartingSide, UBattleDeck* BattleDeck)
 {
-	// initialize deck
-	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
-	UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
-	BattleDeck->InitializeDeck(GetWorld());
-
 	// initialize card hand
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 	UCardHand* CardHand = Cast<UCardHand>(GameInstance->GetSubsystem<UCardHand>());
 	CardHand->RemoveAllCardData();
 
@@ -129,7 +125,7 @@ void UDuelState::PrepareTurnEnd()
 				false
 			);
 		}
-		else 
+		else
 		{
 			// if not finished, wait
 			this->BoardWidget->GetWorld()->GetTimerManager().SetTimer(
@@ -241,9 +237,9 @@ void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 			// if not finished, wait
 
 			auto MyLambda = [this, WinningSide, excessiveDamage]()
-				{
-					this->EndDuel(WinningSide, excessiveDamage);
-				};
+			{
+				this->EndDuel(WinningSide, excessiveDamage);
+			};
 
 			FTimerHandle Handle;
 			this->BoardWidget->GetWorld()->GetTimerManager().SetTimer(
