@@ -71,7 +71,12 @@ void AGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	}
 }
 
-void AGameCharacter::SetView(enum TableCameraTiltDirection Location, bool IgnoreInput)
+void AGameCharacter::SetView(enum TableCameraTiltDirection Location)
 {
-	MovementController->SetView(Location, IgnoreInput);
+	MovementController->SetView(Location);
+}
+
+void AGameCharacter::SetIgnoreInput(bool IgnoreInput)
+{
+	MovementController->SetIgnoreInput(IgnoreInput);
 }

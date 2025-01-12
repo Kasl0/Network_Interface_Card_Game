@@ -42,3 +42,8 @@ TArray<UCardData*> UDeckInfo::GetSinglePlayerDeck()
 	}
 	return DeckCopy;
 }
+
+void UDeckInfo::AddCardToDeck(UCardData* Card)
+{
+	this->SinglePlayerDeck.Add(Card);
+}

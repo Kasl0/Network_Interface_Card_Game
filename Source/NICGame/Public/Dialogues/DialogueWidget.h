@@ -33,7 +33,7 @@ public:
 
 protected:
 
-    UPROPERTY(BlueprintReadOnly)
+    UPROPERTY(BlueprintReadWrite)
     FDialogueOption Dialogue;
 	
 };

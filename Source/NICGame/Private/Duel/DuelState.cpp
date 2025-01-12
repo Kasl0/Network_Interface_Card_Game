@@ -12,6 +12,9 @@
 #include "Cards/CardTypes/Spell.h"
 #include "Cards/CardTypes/JadeGolemMinion.h"
 #include "Duel/Board/BoardWidget.h"
+#include "Dialogues/DialogueManager.h"
+#include "Dialogues/DialoguesProgressManager.h"
+#include "Player/MovementController.h"
 
 //UDuelState::UDuelState()
 //{
@@ -69,13 +72,13 @@ void UDuelState::StartDuel(EBoardSide StartingSide, UBattleDeck* BattleDeck)
 			this->DuelCharacters.Add(Side, Character);
 		}
 	}
-	this->CurrentTurn = StartingSide;
-	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
+	this->CurrentTurn = TEnumAsByte(StartingSide);
+	this->DuelCharacters[this->CurrentTurn]->StartTurn();
 }
 
 UCardWidget* UDuelState::GetSelectedCard() const
 {
-	return this->CurrentTurn == Friendly ? SelectedCard : nullptr;
+	return this->CurrentTurn == TEnumAsByte<EBoardSide>(Friendly) ? SelectedCard : nullptr;
 }
 
 void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
@@ -105,10 +108,10 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::PrepareTurnEnd()
 {
-	if (this->CurrentTurn != None)
+	if (this->CurrentTurn != TEnumAsByte<EBoardSide>(None))
 	{
 		EndingTurn = this->CurrentTurn;
-		this->CurrentTurn = None;
+		this->CurrentTurn = TEnumAsByte<EBoardSide>(None);
 	}
 
 	if (this->BoardWidget)
@@ -149,15 +152,21 @@ void UDuelState::EndPlayerTurn()
 void UDuelState::SwitchPlayerTurn()
 {
 	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	Player->SetView(TableCameraTiltDirection::None, false);
+	Player->SetView(TableCameraTiltDirection::None);
 
-	this->CurrentTurn = EndingTurn == Friendly ? Enemy : Friendly;
-	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
+	this->CurrentTurn = EndingTurn == TEnumAsByte<EBoardSide>(Friendly) ? Enemy : Friendly;
+	if (this->DuelCharacters[this->CurrentTurn]->CheckDeath())
 	{
 		return;
 	}
 
-	auto SwitchTurnLambda = [this] { this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn(); };
+	auto SwitchTurnLambda = [this] {
+		if (this->CurrentTurn == TEnumAsByte<EBoardSide>(None)) // realistically should never happen, but happened during tests anyway
+		{
+			this->CurrentTurn = EndingTurn == TEnumAsByte<EBoardSide>(Friendly) ? Enemy : Friendly;
+		}
+		this->DuelCharacters[this->CurrentTurn]->StartTurn();
+	};
 	FTimerDelegate SwitchTurnDelegate;
 	SwitchTurnDelegate.BindLambda(SwitchTurnLambda);
 
@@ -219,12 +228,26 @@ void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 			Text1.Append(FString::FromInt(excessiveDamage));
 
 			if (GEngine) {
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Text1);
 			}
 
 			UGameInstance* GameInstance = this->GetWorld()->GetGameInstance();
 			if (GameInstance)
 			{
+				UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+				UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+				if (!DialoguesProgressManager->GetIsFirstGameCompleted())
+				{
+					DialoguesProgressManager->SetIsFirstGameCompleted();
+					UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
+					GamePhaseSubsystem->ChangeOverlay(0);
+					GamePhaseSubsystem->ScreenWidgetComponent->RenderInWorld();
+
+					DialogueManager->CreateDialogueChain(1200, [this]() {
+						AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+						Player->SetIgnoreInput(false);
+						});
+				}
 				UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
 				if (GamePhaseSubsystem)
 				{

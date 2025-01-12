@@ -22,9 +22,6 @@ void UMapNodeWidget::NodeChosen(UMapNodeWidget* Node)
 	if (Game)
 	{
 		UMapState* MapState = Cast<UMapState>(Game->GetSubsystem<UMapState>());
-		MapState->CurrentNode = Node;
-
-		UGamePhaseSubsystem* GamePhase = Cast<UGamePhaseSubsystem>(Game->GetSubsystem<UGamePhaseSubsystem>());
-		GamePhase->DuelPhase();
+		MapState->HandleNextNode(Node);
 	}
 }

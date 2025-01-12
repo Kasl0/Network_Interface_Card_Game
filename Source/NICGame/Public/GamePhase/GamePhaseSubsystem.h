@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DuelPhase();
 
+	UFUNCTION(BlueprintCallable)
+	void EncounterPhase();
+
 	// Switch to duel phase
 	UFUNCTION(BlueprintCallable)
 		void MapPhase();

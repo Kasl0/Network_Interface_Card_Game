@@ -1,9 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "GamePhase/GamePhaseSubsystem.h"
 #include "Dialogues/DialogueManager.h"
 #include "Duel/DuelState.h"
+#include "Dialogues/DialoguesProgressManager.h"
+#include "Dialogues/RandomEncounter.h"
 
 
 void UGamePhaseSubsystem::DuelPhase()
@@ -14,9 +13,30 @@ void UGamePhaseSubsystem::DuelPhase()
 		this->GamePhase = Quiz;
 		UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
 		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
-		UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
-		DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);}); // Give buffs to player based on quiz result
-		//DialogueManager->CreateDialogueChain(1, [this]() {this->DuelPhase(); });
+		UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+		if (DialoguesProgressManager->GetIsFirstGameCompleted())
+		{
+			if (!DialoguesProgressManager->GetIsSecondGameCompleted())
+			{
+				DialogueManager->CreateDialogueChain(1300, [this]() {
+					UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+					UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+					UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+					DialoguesProgressManager->SetIsSecondGameCompleted();
+					UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
+		      DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
+					});
+			}
+			else
+			{
+				UBattleDeck* BattleDeck = Cast<UBattleDeck>(GameInstance->GetSubsystem<UBattleDeck>());
+		    DialogueManager->CreateQuizChain(3, [this, BattleDeck](int32 CorrectAnswers) {this->QuizCB(CorrectAnswers, BattleDeck);});
+			}
+		}
+		else
+		{
+			DuelPhase();
+		}
 	}
 }
 
@@ -39,6 +59,14 @@ void UGamePhaseSubsystem::StartDuel(UBattleDeck* BattleDeck)
 			}
 		}
 	}
+}
+
+void UGamePhaseSubsystem::EncounterPhase()
+{
+	this->GamePhase = EGamePhase::Encounter;
+
+	URandomEncounter* Encounter = NewObject<URandomEncounter>();
+	Encounter->CreateRandomEncounter(GetWorld());
 }
 
 void UGamePhaseSubsystem::MapPhase()

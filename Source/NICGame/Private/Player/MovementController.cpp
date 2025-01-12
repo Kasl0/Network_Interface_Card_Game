@@ -1,6 +1,8 @@
 #include "Player/MovementController.h"
 #include "Player/GameCharacter.h"
 #include "Player/TableCameraTiltDirection.h"
+#include "Dialogues/DialogueManager.h"
+#include "Dialogues/DialoguesProgressManager.h"
 
 // Sets default values for this component's properties
 UMovementController::UMovementController()
@@ -38,6 +40,29 @@ void UMovementController::BeginPlay()
 	AActor* Owner = GetOwner();
 	DesiredLocation = Owner->GetActorLocation();
 	DesiredRotation = Owner->GetActorRotation();
+
+	UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+	UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+	if (!DialoguesProgressManager->GetIsFirstIntroductionCompleted())
+	{
+		IsIgnoringInput = true;
+
+		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+		DialogueManager->CreateDialogueChain(1000, [this]() {
+
+			SetView(TableCameraTiltDirection::None);
+			UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+			UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+			DialoguesProgressManager->SetIsFirstIntroductionCompleted();
+			DialogueManager->CreateDialogueChain(1100, [this]() {
+
+				UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+				UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+				DialoguesProgressManager->SetIsSecondIntroductionCompleted();
+				});
+		});
+	}
 }
 
 
@@ -133,6 +158,65 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 	{
 		if (DesiredLocation.Equals(TableLocation, 0.1f) and DesiredRotation.Equals(TableRotation, 0.1f))
 		{
+			UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+			if (!DialoguesProgressManager->GetIsTaskCompleted())
+			{
+				UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+				if (DialoguesProgressManager->GetIsWhiteCablePickedUp() && !DialoguesProgressManager->GetIsBlueCablePickedUp())
+				{
+					IsIgnoringInput = true;
+					bPickedUpWrondCable = true;
+					DialogueManager->CreateDialogueChain(1205, [this]() {
+						UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+						UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+						DialogueManager->CreateDialogueChain(1207, [this]() {
+							IsIgnoringInput = false;
+							});
+						});
+					return;
+				}
+				else if (!DialoguesProgressManager->GetIsWhiteCablePickedUp() && DialoguesProgressManager->GetIsBlueCablePickedUp())
+				{
+					IsIgnoringInput = true;
+					bPickedUpWrondCable = true;
+					DialogueManager->CreateDialogueChain(1205, [this]() {
+						UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+						UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+						DialogueManager->CreateDialogueChain(1206, [this]() {
+							IsIgnoringInput = false;
+							});
+						});
+					return;
+				}
+				else if (DialoguesProgressManager->GetIsWhiteCablePickedUp() && DialoguesProgressManager->GetIsBlueCablePickedUp())
+				{
+					IsIgnoringInput = true;
+					if (bPickedUpWrondCable)
+					{
+						DialogueManager->CreateDialogueChain(1208, [this]() {
+							IsIgnoringInput = false;
+							UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+							UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+							DialoguesProgressManager->SetIsTaskCompleted();
+							});
+					}
+					else
+					{
+						DialogueManager->CreateDialogueChain(1209, [this]() {
+							IsIgnoringInput = false;
+							UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+							UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+							DialoguesProgressManager->SetIsTaskCompleted();
+							});
+					}
+				}
+				else
+				{
+					return;
+				}
+			}
+
 			IsAtTable = true;
 			DesiredLocation += TableCameraTranslation;
 			DesiredRotation -= TableCameraDownRotation;
@@ -183,6 +267,22 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 			// GameCharacter->HideCardOverlay();
 			this->GamePhaseSubsystem->ChangeOverlay(0);
 			this->GamePhaseSubsystem->ScreenWidgetComponent->RenderInWorld();
+
+			UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+			if (!DialoguesProgressManager->GetWasTaskOrdered())
+			{
+				IsIgnoringInput = true;
+				UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+				DialogueManager->CreateDialogueChain(1202, [this]() {
+
+					UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+					UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+					UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+					DialoguesProgressManager->SetWasTaskOrdered();
+					IsIgnoringInput = false;
+					});
+			}
 		}
 	}
 	else
@@ -192,36 +292,40 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 	bMoveToDesiredTransform = true;
 }
 
-void UMovementController::SetView(enum TableCameraTiltDirection Location, bool IgnoreInput)
+void UMovementController::SetView(enum TableCameraTiltDirection Location)
 {
 	switch (Location)
 	{
-		case TableCameraTiltDirection::None:
-			DesiredRotation = TableRotation - TableCameraDownRotation;
-			DesiredLocation = TableLocation + TableCameraTranslation;
-			break;
+	case TableCameraTiltDirection::None:
+		DesiredRotation = TableRotation - TableCameraDownRotation;
+		DesiredLocation = TableLocation + TableCameraTranslation;
+		break;
 		/*case TableCameraTiltDirection::Forward:
 			DesiredRotation = TableRotation - FRotator(90.0f, 0.0f, 0.0f);
 			DesiredLocation = TableLocation + TableCameraTranslation + TableCameraForwardTiltTranslation;
 			break;*/
-		case TableCameraTiltDirection::Left:
-			DesiredRotation = TableRotation - TableCameraDownRotation - FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
-			DesiredLocation = TableLocation + TableCameraTranslation;
-			break;
-		case TableCameraTiltDirection::Right:
-			DesiredRotation = TableRotation + TableCameraTiltRotation;
-			DesiredLocation = TableLocation + TableCameraTranslation;
-			break;
+	case TableCameraTiltDirection::Left:
+		DesiredRotation = TableRotation - TableCameraDownRotation - FRotator(-TableCameraTiltRotation.Pitch, TableCameraTiltRotation.Yaw, TableCameraTiltRotation.Roll);
+		DesiredLocation = TableLocation + TableCameraTranslation;
+		break;
+	case TableCameraTiltDirection::Right:
+		DesiredRotation = TableRotation + TableCameraTiltRotation;
+		DesiredLocation = TableLocation + TableCameraTranslation;
+		break;
 	}
-	IsIgnoringInput = IgnoreInput;
 	IsAtTable = true;
 	TableCameraTiltDirection = Location;
 	bMoveToDesiredTransform = true;
-	
+
 	// AGameCharacter* GameCharacter = Cast<AGameCharacter>(GetOwner());
 	// GameCharacter->ShowCardOverlay();
 	this->GamePhaseSubsystem->ChangeOverlay(1);
 	this->GamePhaseSubsystem->ScreenWidgetComponent->RenderOnScreen();
+}
+
+void UMovementController::SetIgnoreInput(bool IgnoreInput)
+{
+	IsIgnoringInput = IgnoreInput;
 }
 
 void UMovementController::SetGamePhaseSubsystem(UGamePhaseSubsystem* Subsystem)

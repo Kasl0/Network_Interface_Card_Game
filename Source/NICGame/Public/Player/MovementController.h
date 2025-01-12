@@ -17,6 +17,9 @@ public:
 	// Sets default values for this component's properties
 	UMovementController();
 
+private:
+	bool bPickedUpWrondCable = false;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -82,7 +85,10 @@ public:
 	void MoveBackward(const FInputActionInstance& Instance);
 	
 	// Move to the desired transform
-	void SetView(enum TableCameraTiltDirection Location, bool IgnoreInput);
+	void SetView(enum TableCameraTiltDirection Location);
+
+	// Set ignore input
+	void SetIgnoreInput(bool IgnoreInput);
 
 	UFUNCTION(BlueprintCallable)
 	void SetGamePhaseSubsystem(UGamePhaseSubsystem* Subsystem);

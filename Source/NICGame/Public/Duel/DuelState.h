@@ -98,7 +98,7 @@ public:
 		UBoardWidget* BoardWidget;
 
 protected:
-	EBoardSide CurrentTurn;
+	TEnumAsByte<EBoardSide> CurrentTurn;
 
 	UPROPERTY(BlueprintReadOnly)
 		TMap<TEnumAsByte<EBoardSide>, UDuelCharacter*> DuelCharacters;

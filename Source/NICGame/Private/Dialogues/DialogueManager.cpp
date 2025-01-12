@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Dialogues/DialogueWidget.h"
 #include "JsonObjectConverter.h"
+#include "Taxonomy/TaxonomySubsystem.h"
 
 #include <random>
 
@@ -29,15 +30,31 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
 {
     if (AnswerKey != "" || Dialogue.Type == TEnumAsByte<EDialogueType>(Info))
     {
-        this->ChoiceHandler->HandleChoice(Dialogue.Outcomes[AnswerKey]);
+        this->ChoiceHandler->Init(GetWorld());
+
+        if (Dialogue.Type != TEnumAsByte<EDialogueType>(Info))
+        {
+            this->ChoiceHandler->HandleChoice(Dialogue.Outcomes[AnswerKey]);
+        }
 
         if (Dialogue.Type == TEnumAsByte<EDialogueType>(QuizDialogue))
         {
-            if (Dialogue.Outcomes[AnswerKey] == "correct") CorrectAnswers++;
+            UGameInstance* Ins = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+            UTaxonomySubsystem* TaxonomySubsystem = Cast<UTaxonomySubsystem>(Ins->GetSubsystem<UTaxonomySubsystem>());
+
+            if (Dialogue.Outcomes[AnswerKey] == "correct") 
+            {
+                CorrectAnswers++;
+                TaxonomySubsystem->QuestionAnswered(true);
+            }
+            else
+            {
+                TaxonomySubsystem->QuestionAnswered(false);
+            }
         }
 
-        int32 NextQuestionID = Dialogue.NextQuestion[AnswerKey];
-        if (NextQuestionID == -1)
+        int32* NextQuestionID = Dialogue.NextQuestion.Find(AnswerKey);
+        if (NextQuestionID == nullptr  || *NextQuestionID == -1)
         {
             if (Dialogue.Type != TEnumAsByte<EDialogueType>(QuizDialogue) && CurrentCallback)
             {
@@ -54,7 +71,7 @@ void UDialogueManager::HandleDialogueChoice(FDialogueOption Dialogue, FString An
         }
         else
         {
-            this->CreateDialogueWidget(NextQuestionID);
+            this->CreateDialogueWidget(*NextQuestionID);
         }
     }
 }
@@ -98,7 +115,7 @@ void UDialogueManager::CreateQuizChain(int32 Count, std::function<void(int32)> C
         Dialogues[QuestionId].NextQuestion.Add("1", NextQuestionId);
         Dialogues[QuestionId].NextQuestion.Add("2", NextQuestionId);
         Dialogues[QuestionId].NextQuestion.Add("3", NextQuestionId);
-        NextQuestionId = QuestionId;
+        NextQuestionId = Dialogues[QuestionId].ClassID;
     }
 
     if (NextQuestionId != -1)
@@ -149,7 +166,7 @@ void UDialogueManager::Initialize(FSubsystemCollectionBase& Collection)
     LoadDialoguesFromFile(FPaths::ProjectContentDir() + TEXT("Dialogues/Dialogues.json"));
 
     ChoiceHandler = NewObject<UDialogueChoiceHandler>();
-    ChoiceHandler->Init(GetWorld());
+    //ChoiceHandler->Init(GetWorld());
 }
 
 bool UDialogueManager::LoadDialoguesFromFile(const FString FilePath)
