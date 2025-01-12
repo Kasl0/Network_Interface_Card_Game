@@ -73,13 +73,13 @@ void UDuelState::StartDuel(EBoardSide StartingSide)
 			this->DuelCharacters.Add(Side, Character);
 		}
 	}
-	this->CurrentTurn = StartingSide;
-	this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn();
+	this->CurrentTurn = TEnumAsByte(StartingSide);
+	this->DuelCharacters[this->CurrentTurn]->StartTurn();
 }
 
 UCardWidget* UDuelState::GetSelectedCard() const
 {
-	return this->CurrentTurn == Friendly ? SelectedCard : nullptr;
+	return this->CurrentTurn == TEnumAsByte<EBoardSide>(Friendly) ? SelectedCard : nullptr;
 }
 
 void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
@@ -109,10 +109,10 @@ void UDuelState::SetSelectedCard(UCardWidget* NewSelectedCard)
 
 void UDuelState::PrepareTurnEnd()
 {
-	if (this->CurrentTurn != None)
+	if (this->CurrentTurn != TEnumAsByte<EBoardSide>(None))
 	{
 		EndingTurn = this->CurrentTurn;
-		this->CurrentTurn = None;
+		this->CurrentTurn = TEnumAsByte<EBoardSide>(None);
 	}
 
 	if (this->BoardWidget)
@@ -155,13 +155,19 @@ void UDuelState::SwitchPlayerTurn()
 	AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	Player->SetView(TableCameraTiltDirection::None, false);
 
-	this->CurrentTurn = EndingTurn == Friendly ? Enemy : Friendly;
-	if (this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->CheckDeath())
+	this->CurrentTurn = EndingTurn == TEnumAsByte<EBoardSide>(Friendly) ? Enemy : Friendly;
+	if (this->DuelCharacters[this->CurrentTurn]->CheckDeath())
 	{
 		return;
 	}
 
-	auto SwitchTurnLambda = [this] { this->DuelCharacters[TEnumAsByte(this->CurrentTurn)]->StartTurn(); };
+	auto SwitchTurnLambda = [this] {
+		if (this->CurrentTurn == TEnumAsByte<EBoardSide>(None)) // realistically should never happen, but happened during tests anyway
+		{
+			this->CurrentTurn = EndingTurn == TEnumAsByte<EBoardSide>(Friendly) ? Enemy : Friendly;
+		}
+		this->DuelCharacters[this->CurrentTurn]->StartTurn();
+	};
 	FTimerDelegate SwitchTurnDelegate;
 	SwitchTurnDelegate.BindLambda(SwitchTurnLambda);
 

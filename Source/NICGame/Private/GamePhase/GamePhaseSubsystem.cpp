@@ -4,6 +4,7 @@
 #include "GamePhase/GamePhaseSubsystem.h"
 #include "Dialogues/DialogueManager.h"
 #include "Duel/DuelState.h"
+#include "Dialogues/RandomEncounter.h"
 
 
 void UGamePhaseSubsystem::DuelPhase()
@@ -34,6 +35,14 @@ void UGamePhaseSubsystem::DuelPhase()
 			}
 		}
 	}
+}
+
+void UGamePhaseSubsystem::EncounterPhase()
+{
+	this->GamePhase = EGamePhase::Encounter;
+
+	URandomEncounter* Encounter = NewObject<URandomEncounter>();
+	Encounter->CreateRandomEncounter(GetWorld());
 }
 
 void UGamePhaseSubsystem::MapPhase()
