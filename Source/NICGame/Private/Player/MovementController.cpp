@@ -158,6 +158,41 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 	{
 		if (DesiredLocation.Equals(TableLocation, 0.1f) and DesiredRotation.Equals(TableRotation, 0.1f))
 		{
+			UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+			if (!DialoguesProgressManager->GetIsTaskCompleted())
+			{
+				UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+				if (DialoguesProgressManager->GetIsWhiteCablePickedUp() && !DialoguesProgressManager->GetIsBlueCablePickedUp())
+				{
+					IsIgnoringInput = true;
+					DialogueManager->CreateDialogueChain(1207, [this]() {
+						IsIgnoringInput = false;
+						});
+					return;
+				}
+				else if (!DialoguesProgressManager->GetIsWhiteCablePickedUp() && DialoguesProgressManager->GetIsBlueCablePickedUp())
+				{
+					IsIgnoringInput = true;
+					DialogueManager->CreateDialogueChain(1205, [this]() {
+						IsIgnoringInput = false; 
+						});
+					return;
+				}
+				else if (DialoguesProgressManager->GetIsWhiteCablePickedUp() && DialoguesProgressManager->GetIsBlueCablePickedUp())
+				{
+					IsIgnoringInput = true;
+					DialogueManager->CreateDialogueChain(1209, [this]() {
+						IsIgnoringInput = false; 
+						});
+					DialoguesProgressManager->SetIsTaskCompleted();
+				}
+				else
+				{
+					return;
+				}
+			}
+
 			IsAtTable = true;
 			DesiredLocation += TableCameraTranslation;
 			DesiredRotation -= TableCameraDownRotation;
@@ -208,6 +243,20 @@ void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 			// GameCharacter->HideCardOverlay();
 			this->GamePhaseSubsystem->ChangeOverlay(0);
 			this->GamePhaseSubsystem->ScreenWidgetComponent->RenderInWorld();
+
+			UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+			UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+			if (!DialoguesProgressManager->GetWasTaskOrdered())
+			{
+				UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+				DialogueManager->CreateDialogueChain(1202, [this]() {
+
+					UGameInstance* GameInstance = Cast<UGameInstance>(GetWorld()->GetGameInstance());
+					UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
+					UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
+					DialoguesProgressManager->SetWasTaskOrdered();
+					});
+			}
 		}
 	}
 	else

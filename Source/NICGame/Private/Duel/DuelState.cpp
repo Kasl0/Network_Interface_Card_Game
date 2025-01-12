@@ -237,9 +237,14 @@ void UDuelState::EndDuel(EBoardSide WinningSide, uint8 excessiveDamage)
 				if (!DialoguesProgressManager->GetIsFirstGameCompleted())
 				{
 					DialoguesProgressManager->SetIsFirstGameCompleted();
-					AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-					Player->SetIgnoreInput(false);
-					DialogueManager->CreateDialogueChain(1200, [this]() {});
+					UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
+					GamePhaseSubsystem->ChangeOverlay(0);
+					GamePhaseSubsystem->ScreenWidgetComponent->RenderInWorld();
+
+					DialogueManager->CreateDialogueChain(1200, [this]() {
+						AGameCharacter* Player = Cast<AGameCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+						Player->SetIgnoreInput(false);
+						});
 				}
 				UGamePhaseSubsystem* GamePhaseSubsystem = GameInstance->GetSubsystem<UGamePhaseSubsystem>();
 				if (GamePhaseSubsystem)

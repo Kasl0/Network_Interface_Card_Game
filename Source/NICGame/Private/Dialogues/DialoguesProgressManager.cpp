@@ -15,6 +15,26 @@ bool UDialoguesProgressManager::GetIsFirstGameCompleted()
 	return IsFirstGameCompleted;
 }
 
+bool UDialoguesProgressManager::GetWasTaskOrdered()
+{
+	return WasTaskOrdered;
+}
+
+bool UDialoguesProgressManager::GetIsBlueCablePickedUp()
+{
+	return IsBlueCablePickedUp;
+}
+
+bool UDialoguesProgressManager::GetIsWhiteCablePickedUp()
+{
+	return IsWhiteCablePickedUp;
+}
+
+bool UDialoguesProgressManager::GetIsTaskCompleted()
+{
+	return IsTaskCompleted;
+}
+
 bool UDialoguesProgressManager::GetIsSecondGameCompleted()
 {
 	return IsSecondGameCompleted;
@@ -33,6 +53,26 @@ void UDialoguesProgressManager::SetIsSecondIntroductionCompleted()
 void UDialoguesProgressManager::SetIsFirstGameCompleted()
 {
 	IsFirstGameCompleted = true;
+}
+
+void UDialoguesProgressManager::SetWasTaskOrdered()
+{
+	WasTaskOrdered = true;
+}
+
+void UDialoguesProgressManager::SetIsBlueCablePickedUp()
+{
+	IsBlueCablePickedUp = true;
+}
+
+void UDialoguesProgressManager::SetIsWhiteCablePickedUp()
+{
+	IsWhiteCablePickedUp = true;
+}
+
+void UDialoguesProgressManager::SetIsTaskCompleted()
+{
+	IsTaskCompleted = true;
 }
 
 void UDialoguesProgressManager::SetIsSecondGameCompleted()
