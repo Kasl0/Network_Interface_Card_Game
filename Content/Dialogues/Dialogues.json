@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "class_id": 1000,
         "question": "No proszę, kolejny nieszczęśnik. Może trafi się ktoś bardziej użyteczny, niż ISDN..",
@@ -1063,5 +1063,86 @@
             "2": -1,
             "3": -1
         }
+    },
+
+    {
+        "class_id": 3000,
+        "question": "Przy drodze znajdujesz opuszczoną serwerownię. Metalowe szafy i migające światła wydają się dziwnie nie na miejscu w środku lasu. Co tutaj robi takie miejsce? Nie masz czasu na dłuższe rozważania.",
+        "type": "Dialogue",
+        "answers": {
+            "0": "Przeszukaj serwerownię",
+            "1": "Przejrzyj dokumenty",
+            "2": "Zignoruj serwerownię"
+        },
+        "outcomes": {
+            "0": "card;x+;y+",
+            "1": "quizToken;x+;y-",
+            "2": ""
+        },
+        "nextQuestion": {
+            "0": 30001,
+            "1": 30002,
+            "2": 30003
+        }
+    },
+    {
+        "class_id": 30001,
+        "question": "Postanawiasz przetrząsnąć szafy w poszukiwaniu działających urządzeń. Bierzesz, co możesz, i idziesz dalej, mając nadzieję, że nikt nie zorientuje się, co zrobiłeś.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {}
+    },
+    {
+        "class_id": 30002,
+        "question": "Zaczynasz przeglądać porzucone dokumenty. Wygląda na to, że serwerownia kiedyś była częścią laboratorium do nauki o sieciach komputerowych. Notatki, które znajdujesz, mogą pomóc ci w rozwiązaniu quizu, ale zanim zdążysz przeczytać więcej, słyszysz kroki. Decydujesz się uciec.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {}
+    },
+    {
+        "class_id": 30003,
+        "question": "Uznałeś, że lepiej nie ryzykować. Idziesz dalej, jednak nie możesz oprzeć się wrażeniu, że ktoś cię obserwuje. Czy to tylko wyobraźnia? Przyspieszasz kroku, zostawiając dziwne miejsce za sobą.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {}
+    },
+
+    {
+        "class_id": 3001,
+        "question": "Pośród drzew znajdujesz router, który najwyraźniej jest częścią większej infrastruktury. Diody przy jego portach migają w chaotyczny sposób – coś jest nie tak.",
+        "type": "Dialogue",
+        "answers": {
+            "0": "Spróbuj naprawić router",
+            "1": "Zignoruj router"
+        },
+        "outcomes": {
+            "0": "x+;y+",
+            "1": ""
+        },
+        "nextQuestion": {
+            "0": 30011,
+            "1": 30012
+        }
+    },
+    {
+        "class_id": 30011,
+        "question": "Podejmujesz próbę konfiguracji routera, korzystając z konsoli administracyjnej. Odpowiedz na kilka pytań technicznych, aby naprawić urządzenie.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {
+            "": "quiz"
+        },
+        "nextQuestion": {}
+    },
+    {
+        "class_id": 30012,
+        "question": "Uznajesz, że nie warto ryzykować. Oglądasz się za siebie, gdy migoczące diody zanikają.",
+        "type": "Info",
+        "answers": {},
+        "outcomes": {},
+        "nextQuestion": {}
     }
 ]

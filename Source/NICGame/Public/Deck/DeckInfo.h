@@ -26,4 +26,6 @@ protected:
 
 public:
 	TArray<UCardData*> GetSinglePlayerDeck();
+
+	void AddCardToDeck(UCardData* Card);
 };
