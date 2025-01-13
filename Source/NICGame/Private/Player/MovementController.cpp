@@ -45,7 +45,7 @@ void UMovementController::BeginPlay()
 	UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 	if (!DialoguesProgressManager->GetIsFirstIntroductionCompleted())
 	{
-		IsIgnoringInput = true;
+		/*IsIgnoringInput = true;
 
 		UDialogueManager* DialogueManager = Cast<UDialogueManager>(GameInstance->GetSubsystem<UDialogueManager>());
 		DialogueManager->CreateDialogueChain(1000, [this]() {
@@ -61,7 +61,7 @@ void UMovementController::BeginPlay()
 				UDialoguesProgressManager* DialoguesProgressManager = Cast<UDialoguesProgressManager>(GameInstance->GetSubsystem<UDialoguesProgressManager>());
 				DialoguesProgressManager->SetIsSecondIntroductionCompleted();
 				});
-		});
+		});*/
 	}
 }
 
