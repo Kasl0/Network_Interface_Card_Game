@@ -15,6 +15,7 @@ class NICGAME_API UCardService : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
 	UCardData* GetCardData(int32 id);
 	UCardData* GetRandomEnemyCard(int8 layer); // layer value of -1 means random card from all layers
 	TArray<UMinion*> ParseSummonMinion(TSharedPtr<FJsonObject> args);

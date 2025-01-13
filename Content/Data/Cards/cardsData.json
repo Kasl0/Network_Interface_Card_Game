@@ -127,7 +127,7 @@
         "playerCard": true,
         "enemyCard": false,
         "gameDescription": "Daj stronnikowi +2/+2",
-        "irlDescription": "A Virtual Local Area Network (VLAN) allows you to segment a physical network into multiple logical networks, improving security and reducing broadcast traffic."
+        "irlDescription": "A Virtual Local Area Network<br> (VLAN) allows you to segment<br> a physical network into<br> multiple logical networks,<br> improving security and<br> reducing broadcast traffic."
     },
     {
         "id": 9,
@@ -143,7 +143,7 @@
         "playerCard": true,
         "enemyCard": false,
         "gameDescription": "Daj stronnikowi +1/+3",
-        "irlDescription": "Port Address Translation (PAT) and Network Address Translation (NAT) are techniques used to map multiple private IP addresses to a single public IP address, conserving the number of public IP addresses needed and enhancing security."
+        "irlDescription": "Port Address Translation (PAT)<br> and Network Address Translation (NAT)<br> are techniques used to map multiple<br> private IP addresses to<br> a single public IP address,<br> conserving the number of<br> public IP addresses needed<br> and enhancing security."
     },
     {
         "id": 10,
