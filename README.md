@@ -1,5 +1,7 @@
 # Network Interface Card Game
 
+![Room](ReadmeFiles/room.png)
+
 ## Authors
 
 - [Jan Ciężkowski](https://github.com/jciezkowski)
@@ -43,3 +45,25 @@ To run the game on your computer, follow these steps:
 
 5. (Optional) To simplify the process of launching the game in the future, you can create a shortcut:
    - Right-click on the executable file and select "Create Shortcut". Move the created shortcut to any location on your computer, such as the desktop.
+
+## Screenshots
+
+![Dialogue choice](ReadmeFiles/dialogue_choice.png)
+
+![Map](ReadmeFiles/map.png)
+
+![Card battle](ReadmeFiles/card_battle.png)
+
+![Card choice](ReadmeFiles/card_choice.png)
+
+![Highlight](ReadmeFiles/highlight.png)
+
+![Cable inspection](ReadmeFiles/cable_inspection.png)
+
+![Card inspection](ReadmeFiles/card_inspection.png)
+
+![Cable minigame](ReadmeFiles/cable_minigame.png)
+
+![Ethernet frame minigame](ReadmeFiles/ethernet_frame_minigame.png)
+
+![Settings](ReadmeFiles/settings.png)
