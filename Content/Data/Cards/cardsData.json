@@ -82,7 +82,7 @@
     },
     {
         "id": 6,
-        "name": "Netgear EX3700",
+        "name": "EX3700",
         "spellType": null,
         "args": {
             "baseHealth": 2,
@@ -92,9 +92,9 @@
         "imageFilename": "EX3700",
         "layer": 1,
         "playerCard": true,
-        "enemyCard": true,
+        "enemyCard": false,
         "gameDescription": "",
-        "irlDescription": "The Netgear EX7300 is a dual-band WiFi range extender that supports speeds up to 2200Mbps and features MU-MIMO technology for simultaneous streaming to multiple devices."
+        "irlDescription": "Wi-Fi range extenders<br> use various technologies<br> to enhance wireless<br> network coverage and<br> improve connectivity.<br> They employ signal<br> amplification and<br> retransmission to extend<br> the reach of the primary<br> router, ensuring a<br> stable connection in<br> areas with weak or no<br> signal."
     },
     {
         "id": 7,
