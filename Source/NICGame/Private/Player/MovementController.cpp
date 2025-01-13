@@ -141,7 +141,7 @@ void UMovementController::TurnRight(const FInputActionInstance& Instance)
 
 void UMovementController::MoveForward(const FInputActionInstance& Instance)
 {
-	if (IsIgnoringInput)
+	if (IsIgnoringInput || !CanMoveForward())
 	{
 		return;
 	}
@@ -236,7 +236,7 @@ void UMovementController::MoveForward(const FInputActionInstance& Instance)
 
 void UMovementController::MoveBackward(const FInputActionInstance& Instance)
 {
-	if (IsIgnoringInput)
+	if (IsIgnoringInput || !CanMoveBackward())
 	{
 		return;
 	}
@@ -331,4 +331,36 @@ void UMovementController::SetIgnoreInput(bool IgnoreInput)
 void UMovementController::SetGamePhaseSubsystem(UGamePhaseSubsystem* Subsystem)
 {
 	this->GamePhaseSubsystem = Subsystem;
+}
+
+bool UMovementController::CanMoveForward()
+{
+	FVector NewLocation = DesiredLocation + (DesiredRotation.Vector() * DistanceToMove);
+	float MoveRadius = DistanceToMove + 10.0f;
+	FVector BehindTableLocation = TableLocation - (-TableRotation.Vector() * DistanceToMove);
+	if (DesiredLocation.Equals(BehindTableLocation, 0.1f) && NewLocation.Equals(TableLocation, 0.1f))
+	{
+		return false;
+	}
+	if (NewLocation.X < TableLocation.X - MoveRadius || NewLocation.X > TableLocation.X + MoveRadius || NewLocation.Y < TableLocation.Y - MoveRadius || NewLocation.Y > TableLocation.Y + MoveRadius)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool UMovementController::CanMoveBackward()
+{
+	FVector NewLocation = DesiredLocation - (DesiredRotation.Vector() * DistanceToMove);
+	float MoveRadius = DistanceToMove + 10.0f;
+	FVector BehindTableLocation = TableLocation - (-TableRotation.Vector() * DistanceToMove);
+	if ((DesiredLocation.Equals(BehindTableLocation, 0.1f) && NewLocation.Equals(TableLocation, 0.1f)) || (DesiredLocation.Equals(TableLocation, 0.1f) && NewLocation.Equals(BehindTableLocation, 0.1f)))
+	{
+		return false;
+	}
+	if (NewLocation.X < TableLocation.X - MoveRadius || NewLocation.X > TableLocation.X + MoveRadius || NewLocation.Y < TableLocation.Y - MoveRadius || NewLocation.Y > TableLocation.Y + MoveRadius)
+	{
+		return false;
+	}
+	return true;
 }
