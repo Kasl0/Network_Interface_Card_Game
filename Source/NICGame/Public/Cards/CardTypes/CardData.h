@@ -34,7 +34,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 CardLayer;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FSlateBrush CardBrush;
 
 	UFUNCTION(BlueprintCallable)

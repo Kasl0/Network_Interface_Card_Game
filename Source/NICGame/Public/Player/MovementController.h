@@ -20,6 +20,9 @@ public:
 private:
 	bool bPickedUpWrondCable = false;
 
+	bool CanMoveForward();
+	bool CanMoveBackward();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

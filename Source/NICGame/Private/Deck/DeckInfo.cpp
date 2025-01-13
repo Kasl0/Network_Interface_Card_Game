@@ -45,5 +45,13 @@ TArray<UCardData*> UDeckInfo::GetSinglePlayerDeck()
 
 void UDeckInfo::AddCardToDeck(UCardData* Card)
 {
+	for (int i = 0; i < this->SinglePlayerDeck.Num(); i++)
+	{
+		if (this->SinglePlayerDeck[i]->CardName.EqualTo(Card->CardName))
+		{
+			return;
+		}
+	}	
+
 	this->SinglePlayerDeck.Add(Card);
 }

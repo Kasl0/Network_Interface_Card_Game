@@ -27,5 +27,6 @@ protected:
 public:
 	TArray<UCardData*> GetSinglePlayerDeck();
 
+	UFUNCTION(BlueprintCallable)
 	void AddCardToDeck(UCardData* Card);
 };
